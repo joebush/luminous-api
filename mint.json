@@ -36,7 +36,7 @@
         "name": "API Reference",
         "icon": "square-terminal",
         "url": "api-reference",
-        "openapi": ""
+        "openapi": "openapi-spec.yaml"
     },
     {
       "name": "Documentation",
