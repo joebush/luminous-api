@@ -33,6 +33,12 @@
   ],
   "anchors": [
     {
+        "name": "API Reference",
+        "icon": "square-terminal",
+        "url": "api-reference",
+        "openapi": ""
+    },
+    {
       "name": "Documentation",
       "icon": "book-open-cover",
       "url": "https://mintlify.com/docs"
