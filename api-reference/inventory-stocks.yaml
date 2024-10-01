@@ -1,0 +1,96 @@
+get:
+  tags:
+    - Inventory
+  summary: Get inventory stock levels
+  description: Get a paginated list of inventory stock levels with various filter options
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: query
+      name: page
+      schema:
+        type: integer
+        default: 1
+      description: Page number for pagination
+    - in: query
+      name: per_page
+      schema:
+        type: integer
+        default: 100
+      description: Number of items per page
+    - in: query
+      name: discontinued
+      schema:
+        type: integer
+        enum: [0, 1]
+      description: Filter by discontinued status (0 for active, 1 for discontinued)
+    - in: query
+      name: sku
+      schema:
+        type: string
+      description: Filter by SKU, product name, or UPC
+    - in: query
+      name: product_name
+      schema:
+        type: string
+      description: Filter by product name
+    - in: query
+      name: location
+      schema:
+        type: integer
+      description: Filter by location ID
+    - in: query
+      name: category_id
+      schema:
+        type: string
+      description: Filter by category ID(s), comma-separated
+    - in: query
+      name: subcategory_ids
+      schema:
+        type: string
+      description: Filter by subcategory ID(s), comma-separated
+    - in: query
+      name: warehouse_ids
+      schema:
+        type: string
+      description: Filter by warehouse ID(s), comma-separated
+    - in: query
+      name: warehouse_group_ids
+      schema:
+        type: string
+      description: Filter by warehouse group ID(s), comma-separated
+    - in: query
+      name: product_type
+      schema:
+        type: string
+      description: Filter by product type
+    - in: query
+      name: product_type_id
+      schema:
+        type: integer
+      description: Filter by product type ID
+    - in: query
+      name: no_stock_skus
+      schema:
+        type: boolean
+      description: Filter for SKUs with no stock
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/inventory-stock.yaml'
+              meta:
+                $ref: './components/pagination-meta.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'

@@ -306,6 +306,167 @@ paths:
                       type: array
                       items:
                         type: string
+  /inventory/stocks:
+    get:
+      tags:
+        - Inventory
+      summary: Get inventory stock levels
+      description: Get a paginated list of inventory stock levels with various filter options
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 100
+          description: Number of items per page
+        - in: query
+          name: discontinued
+          schema:
+            type: integer
+            enum:
+              - 0
+              - 1
+          description: 'Filter by discontinued status (0 for active, 1 for discontinued)'
+        - in: query
+          name: sku
+          schema:
+            type: string
+          description: 'Filter by SKU, product name, or UPC'
+        - in: query
+          name: product_name
+          schema:
+            type: string
+          description: Filter by product name
+        - in: query
+          name: location
+          schema:
+            type: integer
+          description: Filter by location ID
+        - in: query
+          name: category_id
+          schema:
+            type: string
+          description: 'Filter by category ID(s), comma-separated'
+        - in: query
+          name: subcategory_ids
+          schema:
+            type: string
+          description: 'Filter by subcategory ID(s), comma-separated'
+        - in: query
+          name: warehouse_ids
+          schema:
+            type: string
+          description: 'Filter by warehouse ID(s), comma-separated'
+        - in: query
+          name: warehouse_group_ids
+          schema:
+            type: string
+          description: 'Filter by warehouse group ID(s), comma-separated'
+        - in: query
+          name: product_type
+          schema:
+            type: string
+          description: Filter by product type
+        - in: query
+          name: product_type_id
+          schema:
+            type: integer
+          description: Filter by product type ID
+        - in: query
+          name: no_stock_skus
+          schema:
+            type: boolean
+          description: Filter for SKUs with no stock
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Unique identifier for the inventory stock (combination of rfq_id and warehouse_group_id)
+                        rfq_id:
+                          type: integer
+                          description: ID of the Request for Quote
+                        internal_sku:
+                          type: string
+                          description: Internal SKU
+                        sku:
+                          type: string
+                          description: SKU (same as internal_sku)
+                        product_name:
+                          type: string
+                          description: Name of the product
+                        warehouse_group_id:
+                          type: integer
+                          description: ID of the warehouse group
+                        warehouse_group_label:
+                          type: string
+                          description: Label of the warehouse group
+                        product_type:
+                          type: string
+                          description: Type of the product
+                        qty_on_hand:
+                          type: number
+                          format: float
+                          description: Quantity on hand
+                        qty_pending:
+                          type: number
+                          format: float
+                          description: Quantity pending
+                        qty_available:
+                          type: number
+                          format: float
+                          description: Quantity available
+                        qty_incoming:
+                          type: number
+                          format: float
+                          description: Quantity incoming
+                        category_id:
+                          type: integer
+                          description: ID of the product category
+                        sub_category_id:
+                          type: integer
+                          description: ID of the product subcategory
+                        category_name:
+                          type: string
+                          description: Name of the product category
+                        sub_category_name:
+                          type: string
+                          description: Name of the product subcategory
+                        stock_status:
+                          type: string
+                          description: Status of the stock
+                        preferred_supplier_id:
+                          type: integer
+                          description: ID of the preferred supplier
+                        preferred_supplier_name:
+                          type: string
+                          description: Name of the preferred supplier
+                  meta:
+                    $ref: '#/paths/~1purchase-orders/get/responses/200/content/application~1json/schema/properties/meta'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1purchase-orders/get/responses/401/content/application~1json/schema'
 tags:
   - name: Purchase Orders
     description: Get and modify purchase orders

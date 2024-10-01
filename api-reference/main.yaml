@@ -23,6 +23,8 @@ paths:
     $ref: './purchase-orders.yaml'
   /inventory/adjustments:
     $ref: './inventory.yaml'
+  /inventory/stocks:
+    $ref: './inventory-stocks.yaml'
 
 tags:
   - name: Purchase Orders
