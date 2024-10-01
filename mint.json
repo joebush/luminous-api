@@ -28,7 +28,7 @@
         "name": "API Reference",
         "icon": "square-terminal",
         "url": "api-reference",
-        "openapi": "/api-reference/main.yaml"
+        "openapi": "/api-reference/home.yaml"
     }
   ],
   "navigation": [
