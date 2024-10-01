@@ -1,0 +1,19 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: ID of the created adjustment
+  remarks:
+    type: string
+    description: Remarks for the adjustment
+  posted_by:
+    type: integer
+    description: ID of the user who posted the adjustment
+  created_at:
+    type: string
+    format: date-time
+    description: Timestamp of when the adjustment was created
+  updated_at:
+    type: string
+    format: date-time
+    description: Timestamp of when the adjustment was last updated

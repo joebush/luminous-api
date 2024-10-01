@@ -1,0 +1,145 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the purchase order
+  order_date:
+    type: string
+    format: date
+    description: Date when the purchase order was created
+  order_status_id:
+    type: integer
+    description: ID representing the status of the order
+  order_status_text:
+    type: string
+    description: Textual representation of the order status
+  order_status_date:
+    type: string
+    format: date-time
+    description: Date and time when the order status was last updated
+  factory_id:
+    type: integer
+    description: ID of the factory associated with the order
+  factory_name:
+    type: string
+    description: Name of the factory associated with the order
+  logistic_label:
+    type: string
+    description: Label for the logistics information
+  logistic_code:
+    type: string
+    description: Code for the logistics information
+  order_cost:
+    type: number
+    format: float
+    description: Total cost of the order
+  order_quantity:
+    type: integer
+    description: Total quantity of items in the order
+  total_shipping_cost:
+    type: number
+    format: float
+    description: Total shipping cost for the order
+  total_cost:
+    type: number
+    format: float
+    description: Total cost including shipping
+  private_note:
+    type: string
+    description: Private note associated with the order
+  arrival_due_date:
+    type: string
+    format: date
+    description: Expected arrival date for the order
+  warehouse_id:
+    type: integer
+    description: ID of the warehouse associated with the order
+  default_ship_to_address:
+    type: string
+    description: Default shipping address for the order
+  supplier_order_type:
+    type: string
+    description: Type of supplier order
+  total_tax:
+    type: number
+    format: float
+    description: Total tax applied to the order
+  total_paid:
+    type: number
+    format: float
+    description: Total amount paid for the order
+  downpayment:
+    type: number
+    format: float
+    description: Downpayment amount for the order
+  payment_terms:
+    type: string
+    description: Payment terms for the order
+  item_count:
+    type: integer
+    description: Number of unique items in the order
+  public_note:
+    type: string
+    description: Public note associated with the order
+  tracking_info:
+    type: string
+    description: Tracking information for the order
+  requested_ship_date:
+    type: string
+    format: date
+    description: Requested shipping date for the order
+  due_amount:
+    type: number
+    format: float
+    description: Amount due for the order
+  due_date:
+    type: string
+    format: date
+    description: Due date for the payment
+  order_type:
+    type: integer
+    description: Type of the order
+  sync_in_skuvault:
+    type: boolean
+    description: Indicates if the order should be synced in SKUVault
+  landed_domestic:
+    type: number
+    format: float
+    description: Landed cost for domestic shipping
+  landed_intl:
+    type: number
+    format: float
+    description: Landed cost for international shipping
+  intl_shippping:
+    type: number
+    format: float
+    description: Cost of international shipping
+  location_id:
+    type: integer
+    description: ID of the location associated with the order
+  country:
+    type: string
+    description: Country for shipping
+  zip:
+    type: string
+    description: ZIP code for shipping
+  state:
+    type: string
+    description: State for shipping
+  city:
+    type: string
+    description: City for shipping
+  street_address_1:
+    type: string
+    description: First line of the street address
+  street_address_2:
+    type: string
+    description: Second line of the street address
+  created_at:
+    type: string
+    format: date-time
+    description: Timestamp of when the record was created
+  updated_at:
+    type: string
+    format: date-time
+    description: Timestamp of when the record was last updated

@@ -1,0 +1,31 @@
+openapi: 3.0.0
+info:
+  title: Luminous API
+  version: 1.0.0
+  description: API documentation for Luminous
+
+servers:
+  - url: https://{tenantName}.luminous.com/external/api/v1
+    variables:
+      tenantName:
+        default: companyname
+        description: The tenant-specific subdomain
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Authenticate using a bearer token. To obtain a token, contact the Luminous support team.
+
+paths:
+  /purchase-orders:
+    $ref: './purchase-orders.yaml#/paths/~1purchase-orders'
+  /inventory/adjustments:
+    $ref: './inventory.yaml#/paths/~1inventory~1adjustments'
+
+tags:
+  - name: Purchase Orders
+    description: Get and modify purchase orders
+  - name: Inventory
+    description: Get and adjust stock levels

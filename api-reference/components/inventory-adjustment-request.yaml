@@ -1,0 +1,35 @@
+type: object
+required:
+  - remarks
+  - adjustment_entries
+properties:
+  remarks:
+    type: string
+    description: Remarks for the adjustment
+  adjustment_entries:
+    type: array
+    items:
+      type: object
+      required:
+        - warehouse_id
+        - location_id
+        - rfq_id
+      properties:
+        warehouse_id:
+          type: integer
+          description: ID of the warehouse (required)
+        location_id:
+          type: integer
+          description: ID of the location within the warehouse (required)
+        rfq_id:
+          type: integer
+          description: ID of the SKU (Request for Quote) (required)
+        qty_incoming:
+          type: integer
+          description: Quantity of incoming stock
+        qty_onhand:
+          type: integer
+          description: Quantity on hand
+        qty_pending:
+          type: integer
+          description: Quantity pending
