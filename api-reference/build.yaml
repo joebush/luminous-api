@@ -20,7 +20,7 @@ paths:
     get:
       tags:
         - Purchase Orders
-      summary: Retrieve purchase orders
+      summary: Get purchase orders
       description: Get a paginated list of purchase orders
       security:
         - BearerAuth: []
@@ -223,7 +223,7 @@ paths:
     post:
       tags:
         - Inventory
-      summary: Create inventory adjustment
+      summary: Adjust inventory levels
       description: Create a new inventory adjustment entry
       security:
         - BearerAuth: []
@@ -234,7 +234,6 @@ paths:
             schema:
               type: object
               required:
-                - remarks
                 - adjustment_entries
               properties:
                 remarks:
