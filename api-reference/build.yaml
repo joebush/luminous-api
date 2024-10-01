@@ -331,9 +331,6 @@ paths:
           name: discontinued
           schema:
             type: integer
-            enum:
-              - 0
-              - 1
           description: 'Filter by discontinued status (0 for active, 1 for discontinued)'
         - in: query
           name: sku
