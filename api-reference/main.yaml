@@ -25,9 +25,13 @@ paths:
     $ref: './inventory.yaml'
   /inventory/stocks:
     $ref: './inventory-stocks.yaml'
+  /transfer-orders:
+    $ref: './transfer-orders.yaml'
 
 tags:
   - name: Purchase Orders
     description: Get and modify purchase orders
   - name: Inventory
     description: Get and adjust stock levels
+  - name: Transfer Orders
+    description: Manage transfer orders

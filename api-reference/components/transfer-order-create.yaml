@@ -1,0 +1,55 @@
+type: object
+required:
+  - date
+  - arrival_date
+  - source_warehouse_id
+  - destination_warehouse_id
+  - status
+  - items
+properties:
+  date:
+    type: string
+    format: date
+    description: Date of the transfer order
+  arrival_date:
+    type: string
+    format: date
+    description: Expected arrival date
+  items_cost:
+    type: number
+    format: float
+    description: Total cost of items
+  shipping_cost:
+    type: number
+    format: float
+    description: Shipping cost
+  shipping_method:
+    type: string
+    description: Method of shipping
+  source_warehouse_id:
+    type: integer
+    description: ID of the source warehouse
+  destination_warehouse_id:
+    type: integer
+    description: ID of the destination warehouse
+  status:
+    type: string
+    description: Status of the transfer order
+  items:
+    type: array
+    items:
+      type: object
+      required:
+        - quantity
+        - orderedUomId
+        - rfqId
+      properties:
+        quantity:
+          type: integer
+          description: Quantity of the item
+        orderedUomId:
+          type: integer
+          description: ID of the ordered unit of measure
+        rfqId:
+          type: integer
+          description: ID of the RFQ (Request for Quote)

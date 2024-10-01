@@ -1,0 +1,44 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the transfer order
+  number:
+    type: string
+    description: Transfer order number
+  date:
+    type: string
+    format: date
+    description: Date of the transfer order
+  arrival_date:
+    type: string
+    format: date
+    description: Expected arrival date
+  items_cost:
+    type: number
+    format: float
+    description: Total cost of items
+  shipping_cost:
+    type: number
+    format: float
+    description: Shipping cost
+  shipping_method:
+    type: string
+    description: Method of shipping
+  source_warehouse_id:
+    type: integer
+    description: ID of the source warehouse
+  destination_warehouse_id:
+    type: integer
+    description: ID of the destination warehouse
+  status:
+    type: string
+    description: Status of the transfer order
+  created_at:
+    type: string
+    format: date-time
+    description: Creation timestamp
+  updated_at:
+    type: string
+    format: date-time
+    description: Last update timestamp

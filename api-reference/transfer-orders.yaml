@@ -1,0 +1,103 @@
+get:
+  tags:
+    - Transfer Orders
+  summary: Get transfer orders
+  description: Get a paginated list of transfer orders
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: query
+      name: page
+      schema:
+        type: integer
+        default: 1
+      description: Page number for pagination
+    - in: query
+      name: per_page
+      schema:
+        type: integer
+        default: 10
+      description: Number of items per page
+    - in: query
+      name: number
+      schema:
+        type: string
+      description: Filter by transfer order number
+    - in: query
+      name: source_warehouse_ids
+      schema:
+        type: string
+      description: Comma-separated list of source warehouse IDs
+    - in: query
+      name: destination_warehouse_ids
+      schema:
+        type: string
+      description: Comma-separated list of destination warehouse IDs
+    - in: query
+      name: date
+      schema:
+        type: string
+        format: date
+      description: Filter by transfer order date
+    - in: query
+      name: arrival_date
+      schema:
+        type: string
+        format: date
+      description: Filter by arrival date
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/transfer-order.yaml'
+              meta:
+                $ref: './components/pagination-meta.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+
+post:
+  tags:
+    - Transfer Orders
+  summary: Create a transfer order
+  description: Create a new transfer order
+  security:
+    - BearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: './components/transfer-order-create.yaml'
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/transfer-order.yaml'
+    '422':
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: './components/validation-error.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
