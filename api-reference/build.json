@@ -1,0 +1,988 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Luminous API",
+    "version": "1.0.0",
+    "description": "API documentation for Luminous"
+  },
+  "servers": [
+    {
+      "url": "https://{tenantName}.luminous.com/external/api/v1",
+      "variables": {
+        "tenantName": {
+          "default": "companyname",
+          "description": "The tenant-specific subdomain"
+        }
+      }
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Authenticate using a bearer token. To obtain a token, contact the Luminous support team."
+      }
+    }
+  },
+  "paths": {
+    "/purchase-orders": {
+      "get": {
+        "tags": [
+          "Purchase Orders"
+        ],
+        "summary": "Get purchase orders",
+        "description": "Get a paginated list of purchase orders",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "description": "Unique identifier for the purchase order"
+                          },
+                          "order_date": {
+                            "type": "string",
+                            "format": "date",
+                            "description": "Date when the purchase order was created"
+                          },
+                          "order_status_id": {
+                            "type": "integer",
+                            "description": "ID representing the status of the order"
+                          },
+                          "order_status_text": {
+                            "type": "string",
+                            "description": "Textual representation of the order status"
+                          },
+                          "order_status_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Date and time when the order status was last updated"
+                          },
+                          "factory_id": {
+                            "type": "integer",
+                            "description": "ID of the factory associated with the order"
+                          },
+                          "factory_name": {
+                            "type": "string",
+                            "description": "Name of the factory associated with the order"
+                          },
+                          "logistic_label": {
+                            "type": "string",
+                            "description": "Label for the logistics information"
+                          },
+                          "logistic_code": {
+                            "type": "string",
+                            "description": "Code for the logistics information"
+                          },
+                          "order_cost": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Total cost of the order"
+                          },
+                          "order_quantity": {
+                            "type": "integer",
+                            "description": "Total quantity of items in the order"
+                          },
+                          "total_shipping_cost": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Total shipping cost for the order"
+                          },
+                          "total_cost": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Total cost including shipping"
+                          },
+                          "private_note": {
+                            "type": "string",
+                            "description": "Private note associated with the order"
+                          },
+                          "arrival_due_date": {
+                            "type": "string",
+                            "format": "date",
+                            "description": "Expected arrival date for the order"
+                          },
+                          "warehouse_id": {
+                            "type": "integer",
+                            "description": "ID of the warehouse associated with the order"
+                          },
+                          "default_ship_to_address": {
+                            "type": "string",
+                            "description": "Default shipping address for the order"
+                          },
+                          "supplier_order_type": {
+                            "type": "string",
+                            "description": "Type of supplier order"
+                          },
+                          "total_tax": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Total tax applied to the order"
+                          },
+                          "total_paid": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Total amount paid for the order"
+                          },
+                          "downpayment": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Downpayment amount for the order"
+                          },
+                          "payment_terms": {
+                            "type": "string",
+                            "description": "Payment terms for the order"
+                          },
+                          "item_count": {
+                            "type": "integer",
+                            "description": "Number of unique items in the order"
+                          },
+                          "public_note": {
+                            "type": "string",
+                            "description": "Public note associated with the order"
+                          },
+                          "tracking_info": {
+                            "type": "string",
+                            "description": "Tracking information for the order"
+                          },
+                          "requested_ship_date": {
+                            "type": "string",
+                            "format": "date",
+                            "description": "Requested shipping date for the order"
+                          },
+                          "due_amount": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Amount due for the order"
+                          },
+                          "due_date": {
+                            "type": "string",
+                            "format": "date",
+                            "description": "Due date for the payment"
+                          },
+                          "order_type": {
+                            "type": "integer",
+                            "description": "Type of the order"
+                          },
+                          "sync_in_skuvault": {
+                            "type": "boolean",
+                            "description": "Indicates if the order should be synced in SKUVault"
+                          },
+                          "landed_domestic": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Landed cost for domestic shipping"
+                          },
+                          "landed_intl": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Landed cost for international shipping"
+                          },
+                          "intl_shippping": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Cost of international shipping"
+                          },
+                          "location_id": {
+                            "type": "integer",
+                            "description": "ID of the location associated with the order"
+                          },
+                          "country": {
+                            "type": "string",
+                            "description": "Country for shipping"
+                          },
+                          "zip": {
+                            "type": "string",
+                            "description": "ZIP code for shipping"
+                          },
+                          "state": {
+                            "type": "string",
+                            "description": "State for shipping"
+                          },
+                          "city": {
+                            "type": "string",
+                            "description": "City for shipping"
+                          },
+                          "street_address_1": {
+                            "type": "string",
+                            "description": "First line of the street address"
+                          },
+                          "street_address_2": {
+                            "type": "string",
+                            "description": "Second line of the street address"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp of when the record was created"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp of when the record was last updated"
+                          }
+                        }
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "current_page": {
+                          "type": "integer"
+                        },
+                        "from": {
+                          "type": "integer"
+                        },
+                        "last_page": {
+                          "type": "integer"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "per_page": {
+                          "type": "integer"
+                        },
+                        "to": {
+                          "type": "integer"
+                        },
+                        "total": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inventory/adjustments": {
+      "post": {
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Adjust inventory levels",
+        "description": "Create a new inventory adjustment entry",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "adjustment_entries"
+                ],
+                "properties": {
+                  "remarks": {
+                    "type": "string",
+                    "description": "Remarks for the adjustment"
+                  },
+                  "adjustment_entries": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "warehouse_id",
+                        "location_id",
+                        "rfq_id"
+                      ],
+                      "properties": {
+                        "warehouse_id": {
+                          "type": "integer",
+                          "description": "ID of the warehouse (required)"
+                        },
+                        "location_id": {
+                          "type": "integer",
+                          "description": "ID of the location within the warehouse (required)"
+                        },
+                        "rfq_id": {
+                          "type": "integer",
+                          "description": "ID of the SKU (Request for Quote) (required)"
+                        },
+                        "qty_incoming": {
+                          "type": "integer",
+                          "description": "Quantity of incoming stock"
+                        },
+                        "qty_onhand": {
+                          "type": "integer",
+                          "description": "Quantity on hand"
+                        },
+                        "qty_pending": {
+                          "type": "integer",
+                          "description": "Quantity pending"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID of the created adjustment"
+                    },
+                    "remarks": {
+                      "type": "string",
+                      "description": "Remarks for the adjustment"
+                    },
+                    "posted_by": {
+                      "type": "integer",
+                      "description": "ID of the user who posted the adjustment"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Timestamp of when the adjustment was created"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Timestamp of when the adjustment was last updated"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/paths/~1transfer-orders/post/responses/422/content/application~1json/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inventory/stocks": {
+      "get": {
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Get inventory stock levels",
+        "description": "Get a paginated list of inventory stock levels with various filter options",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer",
+              "default": 100
+            },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "discontinued",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Filter by discontinued status (0 for active, 1 for discontinued)"
+          },
+          {
+            "in": "query",
+            "name": "sku",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by SKU, product name, or UPC"
+          },
+          {
+            "in": "query",
+            "name": "product_name",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by product name"
+          },
+          {
+            "in": "query",
+            "name": "location",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Filter by location ID"
+          },
+          {
+            "in": "query",
+            "name": "category_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by category ID(s), comma-separated"
+          },
+          {
+            "in": "query",
+            "name": "subcategory_ids",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by subcategory ID(s), comma-separated"
+          },
+          {
+            "in": "query",
+            "name": "warehouse_ids",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by warehouse ID(s), comma-separated"
+          },
+          {
+            "in": "query",
+            "name": "warehouse_group_ids",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by warehouse group ID(s), comma-separated"
+          },
+          {
+            "in": "query",
+            "name": "product_type",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by product type"
+          },
+          {
+            "in": "query",
+            "name": "product_type_id",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Filter by product type ID"
+          },
+          {
+            "in": "query",
+            "name": "no_stock_skus",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Filter for SKUs with no stock"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Unique identifier for the inventory stock (combination of rfq_id and warehouse_group_id)"
+                          },
+                          "rfq_id": {
+                            "type": "integer",
+                            "description": "ID of the Request for Quote"
+                          },
+                          "internal_sku": {
+                            "type": "string",
+                            "description": "Internal SKU"
+                          },
+                          "sku": {
+                            "type": "string",
+                            "description": "SKU (same as internal_sku)"
+                          },
+                          "product_name": {
+                            "type": "string",
+                            "description": "Name of the product"
+                          },
+                          "warehouse_group_id": {
+                            "type": "integer",
+                            "description": "ID of the warehouse group"
+                          },
+                          "warehouse_group_label": {
+                            "type": "string",
+                            "description": "Label of the warehouse group"
+                          },
+                          "product_type": {
+                            "type": "string",
+                            "description": "Type of the product"
+                          },
+                          "qty_on_hand": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Quantity on hand"
+                          },
+                          "qty_pending": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Quantity pending"
+                          },
+                          "qty_available": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Quantity available"
+                          },
+                          "qty_incoming": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Quantity incoming"
+                          },
+                          "category_id": {
+                            "type": "integer",
+                            "description": "ID of the product category"
+                          },
+                          "sub_category_id": {
+                            "type": "integer",
+                            "description": "ID of the product subcategory"
+                          },
+                          "category_name": {
+                            "type": "string",
+                            "description": "Name of the product category"
+                          },
+                          "sub_category_name": {
+                            "type": "string",
+                            "description": "Name of the product subcategory"
+                          },
+                          "stock_status": {
+                            "type": "string",
+                            "description": "Status of the stock"
+                          },
+                          "preferred_supplier_id": {
+                            "type": "integer",
+                            "description": "ID of the preferred supplier"
+                          },
+                          "preferred_supplier_name": {
+                            "type": "string",
+                            "description": "Name of the preferred supplier"
+                          }
+                        }
+                      }
+                    },
+                    "meta": {
+                      "$ref": "#/paths/~1purchase-orders/get/responses/200/content/application~1json/schema/properties/meta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/paths/~1purchase-orders/get/responses/401/content/application~1json/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transfer-orders": {
+      "get": {
+        "tags": [
+          "Transfer Orders"
+        ],
+        "summary": "Get transfer orders",
+        "description": "Get a paginated list of transfer orders",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "number",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by transfer order number"
+          },
+          {
+            "in": "query",
+            "name": "source_warehouse_ids",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Comma-separated list of source warehouse IDs"
+          },
+          {
+            "in": "query",
+            "name": "destination_warehouse_ids",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Comma-separated list of destination warehouse IDs"
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Filter by transfer order date"
+          },
+          {
+            "in": "query",
+            "name": "arrival_date",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Filter by arrival date"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/paths/~1transfer-orders/post/responses/200/content/application~1json/schema/properties/data"
+                      }
+                    },
+                    "meta": {
+                      "$ref": "#/paths/~1purchase-orders/get/responses/200/content/application~1json/schema/properties/meta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/paths/~1purchase-orders/get/responses/401/content/application~1json/schema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Transfer Orders"
+        ],
+        "summary": "Create a transfer order",
+        "description": "Create a new transfer order",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "date",
+                  "arrival_date",
+                  "source_warehouse_id",
+                  "destination_warehouse_id",
+                  "status",
+                  "items"
+                ],
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Date of the transfer order"
+                  },
+                  "arrival_date": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Expected arrival date"
+                  },
+                  "items_cost": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Total cost of items"
+                  },
+                  "shipping_cost": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Shipping cost"
+                  },
+                  "shipping_method": {
+                    "type": "string",
+                    "description": "Method of shipping"
+                  },
+                  "source_warehouse_id": {
+                    "type": "integer",
+                    "description": "ID of the source warehouse"
+                  },
+                  "destination_warehouse_id": {
+                    "type": "integer",
+                    "description": "ID of the destination warehouse"
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "Status of the transfer order"
+                  },
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "quantity",
+                        "orderedUomId",
+                        "rfqId"
+                      ],
+                      "properties": {
+                        "quantity": {
+                          "type": "integer",
+                          "description": "Quantity of the item"
+                        },
+                        "orderedUomId": {
+                          "type": "integer",
+                          "description": "ID of the ordered unit of measure"
+                        },
+                        "rfqId": {
+                          "type": "integer",
+                          "description": "ID of the RFQ (Request for Quote)"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "description": "Unique identifier for the transfer order"
+                        },
+                        "number": {
+                          "type": "string",
+                          "description": "Transfer order number"
+                        },
+                        "date": {
+                          "type": "string",
+                          "format": "date",
+                          "description": "Date of the transfer order"
+                        },
+                        "arrival_date": {
+                          "type": "string",
+                          "format": "date",
+                          "description": "Expected arrival date"
+                        },
+                        "items_cost": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "Total cost of items"
+                        },
+                        "shipping_cost": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "Shipping cost"
+                        },
+                        "shipping_method": {
+                          "type": "string",
+                          "description": "Method of shipping"
+                        },
+                        "source_warehouse_id": {
+                          "type": "integer",
+                          "description": "ID of the source warehouse"
+                        },
+                        "destination_warehouse_id": {
+                          "type": "integer",
+                          "description": "ID of the destination warehouse"
+                        },
+                        "status": {
+                          "type": "string",
+                          "description": "Status of the transfer order"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Creation timestamp"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Last update timestamp"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/paths/~1purchase-orders/get/responses/401/content/application~1json/schema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Purchase Orders",
+      "description": "Get and modify purchase orders"
+    },
+    {
+      "name": "Inventory",
+      "description": "Get and adjust stock levels"
+    },
+    {
+      "name": "Transfer Orders",
+      "description": "Manage transfer orders"
+    }
+  ]
+}
