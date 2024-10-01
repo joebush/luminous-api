@@ -1,28 +1,26 @@
-paths:
-  /inventory/adjustments:
-    post:
-      tags:
-        - Inventory
-      summary: Create inventory adjustment
-      description: Create a new inventory adjustment entry
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: './components/inventory-adjustment-request.yaml'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: './components/inventory-adjustment.yaml'
-        '422':
-          description: Validation error
-          content:
-            application/json:
-              schema:
-                $ref: './components/validation-error.yaml'
+post:
+  tags:
+    - Inventory
+  summary: Create inventory adjustment
+  description: Create a new inventory adjustment entry
+  security:
+    - BearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: './components/inventory-adjustment-request.yaml'
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: './components/inventory-adjustment.yaml'
+    '422':
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: './components/validation-error.yaml'

@@ -20,9 +20,9 @@ components:
 
 paths:
   /purchase-orders:
-    $ref: './purchase-orders.yaml#/paths/~1purchase-orders'
+    $ref: './purchase-orders.yaml'
   /inventory/adjustments:
-    $ref: './inventory.yaml#/paths/~1inventory~1adjustments'
+    $ref: './inventory.yaml'
 
 tags:
   - name: Purchase Orders
