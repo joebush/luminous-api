@@ -1,7 +1,7 @@
 post:
   tags:
     - Inventory
-  summary: Create inventory adjustment
+  summary: Adjust inventory levels
   description: Create a new inventory adjustment entry
   security:
     - BearerAuth: []

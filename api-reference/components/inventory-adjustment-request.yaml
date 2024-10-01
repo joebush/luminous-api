@@ -1,6 +1,5 @@
 type: object
 required:
-  - remarks
   - adjustment_entries
 properties:
   remarks:
