@@ -41,15 +41,15 @@ properties:
       type: object
       required:
         - quantity
-        - orderedUomId
-        - rfqId
+        - ordered_uom_id
+        - product_id
       properties:
         quantity:
           type: integer
           description: Quantity of the item
-        orderedUomId:
+        ordered_uom_id:
           type: integer
           description: ID of the ordered unit of measure
-        rfqId:
+        product_id:
           type: integer
-          description: ID of the RFQ (Request for Quote)
+          description: ID of the product

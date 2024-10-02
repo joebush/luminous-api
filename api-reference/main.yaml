@@ -5,11 +5,11 @@ info:
   description: API documentation for Luminous
 
 servers:
-  - url: https://{tenantName}.luminous.com/external/api/v1
+  - url: https://{companyName}.joinluminous.com/external/api/v1
     variables:
-      tenantName:
-        default: companyname
-        description: The tenant-specific subdomain
+      companyName:
+        default: companyName
+        description: Your company-specific subdomain
 
 components:
   securitySchemes:
