@@ -1,0 +1,46 @@
+type: object
+properties:
+  id:
+    type: integer
+  created_at:
+    type: string
+    format: date-time
+  updated_at:
+    type: string
+    format: date-time
+  receiving_report_id:
+    type: integer
+  purchase_order_id:
+    type: integer
+  purchase_order_item_id:
+    type: integer
+  purchase_order_shipment_id:
+    type: integer
+  quantity:
+    type: number
+  unit:
+    type: string
+  unit_price:
+    type: number
+  tax:
+    type: number
+  discount_amount:
+    type: number
+  discount_percent:
+    type: number
+  line_total:
+    type: number
+  remarks:
+    type: string
+  stock_id:
+    type: integer
+  received_quantity:
+    type: number
+  base_unit_of_measure_id:
+    type: integer
+  received_unit_of_measure_id:
+    type: integer
+  location_id:
+    type: integer
+  lot_id:
+    type: integer

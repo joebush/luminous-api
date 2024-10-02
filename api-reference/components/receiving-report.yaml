@@ -1,0 +1,40 @@
+type: object
+properties:
+  id:
+    type: integer
+  created_at:
+    type: string
+    format: date-time
+  updated_at:
+    type: string
+    format: date-time
+  status:
+    type: string
+  received_date:
+    type: string
+    format: date
+  tracking_number:
+    type: string
+  received_by:
+    type: integer
+  received_at:
+    type: string
+    format: date-time
+  shipped_via:
+    type: string
+  total_quantity:
+    type: number
+  total_tax:
+    type: number
+  total_cost:
+    type: number
+  shipping_cost:
+    type: number
+  items:
+    type: array
+    items:
+      $ref: './receiving-report-item.yaml'
+  extra_costs:
+    type: array
+    items:
+      $ref: './receiving-report-extra-cost.yaml'

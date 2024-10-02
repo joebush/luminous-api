@@ -1,0 +1,69 @@
+get:
+  operationId: getReceivingReports
+  tags:
+    - Receiving Reports
+  summary: Get receiving reports
+  description: Get a paginated list of receiving reports
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: query
+      name: page
+      schema:
+        type: integer
+        default: 1
+      description: Page number for pagination
+    - in: query
+      name: per_page
+      schema:
+        type: integer
+        default: 10
+      description: Number of items per page
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/receiving-report.yaml'
+              meta:
+                $ref: './components/pagination-meta.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+
+post:
+  operationId: createReceivingReport
+  tags:
+    - Receiving Reports
+  summary: Create a receiving report
+  description: Create a new receiving report
+  security:
+    - BearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: './components/receiving-report-create.yaml'
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: './components/receiving-report.yaml'
+    '422':
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: './components/validation-error.yaml'

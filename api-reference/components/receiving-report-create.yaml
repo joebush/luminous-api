@@ -1,0 +1,84 @@
+type: object
+required:
+  - received_date
+  - items
+properties:
+  received_date:
+    type: string
+    format: date
+  tracking_number:
+    type: string
+  received_by:
+    type: integer
+  received_at:
+    type: string
+    format: date-time
+  shipped_via:
+    type: string
+  total_quantity:
+    type: number
+  total_tax:
+    type: number
+  total_cost:
+    type: number
+  shipping_cost:
+    type: number
+  items:
+    type: array
+    items:
+      type: object
+      required:
+        - purchase_order_id
+        - purchase_order_item_id
+        - quantity
+        - unit_price
+      properties:
+        purchase_order_id:
+          type: integer
+        purchase_order_item_id:
+          type: integer
+        quantity:
+          type: number
+        unit:
+          type: string
+        unit_price:
+          type: number
+        tax:
+          type: number
+        discount_amount:
+          type: number
+        discount_percent:
+          type: number
+        line_total:
+          type: number
+        remarks:
+          type: string
+        stock_id:
+          type: integer
+        received_quantity:
+          type: number
+        base_unit_of_measure_id:
+          type: integer
+        received_unit_of_measure_id:
+          type: integer
+        location_id:
+          type: integer
+        lot_id:
+          type: integer
+  extra_costs:
+    type: array
+    items:
+      type: object
+      required:
+        - name
+        - quantity
+        - unit_price
+      properties:
+        name:
+          type: string
+        quantity:
+          type: number
+        unit_price:
+          type: number
+        line_total:
+          type: number

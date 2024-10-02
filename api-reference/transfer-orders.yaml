@@ -1,4 +1,5 @@
 get:
+  operationId: getTransferOrders
   tags:
     - Transfer Orders
   summary: Get transfer orders
@@ -67,6 +68,7 @@ get:
             $ref: './components/error.yaml'
 
 post:
+  operationId: createTransferOrder
   tags:
     - Transfer Orders
   summary: Create a transfer order

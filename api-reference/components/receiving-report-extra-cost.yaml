@@ -1,0 +1,20 @@
+type: object
+properties:
+  id:
+    type: integer
+  created_at:
+    type: string
+    format: date-time
+  updated_at:
+    type: string
+    format: date-time
+  supplier_receiving_report_id:
+    type: integer
+  name:
+    type: string
+  quantity:
+    type: number
+  unit_price:
+    type: number
+  line_total:
+    type: number

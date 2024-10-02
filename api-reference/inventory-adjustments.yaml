@@ -1,4 +1,5 @@
 post:
+  operationId: createInventoryAdjustment
   tags:
     - Inventory
   summary: Adjust inventory levels

@@ -22,11 +22,15 @@ paths:
   /purchase-orders:
     $ref: './purchase-orders.yaml'
   /inventory/adjustments:
-    $ref: './inventory.yaml'
+    $ref: './inventory-adjustments.yaml'
   /inventory/stocks:
     $ref: './inventory-stocks.yaml'
   /transfer-orders:
     $ref: './transfer-orders.yaml'
+  /receiving-reports:
+    $ref: './receiving-reports.yaml'
+  /receiving-reports/{receivingReportId}:
+    $ref: './receiving-report.yaml'
 
 tags:
   - name: Purchase Orders
@@ -35,3 +39,5 @@ tags:
     description: Get and adjust stock levels
   - name: Transfer Orders
     description: Manage transfer orders
+  - name: Receiving Reports
+    description: Manage receiving reports

@@ -1,4 +1,5 @@
 get:
+  operationId: getInventoryStocks
   tags:
     - Inventory
   summary: Get inventory stock levels

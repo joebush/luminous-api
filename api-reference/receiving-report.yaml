@@ -1,0 +1,28 @@
+get:
+  operationId: getSingleReceivingReport
+  tags:
+    - Receiving Reports
+  summary: Get a specific receiving report
+  description: Get details of a specific receiving report by ID
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: receivingReportId
+      required: true
+      schema:
+        type: integer
+      description: ID of the receiving report to retrieve
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: './components/receiving-report.yaml'
+    '404':
+      description: Receiving report not found
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
