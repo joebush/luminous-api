@@ -25,12 +25,6 @@ paths:
     $ref: './inventory-adjustments.yaml'
   /inventory/stocks:
     $ref: './inventory-stocks.yaml'
-  /transfer-orders:
-    $ref: './transfer-orders.yaml'
-  /receiving-reports:
-    $ref: './receiving-reports.yaml'
-  /receiving-reports/{receivingReportId}:
-    $ref: './receiving-report.yaml'
 
 tags:
   - name: Purchase Orders
