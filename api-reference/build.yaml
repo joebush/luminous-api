@@ -298,23 +298,14 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                  errors:
-                    type: object
-                    additionalProperties:
-                      type: array
-                      items:
-                        type: string
-  /inventory/stocks:
+                $ref: '#/paths/~1transfer-orders/post/responses/422/content/application~1json/schema'
+  /transfer-orders:
     get:
-      operationId: getInventoryStocks
+      operationId: getTransferOrders
       tags:
-        - Inventory
-      summary: Get inventory stock levels
-      description: Get a paginated list of inventory stock levels with various filter options
+        - Transfer Orders
+      summary: Get transfer orders
+      description: Get a paginated list of transfer orders
       security:
         - BearerAuth: []
       parameters:
@@ -328,63 +319,35 @@ paths:
           name: per_page
           schema:
             type: integer
-            default: 100
+            default: 10
           description: Number of items per page
         - in: query
-          name: discontinued
-          schema:
-            type: integer
-          description: 'Filter by discontinued status (0 for active, 1 for discontinued)'
-        - in: query
-          name: sku
+          name: number
           schema:
             type: string
-          description: 'Filter by SKU, product name, or UPC'
+          description: Filter by transfer order number
         - in: query
-          name: product_name
+          name: source_warehouse_ids
           schema:
             type: string
-          description: Filter by product name
+          description: Comma-separated list of source warehouse IDs
         - in: query
-          name: location
-          schema:
-            type: integer
-          description: Filter by location ID
-        - in: query
-          name: category_id
+          name: destination_warehouse_ids
           schema:
             type: string
-          description: 'Filter by category ID(s), comma-separated'
+          description: Comma-separated list of destination warehouse IDs
         - in: query
-          name: subcategory_ids
+          name: date
           schema:
             type: string
-          description: 'Filter by subcategory ID(s), comma-separated'
+            format: date
+          description: Filter by transfer order date
         - in: query
-          name: warehouse_ids
+          name: arrival_date
           schema:
             type: string
-          description: 'Filter by warehouse ID(s), comma-separated'
-        - in: query
-          name: warehouse_group_ids
-          schema:
-            type: string
-          description: 'Filter by warehouse group ID(s), comma-separated'
-        - in: query
-          name: product_type
-          schema:
-            type: string
-          description: Filter by product type
-        - in: query
-          name: product_type_id
-          schema:
-            type: integer
-          description: Filter by product type ID
-        - in: query
-          name: no_stock_skus
-          schema:
-            type: boolean
-          description: Filter for SKUs with no stock
+            format: date
+          description: Filter by arrival date
       responses:
         '200':
           description: Successful response
@@ -396,69 +359,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          description: Unique identifier for the inventory stock (combination of rfq_id and warehouse_group_id)
-                        rfq_id:
-                          type: integer
-                          description: ID of the Request for Quote
-                        internal_sku:
-                          type: string
-                          description: Internal SKU
-                        sku:
-                          type: string
-                          description: SKU (same as internal_sku)
-                        product_name:
-                          type: string
-                          description: Name of the product
-                        warehouse_group_id:
-                          type: integer
-                          description: ID of the warehouse group
-                        warehouse_group_label:
-                          type: string
-                          description: Label of the warehouse group
-                        product_type:
-                          type: string
-                          description: Type of the product
-                        qty_on_hand:
-                          type: number
-                          format: float
-                          description: Quantity on hand
-                        qty_pending:
-                          type: number
-                          format: float
-                          description: Quantity pending
-                        qty_available:
-                          type: number
-                          format: float
-                          description: Quantity available
-                        qty_incoming:
-                          type: number
-                          format: float
-                          description: Quantity incoming
-                        category_id:
-                          type: integer
-                          description: ID of the product category
-                        sub_category_id:
-                          type: integer
-                          description: ID of the product subcategory
-                        category_name:
-                          type: string
-                          description: Name of the product category
-                        sub_category_name:
-                          type: string
-                          description: Name of the product subcategory
-                        stock_status:
-                          type: string
-                          description: Status of the stock
-                        preferred_supplier_id:
-                          type: integer
-                          description: ID of the preferred supplier
-                        preferred_supplier_name:
-                          type: string
-                          description: Name of the preferred supplier
+                      $ref: '#/paths/~1transfer-orders/post/responses/200/content/application~1json/schema/properties/data'
                   meta:
                     $ref: '#/paths/~1purchase-orders/get/responses/200/content/application~1json/schema/properties/meta'
         '401':
@@ -467,6 +368,148 @@ paths:
             application/json:
               schema:
                 $ref: '#/paths/~1purchase-orders/get/responses/401/content/application~1json/schema'
+    post:
+      operationId: createTransferOrder
+      tags:
+        - Transfer Orders
+      summary: Create a transfer order
+      description: Create a new transfer order
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - date
+                - arrival_date
+                - source_warehouse_id
+                - destination_warehouse_id
+                - status
+                - items
+              properties:
+                date:
+                  type: string
+                  format: date
+                  description: Date of the transfer order
+                arrival_date:
+                  type: string
+                  format: date
+                  description: Expected arrival date
+                items_cost:
+                  type: number
+                  format: float
+                  description: Total cost of items
+                shipping_cost:
+                  type: number
+                  format: float
+                  description: Shipping cost
+                shipping_method:
+                  type: string
+                  description: Method of shipping
+                source_warehouse_id:
+                  type: integer
+                  description: ID of the source warehouse
+                destination_warehouse_id:
+                  type: integer
+                  description: ID of the destination warehouse
+                status:
+                  type: string
+                  description: Status of the transfer order
+                items:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - quantity
+                      - orderedUomId
+                      - rfqId
+                    properties:
+                      quantity:
+                        type: integer
+                        description: Quantity of the item
+                      orderedUomId:
+                        type: integer
+                        description: ID of the ordered unit of measure
+                      rfqId:
+                        type: integer
+                        description: ID of the RFQ (Request for Quote)
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Unique identifier for the transfer order
+                      number:
+                        type: string
+                        description: Transfer order number
+                      date:
+                        type: string
+                        format: date
+                        description: Date of the transfer order
+                      arrival_date:
+                        type: string
+                        format: date
+                        description: Expected arrival date
+                      items_cost:
+                        type: number
+                        format: float
+                        description: Total cost of items
+                      shipping_cost:
+                        type: number
+                        format: float
+                        description: Shipping cost
+                      shipping_method:
+                        type: string
+                        description: Method of shipping
+                      source_warehouse_id:
+                        type: integer
+                        description: ID of the source warehouse
+                      destination_warehouse_id:
+                        type: integer
+                        description: ID of the destination warehouse
+                      status:
+                        type: string
+                        description: Status of the transfer order
+                      created_at:
+                        type: string
+                        format: date-time
+                        description: Creation timestamp
+                      updated_at:
+                        type: string
+                        format: date-time
+                        description: Last update timestamp
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1purchase-orders/get/responses/401/content/application~1json/schema'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
 tags:
   - name: Purchase Orders
     description: Get and modify purchase orders
