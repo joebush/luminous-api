@@ -248,7 +248,7 @@ paths:
                     required:
                       - warehouse_id
                       - location_id
-                      - rfq_id
+                      - product_id
                     properties:
                       warehouse_id:
                         type: integer
@@ -256,9 +256,9 @@ paths:
                       location_id:
                         type: integer
                         description: ID of the location within the warehouse (required)
-                      rfq_id:
+                      product_id:
                         type: integer
-                        description: ID of the SKU (Request for Quote) (required)
+                        description: ID of the product (required)
                       qty_incoming:
                         type: integer
                         description: Quantity of incoming stock
@@ -392,15 +392,12 @@ paths:
                         id:
                           type: string
                           description: Unique identifier for the inventory stock (combination of rfq_id and warehouse_group_id)
-                        rfq_id:
+                        product_id:
                           type: integer
-                          description: ID of the Request for Quote
-                        internal_sku:
-                          type: string
-                          description: Internal SKU
+                          description: ID of the inventory product
                         sku:
                           type: string
-                          description: SKU (same as internal_sku)
+                          description: Product SKU
                         product_name:
                           type: string
                           description: Name of the product
@@ -924,6 +921,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/paths/~1transfer-orders/post/responses/422/content/application~1json/schema'
+  '/receiving-reports/{id}':
+    get:
+      operationId: getSingleReceivingReport
+      tags:
+        - Receiving Reports
+      summary: Get a specific receiving report
+      description: Get details of a specific receiving report by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the receiving report to retrieve
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1receiving-reports/post/responses/200/content/application~1json/schema'
+        '404':
+          description: Receiving report not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1purchase-orders/get/responses/401/content/application~1json/schema'
 tags:
   - name: Purchase Orders
     description: Get and modify purchase orders

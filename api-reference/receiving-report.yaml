@@ -8,7 +8,7 @@ get:
     - BearerAuth: []
   parameters:
     - in: path
-      name: receivingReportId
+      name: id
       required: true
       schema:
         type: integer

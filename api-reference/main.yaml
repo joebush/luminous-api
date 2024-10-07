@@ -29,6 +29,8 @@ paths:
     $ref: './transfer-orders.yaml'
   /receiving-reports:
     $ref: './receiving-reports.yaml'
+  /receiving-reports/{id}:
+    $ref: './receiving-report.yaml'
 
 tags:
   - name: Purchase Orders

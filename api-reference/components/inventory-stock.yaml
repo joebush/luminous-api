@@ -3,15 +3,12 @@ properties:
   id:
     type: string
     description: Unique identifier for the inventory stock (combination of rfq_id and warehouse_group_id)
-  rfq_id:
+  product_id:
     type: integer
-    description: ID of the Request for Quote
-  internal_sku:
-    type: string
-    description: Internal SKU
+    description: ID of the inventory product
   sku:
     type: string
-    description: SKU (same as internal_sku)
+    description: Product SKU
   product_name:
     type: string
     description: Name of the product

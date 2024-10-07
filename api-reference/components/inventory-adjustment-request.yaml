@@ -12,7 +12,7 @@ properties:
       required:
         - warehouse_id
         - location_id
-        - rfq_id
+        - product_id
       properties:
         warehouse_id:
           type: integer
@@ -20,9 +20,9 @@ properties:
         location_id:
           type: integer
           description: ID of the location within the warehouse (required)
-        rfq_id:
+        product_id:
           type: integer
-          description: ID of the SKU (Request for Quote) (required)
+          description: ID of the product (required)
         qty_incoming:
           type: integer
           description: Quantity of incoming stock
