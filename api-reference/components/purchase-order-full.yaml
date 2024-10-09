@@ -158,3 +158,19 @@ properties:
     type: string
     format: date-time
     description: Timestamp of when the record was last updated
+  items:
+    type: array
+    items:
+      $ref: './purchase-order-item.yaml'
+    description: List of items in the purchase order
+  tags:
+    type: array
+    items:
+      $ref: './product-tag.yaml'
+    description: List of tags associated with the purchase order
+  supplier:
+    $ref: './supplier.yaml'
+  warehouse:
+    $ref: './location.yaml'
+  location:
+    $ref: './location.yaml'

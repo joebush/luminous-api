@@ -2,41 +2,32 @@ type: object
 properties:
   id:
     type: string
-    description: Unique identifier for the inventory stock (combination of rfq_id and warehouse_group_id)
-  product_id:
-    type: integer
-    description: ID of the inventory product
+    description: Product ID
   sku:
     type: string
     description: Product SKU
-  product_name:
+  name:
     type: string
     description: Name of the product
-  warehouse_group_id:
-    type: integer
-    description: ID of the warehouse group
-  warehouse_group_label:
-    type: string
-    description: Label of the warehouse group
   product_type:
     type: string
     description: Type of the product
-  qty_on_hand:
+  qty_onhand:
     type: number
     format: float
-    description: Quantity on hand
+    description: Total quantity on hand across all locations
   qty_pending:
     type: number
     format: float
-    description: Quantity pending
+    description: Total quantity pending across all locations
   qty_available:
     type: number
     format: float
-    description: Quantity available
+    description: Total quantity available across all locations
   qty_incoming:
     type: number
     format: float
-    description: Quantity incoming
+    description: Total quantity incoming across all locations
   category_id:
     type: integer
     description: ID of the product category
@@ -49,12 +40,8 @@ properties:
   sub_category_name:
     type: string
     description: Name of the product subcategory
-  stock_status:
-    type: string
-    description: Status of the stock
-  preferred_supplier_id:
-    type: integer
-    description: ID of the preferred supplier
-  preferred_supplier_name:
-    type: string
-    description: Name of the preferred supplier
+  location_stocks:
+    type: array
+    items:
+      $ref: './inventory-location-stock.yaml'
+    description: List of stock entries across all locations

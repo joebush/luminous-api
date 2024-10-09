@@ -68,70 +68,57 @@ paths:
                           type: string
                           format: date-time
                           description: Date and time when the order status was last updated
-                        factory_id:
+                        supplier_id:
                           type: integer
-                          description: ID of the factory associated with the order
-                        factory_name:
+                          description: ID of the supplier associated with the order
+                        order_type:
                           type: string
-                          description: Name of the factory associated with the order
-                        logistic_label:
-                          type: string
-                          description: Label for the logistics information
+                          description: Type of the order
                         logistic_code:
                           type: string
                           description: Code for the logistics information
+                        logistic_label:
+                          type: string
+                          description: Label for the logistics information
+                        item_count:
+                          type: integer
+                          description: Number of unique items in the order
+                        order_quantity:
+                          type: integer
+                          description: Total quantity of items in the order
                         order_cost:
                           type: number
                           format: float
                           description: Total cost of the order
-                        order_quantity:
-                          type: integer
-                          description: Total quantity of items in the order
-                        total_shipping_cost:
-                          type: number
-                          format: float
-                          description: Total shipping cost for the order
-                        total_cost:
-                          type: number
-                          format: float
-                          description: Total cost including shipping
-                        private_note:
-                          type: string
-                          description: Private note associated with the order
-                        arrival_due_date:
-                          type: string
-                          format: date
-                          description: Expected arrival date for the order
-                        warehouse_id:
-                          type: integer
-                          description: ID of the warehouse associated with the order
-                        default_ship_to_address:
-                          type: string
-                          description: Default shipping address for the order
-                        supplier_order_type:
-                          type: string
-                          description: Type of supplier order
                         total_tax:
                           type: number
                           format: float
                           description: Total tax applied to the order
+                        total_cost:
+                          type: number
+                          format: float
+                          description: Total cost including tax
                         total_paid:
                           type: number
                           format: float
                           description: Total amount paid for the order
-                        downpayment:
+                        total_shipping_cost:
                           type: number
                           format: float
-                          description: Downpayment amount for the order
+                          description: Total shipping cost for the order
+                        down_payment:
+                          type: number
+                          format: float
+                          description: Down payment amount for the order
                         payment_terms:
                           type: string
                           description: Payment terms for the order
-                        item_count:
-                          type: integer
-                          description: Number of unique items in the order
                         public_note:
                           type: string
                           description: Public note associated with the order
+                        private_note:
+                          type: string
+                          description: Private note associated with the order
                         tracking_info:
                           type: string
                           description: Tracking information for the order
@@ -139,6 +126,10 @@ paths:
                           type: string
                           format: date
                           description: Requested shipping date for the order
+                        arrival_due_date:
+                          type: string
+                          format: date
+                          description: Expected arrival date for the order
                         due_amount:
                           type: number
                           format: float
@@ -147,10 +138,13 @@ paths:
                           type: string
                           format: date
                           description: Due date for the payment
-                        order_type:
-                          type: integer
-                          description: Type of the order
-                        sync_in_skuvault:
+                        starred:
+                          type: boolean
+                          description: Indicates if the order is starred
+                        starred_notes:
+                          type: string
+                          description: Notes for starred orders
+                        sync_in_sku_vault:
                           type: boolean
                           description: Indicates if the order should be synced in SKUVault
                         landed_domestic:
@@ -161,31 +155,52 @@ paths:
                           type: number
                           format: float
                           description: Landed cost for international shipping
-                        intl_shippping:
+                        intl_shipping:
                           type: number
                           format: float
                           description: Cost of international shipping
-                        location_id:
-                          type: integer
-                          description: ID of the location associated with the order
-                        country:
+                        street_address_one:
                           type: string
-                          description: Country for shipping
-                        zip:
+                          description: First line of the street address
+                        street_address_two:
                           type: string
-                          description: ZIP code for shipping
-                        state:
-                          type: string
-                          description: State for shipping
+                          description: Second line of the street address
                         city:
                           type: string
                           description: City for shipping
-                        street_address_1:
+                        state:
                           type: string
-                          description: First line of the street address
-                        street_address_2:
+                          description: State for shipping
+                        zip:
                           type: string
-                          description: Second line of the street address
+                          description: ZIP code for shipping
+                        country:
+                          type: string
+                          description: Country for shipping
+                        location_id:
+                          type: integer
+                          description: ID of the location associated with the order
+                        warehouse_id:
+                          type: integer
+                          description: ID of the warehouse associated with the order
+                        default_ship_to_address:
+                          type: string
+                          description: Default shipping address for the order
+                        internal_resource_id:
+                          type: integer
+                          description: ID of the internal resource
+                        internal_resource_type:
+                          type: string
+                          description: Type of the internal resource
+                        supplier_order_type:
+                          type: string
+                          description: Type of supplier order
+                        quickbooks_purchase_order_id:
+                          type: string
+                          description: QuickBooks purchase order ID
+                        quickbooks_detailed_message:
+                          type: string
+                          description: Detailed message from QuickBooks
                         created_at:
                           type: string
                           format: date-time
@@ -220,6 +235,344 @@ paths:
                 properties:
                   message:
                     type: string
+  '/purchase-orders/{id}':
+    get:
+      operationId: getPurchaseOrder
+      tags:
+        - Purchase Orders
+      summary: Get a specific purchase order
+      description: Get details of a specific purchase order by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the purchase order to retrieve
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Unique identifier for the purchase order
+                      order_date:
+                        type: string
+                        format: date
+                        description: Date when the purchase order was created
+                      order_status_id:
+                        type: integer
+                        description: ID representing the status of the order
+                      order_status_text:
+                        type: string
+                        description: Textual representation of the order status
+                      order_status_date:
+                        type: string
+                        format: date-time
+                        description: Date and time when the order status was last updated
+                      supplier_id:
+                        type: integer
+                        description: ID of the supplier associated with the order
+                      order_type:
+                        type: string
+                        description: Type of the order
+                      logistic_code:
+                        type: string
+                        description: Code for the logistics information
+                      logistic_label:
+                        type: string
+                        description: Label for the logistics information
+                      item_count:
+                        type: integer
+                        description: Number of unique items in the order
+                      order_quantity:
+                        type: integer
+                        description: Total quantity of items in the order
+                      order_cost:
+                        type: number
+                        format: float
+                        description: Total cost of the order
+                      total_tax:
+                        type: number
+                        format: float
+                        description: Total tax applied to the order
+                      total_cost:
+                        type: number
+                        format: float
+                        description: Total cost including tax
+                      total_paid:
+                        type: number
+                        format: float
+                        description: Total amount paid for the order
+                      total_shipping_cost:
+                        type: number
+                        format: float
+                        description: Total shipping cost for the order
+                      down_payment:
+                        type: number
+                        format: float
+                        description: Down payment amount for the order
+                      payment_terms:
+                        type: string
+                        description: Payment terms for the order
+                      public_note:
+                        type: string
+                        description: Public note associated with the order
+                      private_note:
+                        type: string
+                        description: Private note associated with the order
+                      tracking_info:
+                        type: string
+                        description: Tracking information for the order
+                      requested_ship_date:
+                        type: string
+                        format: date
+                        description: Requested shipping date for the order
+                      arrival_due_date:
+                        type: string
+                        format: date
+                        description: Expected arrival date for the order
+                      due_amount:
+                        type: number
+                        format: float
+                        description: Amount due for the order
+                      due_date:
+                        type: string
+                        format: date
+                        description: Due date for the payment
+                      starred:
+                        type: boolean
+                        description: Indicates if the order is starred
+                      starred_notes:
+                        type: string
+                        description: Notes for starred orders
+                      sync_in_sku_vault:
+                        type: boolean
+                        description: Indicates if the order should be synced in SKUVault
+                      landed_domestic:
+                        type: number
+                        format: float
+                        description: Landed cost for domestic shipping
+                      landed_intl:
+                        type: number
+                        format: float
+                        description: Landed cost for international shipping
+                      intl_shipping:
+                        type: number
+                        format: float
+                        description: Cost of international shipping
+                      street_address_one:
+                        type: string
+                        description: First line of the street address
+                      street_address_two:
+                        type: string
+                        description: Second line of the street address
+                      city:
+                        type: string
+                        description: City for shipping
+                      state:
+                        type: string
+                        description: State for shipping
+                      zip:
+                        type: string
+                        description: ZIP code for shipping
+                      country:
+                        type: string
+                        description: Country for shipping
+                      location_id:
+                        type: integer
+                        description: ID of the location associated with the order
+                      warehouse_id:
+                        type: integer
+                        description: ID of the warehouse associated with the order
+                      default_ship_to_address:
+                        type: string
+                        description: Default shipping address for the order
+                      internal_resource_id:
+                        type: integer
+                        description: ID of the internal resource
+                      internal_resource_type:
+                        type: string
+                        description: Type of the internal resource
+                      supplier_order_type:
+                        type: string
+                        description: Type of supplier order
+                      quickbooks_purchase_order_id:
+                        type: string
+                        description: QuickBooks purchase order ID
+                      quickbooks_detailed_message:
+                        type: string
+                        description: Detailed message from QuickBooks
+                      created_at:
+                        type: string
+                        format: date-time
+                        description: Timestamp of when the record was created
+                      updated_at:
+                        type: string
+                        format: date-time
+                        description: Timestamp of when the record was last updated
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            purchase_order_id:
+                              type: integer
+                            internal_sku:
+                              type: string
+                            source_sku:
+                              type: string
+                            product_name:
+                              type: string
+                            product_description:
+                              type: string
+                            quantity:
+                              type: number
+                            unit:
+                              type: string
+                            unit_price:
+                              type: number
+                            tax:
+                              type: number
+                            discount_amount:
+                              type: number
+                            discount_percent:
+                              type: number
+                            down_payment_amount:
+                              type: number
+                            down_payment_percent:
+                              type: number
+                            line_total:
+                              type: number
+                            product_id:
+                              type: integer
+                            product_type_id:
+                              type: integer
+                            shipping_unit_cost:
+                              type: number
+                            stock_id:
+                              type: integer
+                            order:
+                              type: integer
+                            ordered_quantity:
+                              type: number
+                            base_uom_id:
+                              type: integer
+                            ordered_uom_id:
+                              type: integer
+                            received_quantity:
+                              type: number
+                            description:
+                              type: string
+                            internal_resource_item_id:
+                              type: integer
+                            internal_resource_item_type:
+                              type: string
+                            lot_id:
+                              type: integer
+                            remaining_shipment_quantity:
+                              type: number
+                            shipment_quantity:
+                              type: number
+                        description: List of items in the purchase order
+                      tags:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            description:
+                              type: string
+                            icon:
+                              type: string
+                            color:
+                              type: string
+                            discount_structure:
+                              type: object
+                            markup_structure:
+                              type: object
+                        description: List of tags associated with the purchase order
+                      supplier:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          status:
+                            type: integer
+                          name:
+                            type: string
+                          description:
+                            type: string
+                          street_address:
+                            type: string
+                          city:
+                            type: string
+                          state:
+                            type: string
+                          zip:
+                            type: string
+                          country:
+                            type: string
+                          supplier_admin_id:
+                            type: integer
+                          contact_name:
+                            type: string
+                          contact_email:
+                            type: string
+                          contact_phone:
+                            type: string
+                          created_by:
+                            type: integer
+                          created_at:
+                            type: string
+                            format: date-time
+                          updated_by:
+                            type: integer
+                          updated_at:
+                            type: string
+                            format: date-time
+                      warehouse:
+                        $ref: '#/paths/~1purchase-orders~1%7Bid%7D/get/responses/200/content/application~1json/schema/properties/data/properties/location'
+                      location:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          status:
+                            type: string
+                          name:
+                            type: string
+                          parent_id:
+                            type: integer
+                            nullable: true
+                          created_at:
+                            type: string
+                            format: date-time
+                          updated_at:
+                            type: string
+                            format: date-time
+                          parent:
+                            $ref: '#/paths/~1purchase-orders~1%7Bid%7D/get/responses/200/content/application~1json/schema/properties/data/properties/location'
+        '404':
+          description: Purchase order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1purchase-orders/get/responses/401/content/application~1json/schema'
   /inventory/adjustments:
     post:
       operationId: createInventoryAdjustment
@@ -240,7 +593,7 @@ paths:
               properties:
                 remarks:
                   type: string
-                  description: Remarks for the adjustment
+                  description: Optional remarks for the adjustment
                 adjustment_entries:
                   type: array
                   items:
@@ -249,25 +602,20 @@ paths:
                       - warehouse_id
                       - location_id
                       - product_id
+                      - qty_onhand
                     properties:
                       warehouse_id:
                         type: integer
-                        description: ID of the warehouse (required)
+                        description: ID of the warehouse
                       location_id:
                         type: integer
-                        description: ID of the location within the warehouse (required)
+                        description: ID of the location within the warehouse
                       product_id:
                         type: integer
-                        description: ID of the product (required)
-                      qty_incoming:
-                        type: integer
-                        description: Quantity of incoming stock
+                        description: ID of the product
                       qty_onhand:
                         type: integer
                         description: Quantity on hand
-                      qty_pending:
-                        type: integer
-                        description: Quantity pending
       responses:
         '200':
           description: Successful response
@@ -391,41 +739,32 @@ paths:
                       properties:
                         id:
                           type: string
-                          description: Unique identifier for the inventory stock (combination of rfq_id and warehouse_group_id)
-                        product_id:
-                          type: integer
-                          description: ID of the inventory product
+                          description: Product ID
                         sku:
                           type: string
                           description: Product SKU
-                        product_name:
+                        name:
                           type: string
                           description: Name of the product
-                        warehouse_group_id:
-                          type: integer
-                          description: ID of the warehouse group
-                        warehouse_group_label:
-                          type: string
-                          description: Label of the warehouse group
                         product_type:
                           type: string
                           description: Type of the product
-                        qty_on_hand:
+                        qty_onhand:
                           type: number
                           format: float
-                          description: Quantity on hand
+                          description: Total quantity on hand across all locations
                         qty_pending:
                           type: number
                           format: float
-                          description: Quantity pending
+                          description: Total quantity pending across all locations
                         qty_available:
                           type: number
                           format: float
-                          description: Quantity available
+                          description: Total quantity available across all locations
                         qty_incoming:
                           type: number
                           format: float
-                          description: Quantity incoming
+                          description: Total quantity incoming across all locations
                         category_id:
                           type: integer
                           description: ID of the product category
@@ -438,15 +777,32 @@ paths:
                         sub_category_name:
                           type: string
                           description: Name of the product subcategory
-                        stock_status:
-                          type: string
-                          description: Status of the stock
-                        preferred_supplier_id:
-                          type: integer
-                          description: ID of the preferred supplier
-                        preferred_supplier_name:
-                          type: string
-                          description: Name of the preferred supplier
+                        location_stocks:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              warehouse:
+                                $ref: '#/paths/~1purchase-orders~1%7Bid%7D/get/responses/200/content/application~1json/schema/properties/data/properties/location'
+                              location:
+                                $ref: '#/paths/~1purchase-orders~1%7Bid%7D/get/responses/200/content/application~1json/schema/properties/data/properties/location'
+                              qty_onhand:
+                                type: number
+                                format: float
+                                description: Quantity on hand at location
+                              qty_pending:
+                                type: number
+                                format: float
+                                description: Quantity pending at location
+                              qty_available:
+                                type: number
+                                format: float
+                                description: Quantity available at location
+                              qty_incoming:
+                                type: number
+                                format: float
+                                description: Quantity incoming at location
+                          description: List of stock entries across all locations
                   meta:
                     $ref: '#/paths/~1purchase-orders/get/responses/200/content/application~1json/schema/properties/meta'
         '401':
@@ -666,6 +1022,131 @@ paths:
                       type: array
                       items:
                         type: string
+  '/transfer-orders/{id}':
+    get:
+      operationId: getTransferOrder
+      tags:
+        - Transfer Orders
+      summary: Get a specific transfer order
+      description: Get details of a specific transfer order by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the transfer order to retrieve
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Unique identifier for the transfer order
+                      number:
+                        type: string
+                        description: Transfer order number
+                      date:
+                        type: string
+                        format: date
+                        description: Date of the transfer order
+                      arrival_date:
+                        type: string
+                        format: date
+                        description: Expected arrival date
+                      items_cost:
+                        type: number
+                        format: float
+                        description: Total cost of items
+                      shipping_cost:
+                        type: number
+                        format: float
+                        description: Shipping cost
+                      shipping_method:
+                        type: string
+                        description: Method of shipping
+                      source_warehouse_id:
+                        type: integer
+                        description: ID of the source warehouse
+                      destination_warehouse_id:
+                        type: integer
+                        description: ID of the destination warehouse
+                      status:
+                        type: string
+                        description: Status of the transfer order
+                      created_at:
+                        type: string
+                        format: date-time
+                        description: Creation timestamp
+                      updated_at:
+                        type: string
+                        format: date-time
+                        description: Last update timestamp
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the transfer order item
+                            transfer_order_id:
+                              type: integer
+                              description: ID of the associated transfer order
+                            product_id:
+                              type: integer
+                              description: ID of the product
+                            sku:
+                              type: string
+                              description: SKU of the product
+                            product_name:
+                              type: string
+                              description: Name of the product
+                            description:
+                              type: string
+                              description: Description of the item
+                            quantity:
+                              type: number
+                              description: Quantity of the item
+                            ordered_qty:
+                              type: number
+                              description: Ordered quantity of the item
+                            base_uom_id:
+                              type: integer
+                              description: ID of the base unit of measure
+                            ordered_uom_id:
+                              type: integer
+                              description: ID of the ordered unit of measure
+                            unit_cost:
+                              type: number
+                              description: Unit cost of the item
+                            line_item_cost:
+                              type: number
+                              description: Total cost of the line item
+                            created_at:
+                              type: string
+                              format: date-time
+                              description: Creation timestamp
+                            updated_at:
+                              type: string
+                              format: date-time
+                              description: Last update timestamp
+                        description: List of items in the transfer order
+        '404':
+          description: Transfer order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1purchase-orders/get/responses/401/content/application~1json/schema'
   /receiving-reports:
     get:
       operationId: getReceivingReports
@@ -843,78 +1324,6 @@ paths:
                     type: number
                   shipping_cost:
                     type: number
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        created_at:
-                          type: string
-                          format: date-time
-                        updated_at:
-                          type: string
-                          format: date-time
-                        receiving_report_id:
-                          type: integer
-                        purchase_order_id:
-                          type: integer
-                        purchase_order_item_id:
-                          type: integer
-                        purchase_order_shipment_id:
-                          type: integer
-                        quantity:
-                          type: number
-                        unit:
-                          type: string
-                        unit_price:
-                          type: number
-                        tax:
-                          type: number
-                        discount_amount:
-                          type: number
-                        discount_percent:
-                          type: number
-                        line_total:
-                          type: number
-                        remarks:
-                          type: string
-                        stock_id:
-                          type: integer
-                        received_quantity:
-                          type: number
-                        base_unit_of_measure_id:
-                          type: integer
-                        received_unit_of_measure_id:
-                          type: integer
-                        location_id:
-                          type: integer
-                        lot_id:
-                          type: integer
-                  extra_costs:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        created_at:
-                          type: string
-                          format: date-time
-                        updated_at:
-                          type: string
-                          format: date-time
-                        supplier_receiving_report_id:
-                          type: integer
-                        name:
-                          type: string
-                        quantity:
-                          type: number
-                        unit_price:
-                          type: number
-                        line_total:
-                          type: number
         '422':
           description: Validation error
           content:
@@ -943,7 +1352,113 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1receiving-reports/post/responses/200/content/application~1json/schema'
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+                      status:
+                        type: string
+                      received_date:
+                        type: string
+                        format: date
+                      tracking_number:
+                        type: string
+                      received_by:
+                        type: integer
+                      received_at:
+                        type: string
+                        format: date-time
+                      shipped_via:
+                        type: string
+                      total_quantity:
+                        type: number
+                      total_tax:
+                        type: number
+                      total_cost:
+                        type: number
+                      shipping_cost:
+                        type: number
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+                            receiving_report_id:
+                              type: integer
+                            purchase_order_id:
+                              type: integer
+                            purchase_order_item_id:
+                              type: integer
+                            purchase_order_shipment_id:
+                              type: integer
+                            quantity:
+                              type: number
+                            unit:
+                              type: string
+                            unit_price:
+                              type: number
+                            tax:
+                              type: number
+                            discount_amount:
+                              type: number
+                            discount_percent:
+                              type: number
+                            line_total:
+                              type: number
+                            remarks:
+                              type: string
+                            stock_id:
+                              type: integer
+                            received_quantity:
+                              type: number
+                            base_unit_of_measure_id:
+                              type: integer
+                            received_unit_of_measure_id:
+                              type: integer
+                            location_id:
+                              type: integer
+                            lot_id:
+                              type: integer
+                      extra_costs:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+                            supplier_receiving_report_id:
+                              type: integer
+                            name:
+                              type: string
+                            quantity:
+                              type: number
+                            unit_price:
+                              type: number
+                            line_total:
+                              type: number
         '404':
           description: Receiving report not found
           content:

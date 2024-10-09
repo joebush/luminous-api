@@ -1,0 +1,38 @@
+type: object
+properties:
+  id:
+    type: integer
+  status:
+    type: integer
+  name:
+    type: string
+  description:
+    type: string
+  street_address:
+    type: string
+  city:
+    type: string
+  state:
+    type: string
+  zip:
+    type: string
+  country:
+    type: string
+  supplier_admin_id:
+    type: integer
+  contact_name:
+    type: string
+  contact_email:
+    type: string
+  contact_phone:
+    type: string
+  created_by:
+    type: integer
+  created_at:
+    type: string
+    format: date-time
+  updated_by:
+    type: integer
+  updated_at:
+    type: string
+    format: date-time

@@ -1,0 +1,19 @@
+type: object
+properties:
+  id:
+    type: integer
+  status:
+    type: string
+  name:
+    type: string
+  parent_id:
+    type: integer
+    nullable: true
+  created_at:
+    type: string
+    format: date-time
+  updated_at:
+    type: string
+    format: date-time
+  parent:
+    $ref: './location.yaml'

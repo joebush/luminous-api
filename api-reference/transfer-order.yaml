@@ -1,9 +1,9 @@
 get:
-  operationId: getSingleReceivingReport
+  operationId: getTransferOrder
   tags:
-    - Receiving Reports
-  summary: Get a specific receiving report
-  description: Get details of a specific receiving report by ID
+    - Transfer Orders
+  summary: Get a specific transfer order
+  description: Get details of a specific transfer order by ID
   security:
     - BearerAuth: []
   parameters:
@@ -12,7 +12,7 @@ get:
       required: true
       schema:
         type: integer
-      description: ID of the receiving report to retrieve
+      description: ID of the transfer order to retrieve
   responses:
     '200':
       description: Successful response
@@ -22,9 +22,9 @@ get:
             type: object
             properties:
               data:
-                $ref: './components/receiving-report-full.yaml'
+                $ref: './components/transfer-order-full.yaml'
     '404':
-      description: Receiving report not found
+      description: Transfer order not found
       content:
         application/json:
           schema:

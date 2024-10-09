@@ -1,0 +1,62 @@
+type: object
+properties:
+  id:
+    type: integer
+  purchase_order_id:
+    type: integer
+  internal_sku:
+    type: string
+  source_sku:
+    type: string
+  product_name:
+    type: string
+  product_description:
+    type: string
+  quantity:
+    type: number
+  unit:
+    type: string
+  unit_price:
+    type: number
+  tax:
+    type: number
+  discount_amount:
+    type: number
+  discount_percent:
+    type: number
+  down_payment_amount:
+    type: number
+  down_payment_percent:
+    type: number
+  line_total:
+    type: number
+  product_id:
+    type: integer
+  product_type_id:
+    type: integer
+  shipping_unit_cost:
+    type: number
+  stock_id:
+    type: integer
+  order:
+    type: integer
+  ordered_quantity:
+    type: number
+  base_uom_id:
+    type: integer
+  ordered_uom_id:
+    type: integer
+  received_quantity:
+    type: number
+  description:
+    type: string
+  internal_resource_item_id:
+    type: integer
+  internal_resource_item_type:
+    type: string
+  lot_id:
+    type: integer
+  remaining_shipment_quantity:
+    type: number
+  shipment_quantity:
+    type: number

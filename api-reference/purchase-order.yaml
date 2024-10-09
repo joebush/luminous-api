@@ -1,9 +1,9 @@
 get:
-  operationId: getSingleReceivingReport
+  operationId: getPurchaseOrder
   tags:
-    - Receiving Reports
-  summary: Get a specific receiving report
-  description: Get details of a specific receiving report by ID
+    - Purchase Orders
+  summary: Get a specific purchase order
+  description: Get details of a specific purchase order by ID
   security:
     - BearerAuth: []
   parameters:
@@ -12,7 +12,7 @@ get:
       required: true
       schema:
         type: integer
-      description: ID of the receiving report to retrieve
+      description: ID of the purchase order to retrieve
   responses:
     '200':
       description: Successful response
@@ -22,9 +22,9 @@ get:
             type: object
             properties:
               data:
-                $ref: './components/receiving-report-full.yaml'
+                $ref: './components/purchase-order-full.yaml'
     '404':
-      description: Receiving report not found
+      description: Purchase order not found
       content:
         application/json:
           schema:

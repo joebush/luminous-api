@@ -1,0 +1,46 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the transfer order item
+  transfer_order_id:
+    type: integer
+    description: ID of the associated transfer order
+  product_id:
+    type: integer
+    description: ID of the product
+  sku:
+    type: string
+    description: SKU of the product
+  product_name:
+    type: string
+    description: Name of the product
+  description:
+    type: string
+    description: Description of the item
+  quantity:
+    type: number
+    description: Quantity of the item
+  ordered_qty:
+    type: number
+    description: Ordered quantity of the item
+  base_uom_id:
+    type: integer
+    description: ID of the base unit of measure
+  ordered_uom_id:
+    type: integer
+    description: ID of the ordered unit of measure
+  unit_cost:
+    type: number
+    description: Unit cost of the item
+  line_item_cost:
+    type: number
+    description: Total cost of the line item
+  created_at:
+    type: string
+    format: date-time
+    description: Creation timestamp
+  updated_at:
+    type: string
+    format: date-time
+    description: Last update timestamp

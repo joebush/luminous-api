@@ -30,3 +30,11 @@ properties:
     type: number
   shipping_cost:
     type: number
+  items:
+    type: array
+    items:
+      $ref: './receiving-report-item.yaml'
+  extra_costs:
+    type: array
+    items:
+      $ref: './receiving-report-extra-cost.yaml'

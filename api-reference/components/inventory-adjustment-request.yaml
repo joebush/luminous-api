@@ -4,7 +4,7 @@ required:
 properties:
   remarks:
     type: string
-    description: Remarks for the adjustment
+    description: Optional remarks for the adjustment
   adjustment_entries:
     type: array
     items:
@@ -13,22 +13,17 @@ properties:
         - warehouse_id
         - location_id
         - product_id
+        - qty_onhand
       properties:
         warehouse_id:
           type: integer
-          description: ID of the warehouse (required)
+          description: ID of the warehouse
         location_id:
           type: integer
-          description: ID of the location within the warehouse (required)
+          description: ID of the location within the warehouse
         product_id:
           type: integer
-          description: ID of the product (required)
-        qty_incoming:
-          type: integer
-          description: Quantity of incoming stock
+          description: ID of the product
         qty_onhand:
           type: integer
           description: Quantity on hand
-        qty_pending:
-          type: integer
-          description: Quantity pending
