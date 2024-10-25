@@ -1,0 +1,11 @@
+# components/sales-order-full.yaml
+type: object
+allOf:
+  - $ref: './sales-order.yaml'
+  - type: object
+    properties:
+      items:
+        type: array
+        items:
+          $ref: './sales-order-item.yaml'
+        description: Line items in the order

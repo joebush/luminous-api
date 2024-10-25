@@ -1,0 +1,150 @@
+# sales-orders.yaml
+get:
+  operationId: getSalesOrders
+  tags:
+    - Sales Orders
+  summary: Get sales orders
+  description: Get a paginated list of sales orders with optional filtering
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: query
+      name: page
+      schema:
+        type: integer
+        default: 1
+      description: Page number for pagination
+    - in: query
+      name: per_page
+      schema:
+        type: integer
+        default: 10
+      description: Number of items per page
+    - in: query
+      name: order_status
+      schema:
+        type: string
+      description: Filter by order status
+    - in: query
+      name: invoice_id
+      schema:
+        type: string
+      description: Filter by invoice ID
+    - in: query
+      name: order_key
+      schema:
+        type: string
+      description: Filter by order key
+    - in: query
+      name: shipping_name
+      schema:
+        type: string
+      description: Filter by shipping name
+    - in: query
+      name: shipping_company
+      schema:
+        type: string
+      description: Filter by shipping company
+    - in: query
+      name: shipping_address
+      schema:
+        type: string
+      description: Filter by shipping address
+    - in: query
+      name: order_verified
+      schema:
+        type: string
+      description: Filter by verification status
+    - in: query
+      name: type
+      schema:
+        type: string
+      description: Filter by order type
+    - in: query
+      name: tags
+      schema:
+        type: string
+      description: Filter by tags
+    - in: query
+      name: sku
+      schema:
+        type: string
+      description: Filter by SKU
+    - in: query
+      name: product_name
+      schema:
+        type: string
+      description: Filter by product name
+    - in: query
+      name: recipient_name
+      schema:
+        type: string
+      description: Filter by recipient name
+    - in: query
+      name: oms_status
+      schema:
+        type: string
+      description: Filter by OMS status
+    - in: query
+      name: channel_name
+      schema:
+        type: string
+      description: Filter by channel name
+    - in: query
+      name: ship_to_country
+      schema:
+        type: string
+      description: Filter by shipping country
+    - in: query
+      name: requested_shipping_service
+      schema:
+        type: string
+      description: Filter by requested shipping service
+    - in: query
+      name: order_date
+      schema:
+        type: string
+        format: date
+      description: Filter by order date
+    - in: query
+      name: ship_date
+      schema:
+        type: string
+        format: date
+      description: Filter by ship date
+    - in: query
+      name: verified_date
+      schema:
+        type: string
+        format: date
+      description: Filter by verification date
+    - in: query
+      name: exclude_deleted
+      schema:
+        type: boolean
+      description: Exclude deleted orders
+    - in: query
+      name: is_posted
+      schema:
+        type: boolean
+      description: Filter by posted status
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/sales-order.yaml'
+              meta:
+                $ref: './components/pagination-meta.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'

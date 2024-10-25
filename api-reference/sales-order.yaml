@@ -1,0 +1,38 @@
+# sales-order.yaml
+get:
+  operationId: getSalesOrder
+  tags:
+    - Sales Orders
+  summary: Get a specific sales order
+  description: Get details of a specific sales order by ID
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+      description: ID of the sales order to retrieve
+    - in: query
+      name: excludeIgnoredOrderItems
+      schema:
+        type: boolean
+        default: false
+      description: Whether to exclude ignored order items from the response
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/sales-order-full.yaml'
+    '404':
+      description: Sales order not found
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'

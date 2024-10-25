@@ -5,7 +5,7 @@ info:
   description: API documentation for Luminous
 
 servers:
-  - url: https://{companyName}.joinluminous.com/external/api/v1
+  - url: https://{companyName}.api.joinluminous.com/external/api/v1
     variables:
       companyName:
         default: companyName
@@ -16,7 +16,7 @@ components:
     BearerAuth:
       type: http
       scheme: bearer
-      description: Authenticate using a bearer token. To obtain a token, contact the Luminous support team.
+      description: Authenticate using a bearer token. To obtain a token, contact developers@joinluminous.com
 
 paths:
   /purchase-orders:
@@ -35,6 +35,10 @@ paths:
     $ref: './receiving-reports.yaml'
   /receiving-reports/{id}:
     $ref: './receiving-report.yaml'
+  /sales-orders:
+    $ref: './sales-orders.yaml'
+  /sales-orders/{id}:
+    $ref: './sales-order.yaml'
 
 tags:
   - name: Purchase Orders
@@ -45,3 +49,5 @@ tags:
     description: Manage transfer orders
   - name: Receiving Reports
     description: Manage receiving reports
+  - name: Sales Orders
+    description: Manage sales orders and their items
