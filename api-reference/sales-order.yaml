@@ -14,12 +14,6 @@ get:
       schema:
         type: integer
       description: ID of the sales order to retrieve
-    - in: query
-      name: excludeIgnoredOrderItems
-      schema:
-        type: boolean
-        default: false
-      description: Whether to exclude ignored order items from the response
   responses:
     '200':
       description: Successful response

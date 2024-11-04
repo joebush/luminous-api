@@ -1,11 +1,173 @@
-# components/sales-order-full.yaml
+# components/sales-order.yaml
 type: object
-allOf:
-  - $ref: './sales-order.yaml'
-  - type: object
-    properties:
-      items:
-        type: array
-        items:
-          $ref: './sales-order-item.yaml'
-        description: Line items in the order
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the sales order
+  created_at:
+    type: string
+    format: date-time
+    description: Timestamp when the order was created
+  updated_at:
+    type: string
+    format: date-time
+    description: Timestamp when the order was last updated
+  status:
+    type: string
+    description: Current status of the order
+  order_id:
+    type: string
+    description: External order identifier
+  order_number:
+    type: string
+    description: Order number
+  order_date:
+    type: string
+    format: date
+    description: Date when the order was placed
+  payment_date:
+    type: string
+    format: date
+    description: Date when payment was received
+  ship_by_date:
+    type: string
+    format: date
+    description: Required ship by date
+  age:
+    type: integer
+    description: Age of the order in days
+  order_status:
+    type: string
+    description: Status of the order
+  customer_id:
+    type: string
+    description: Customer identifier
+  customer_username:
+    type: string
+    description: Customer's username
+  customer_email:
+    type: string
+    description: Customer's email address
+  bill_to:
+    type: object
+    description: Billing information
+  ship_to:
+    type: object
+    description: Shipping information
+  total:
+    type: number
+    format: float
+    description: Total order amount
+  total_paid:
+    type: number
+    format: float
+    description: Amount paid
+  total_tax:
+    type: number
+    format: float
+    description: Total tax amount
+  total_shipping:
+    type: number
+    format: float
+    description: Total shipping amount
+  customer_notes:
+    type: string
+    description: Notes from the customer
+  internal_notes:
+    type: string
+    description: Internal notes
+  ship_date:
+    type: string
+    format: date
+    description: Date when order was shipped
+  hold_until_date:
+    type: string
+    format: date
+    description: Hold until date
+  user_id:
+    type: integer
+    description: User ID associated with the order
+  externally_fulfilled:
+    type: boolean
+    description: Whether the order is fulfilled externally
+  externally_fulfilled_by:
+    type: string
+    description: Entity fulfilling the order externally
+  is_posted:
+    type: boolean
+    description: Whether the order is posted
+  posted_by:
+    type: string
+    description: User who posted the order
+  not_sync:
+    type: boolean
+    description: Sync status
+  sales_posted:
+    type: boolean
+    description: Sales posting status
+  split_order:
+    type: boolean
+    description: Whether the order is split
+  skip_inventory:
+    type: boolean
+    description: Whether to skip inventory
+  skip_sales_report:
+    type: boolean
+    description: Whether to skip sales report
+  channel_id:
+    type: integer
+    description: Channel identifier
+  total_order_cost:
+    type: number
+    format: float
+    description: Total cost of order
+  total_order_quantity:
+    type: number
+    format: float
+    description: Total quantity of items
+  order_cost_details:
+    type: object
+    description: Detailed order cost information
+  source:
+    type: string
+    description: Order source
+  shipstation_order_id:
+    type: string
+    description: ShipStation order identifier
+  type:
+    type: string
+    description: Order type
+  parent_id:
+    type: integer
+    description: Parent order ID if applicable
+  shipping_revenue:
+    type: number
+    format: float
+    description: Revenue from shipping
+  product_total:
+    type: number
+    format: float
+    description: Total product amount
+  total_discount:
+    type: number
+    format: float
+    description: Total discount amount
+  picking_status:
+    type: string
+    description: Status of picking process
+  starred_description:
+    type: string
+    description: Description for starred orders
+  customer_po_number:
+    type: string
+    description: Customer PO number
+  items:
+    type: array
+    items:
+      $ref: './sales-order-item.yaml'
+    description: Line items in the order
+  tags:
+    type: array
+    items:
+      $ref: './product-tag.yaml'
+    description: Tags associated with the order
