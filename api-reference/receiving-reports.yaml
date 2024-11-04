@@ -2,7 +2,7 @@ get:
   operationId: getReceivingReports
   tags:
     - Receiving Reports
-  summary: Get receiving reports
+  summary: Receiving reports
   description: Get a paginated list of receiving reports
   security:
     - BearerAuth: []

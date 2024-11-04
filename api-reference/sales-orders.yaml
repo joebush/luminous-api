@@ -3,8 +3,45 @@ get:
   operationId: getSalesOrders
   tags:
     - Sales Orders
-  summary: Get sales orders
-  description: Get a paginated list of sales orders with optional filtering
+  summary: Sales orders
+  description: |
+    Get a paginated list of sales orders with optional filtering.
+    
+    For detailed information about the filtering system and available operators, 
+    refer to the [Filter System Documentation](/filters).
+
+    ## Available Filters
+
+    ### String Filters
+    - `order_number`: Order reference number
+    - `tag`: Order tags
+    
+    ### Date Filters
+    - `order_date`: Date the order was placed
+    - `ship_date`: Date the order was shipped
+    
+    ### DateTime Filters
+    - `created_at`: When the order was created
+    - `updated_at`: When the order was last updated
+    
+    ### Numeric Filters
+    - `total_quantity`: Total number of items
+    - `total`: Order total amount
+    - `total_shipping`: Shipping cost
+    - `total_tax`: Tax amount
+    - `total_paid`: Amount paid
+    
+    ## Examples
+    ```
+    # Find orders over $500 created this year
+    ?total[gt]=500.00&created_at[gte]=2024-01-01 00:00:00
+
+    # Find recent urgent orders
+    ?tag[eq]=urgent&created_at[gte]=2024-10-25 00:00:00
+
+    # Find orders with specific shipping costs
+    ?total_shipping[gte]=10.00&total_shipping[lte]=50.00
+    ```
   security:
     - BearerAuth: []
   parameters:
@@ -19,115 +56,72 @@ get:
       schema:
         type: integer
         default: 10
-      description: Number of items per page
+        maximum: 100
+      description: Number of items per page (max 100)
+    # String Filters
     - in: query
-      name: order_status
+      name: order_number
       schema:
         type: string
-      description: Filter by order status
-    - in: query
-      name: invoice_id
-      schema:
-        type: string
-      description: Filter by invoice ID
-    - in: query
-      name: order_key
-      schema:
-        type: string
-      description: Filter by order key
-    - in: query
-      name: shipping_name
-      schema:
-        type: string
-      description: Filter by shipping name
-    - in: query
-      name: shipping_company
-      schema:
-        type: string
-      description: Filter by shipping company
-    - in: query
-      name: shipping_address
-      schema:
-        type: string
-      description: Filter by shipping address
-    - in: query
-      name: order_verified
-      schema:
-        type: string
-      description: Filter by verification status
-    - in: query
-      name: type
-      schema:
-        type: string
-      description: Filter by order type
-    - in: query
-      name: tags
-      schema:
-        type: string
-      description: Filter by tags
-    - in: query
-      name: sku
-      schema:
-        type: string
-      description: Filter by SKU
-    - in: query
-      name: product_name
-      schema:
-        type: string
-      description: Filter by product name
-    - in: query
-      name: recipient_name
-      schema:
-        type: string
-      description: Filter by recipient name
-    - in: query
-      name: oms_status
-      schema:
-        type: string
-      description: Filter by OMS status
-    - in: query
-      name: channel_name
-      schema:
-        type: string
-      description: Filter by channel name
-    - in: query
-      name: ship_to_country
-      schema:
-        type: string
-      description: Filter by shipping country
-    - in: query
-      name: requested_shipping_service
-      schema:
-        type: string
-      description: Filter by requested shipping service
+      description: Filter by order number
+    # Date Filters
     - in: query
       name: order_date
       schema:
         type: string
         format: date
-      description: Filter by order date
+      description: Filter by order date (YYYY-MM-DD)
     - in: query
       name: ship_date
       schema:
         type: string
         format: date
-      description: Filter by ship date
+      description: Filter by ship date (YYYY-MM-DD)
+    # DateTime Filters
     - in: query
-      name: verified_date
+      name: created_at
       schema:
         type: string
-        format: date
-      description: Filter by verification date
+        format: date-time
+      description: Filter by creation date (YYYY-MM-DD HH:mm:ss)
     - in: query
-      name: exclude_deleted
+      name: updated_at
       schema:
-        type: boolean
-      description: Exclude deleted orders
+        type: string
+        format: date-time
+      description: Filter by last update date (YYYY-MM-DD HH:mm:ss)
+    # Numeric Filters
     - in: query
-      name: is_posted
+      name: total_quantity
       schema:
-        type: boolean
-      description: Filter by posted status
+        type: number
+      description: Filter by total order quantity
+    - in: query
+      name: total
+      schema:
+        type: number
+      description: Filter by order total amount
+    - in: query
+      name: total_shipping
+      schema:
+        type: number
+      description: Filter by shipping amount
+    - in: query
+      name: total_tax
+      schema:
+        type: number
+      description: Filter by tax amount
+    - in: query
+      name: total_paid
+      schema:
+        type: number
+      description: Filter by amount paid
+    # Tag Filter
+    - in: query
+      name: tag
+      schema:
+        type: string
+      description: Filter by tags
   responses:
     '200':
       description: Successful response

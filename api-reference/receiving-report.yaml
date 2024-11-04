@@ -2,7 +2,7 @@ get:
   operationId: getSingleReceivingReport
   tags:
     - Receiving Reports
-  summary: Get a specific receiving report
+  summary: Specific receiving report
   description: Get details of a specific receiving report by ID
   security:
     - BearerAuth: []

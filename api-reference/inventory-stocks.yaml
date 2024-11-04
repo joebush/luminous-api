@@ -2,7 +2,7 @@ get:
   operationId: getInventoryStocks
   tags:
     - Inventory
-  summary: Get inventory stock levels
+  summary: Inventory stock
   description: Get a paginated list of inventory stock levels with various filter options
   security:
     - BearerAuth: []

@@ -1,0 +1,82 @@
+---
+title: 'Filters'
+description: 'How filters work when getting data from the Luminous API'
+---
+
+The Luminous API supports flexible data filtering on GET endpoints through URL query parameters,
+allowing you to precisely control what data is returned in your API responses. By applying filters,
+you can narrow down results based on specific field values, date ranges, text content, and more.
+This filtering system helps reduce unnecessary data transfer and processing by retrieving only
+the records you need. The filters use an intuitive syntax where operators are specified in
+square brackets (e.g., field[operator]=value) and can be combined to create complex queries.
+Whether you need to find records within a date range, match specific text patterns,
+or compare numeric values, these filtering capabilities help you build efficient and targeted API requests.
+
+## Available Operators
+
+Fields can be filtered using operators in square brackets: `field[operator]=value`
+
+  - `eq`: Equals (default if no operator specified)
+  - `neq`: Not equals
+  - `gt`: Greater than
+  - `gte`: Greater than or equal
+  - `lt`: Less than
+  - `lte`: Less than or equal
+  - `contains`: Contains string (case-sensitive)
+  - `notcontains`: Does not contain string (case-sensitive)
+  - `in`: In array (comma-separated values)
+  - `notin`: Not in array (comma-separated values)
+
+## Field Types and Operators
+
+### String Fields
+Supported operators: eq, neq, contains, notcontains, in, notin
+  ```
+  # Exact match
+  ?field[eq]=value
+
+  # Contains string
+  ?field[contains]=value
+
+  # Multiple values, will match value1 OR value2
+  ?field[in]=value1,value2
+  ```
+
+### Date Fields
+Supported operators: eq, neq, gt, gte, lt, lte
+Format: YYYY-MM-DD
+  ```
+  # After specific date
+  ?field[gte]=2024-01-01
+
+  # Date range
+  ?field[gte]=2024-01-01&field[lt]=2024-12-31
+  ```
+
+### DateTime Fields
+Supported operators: eq, neq, gt, gte, lt, lte
+Format: YYYY-MM-DD HH:mm:ss
+  ```
+  # After specific time
+  ?field[gte]=2024-01-01 00:00:00
+
+  # Time range
+  ?field[gte]=2024-01-01 00:00:00&field[lt]=2024-12-31 23:59:59
+  ```
+
+### Numeric Fields
+Supported operators: eq, neq, gt, gte, lt, lte
+  ```
+  # Greater than
+  ?field[gt]=100
+
+  # Value range
+  ?field[gte]=100&field[lte]=200
+  ```
+
+## Multiple Filters
+
+Multiple filters can be combined using & operator:
+  ```
+  ?field1[gt]=100&field2[contains]=test&field3[in]=val1,val2
+  ```

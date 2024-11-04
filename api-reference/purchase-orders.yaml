@@ -2,7 +2,7 @@ get:
   operationId: getPurchaseOrders
   tags:
     - Purchase Orders
-  summary: Get purchase orders
+  summary: Purchase orders
   description: Get a paginated list of purchase orders
   security:
     - BearerAuth: []

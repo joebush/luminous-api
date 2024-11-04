@@ -2,7 +2,7 @@ post:
   operationId: createInventoryAdjustment
   tags:
     - Inventory
-  summary: Adjust inventory levels
+  summary: Adjust inventory stock
   description: Create a new inventory adjustment entry
   security:
     - BearerAuth: []
