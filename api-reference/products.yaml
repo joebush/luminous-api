@@ -1,4 +1,3 @@
-# products.yaml
 get:
   operationId: getProducts
   tags:
@@ -57,7 +56,6 @@ get:
         default: 10
         maximum: 100
       description: Number of items per page (max 100)
-    # String Filters
     - in: query
       name: q
       schema:
@@ -87,7 +85,6 @@ get:
         type: string
       description: Filter by UPC/Barcode
       example: "123456789012"
-    # Float Filters
     - in: query
       name: retail_price
       schema:
@@ -102,7 +99,6 @@ get:
         format: float
       description: Filter by wholesale price
       example: 45.00
-    # DateTime Filters
     - in: query
       name: created_at
       schema:
@@ -115,7 +111,6 @@ get:
         type: string
         format: date-time
       description: Filter by last update date (YYYY-MM-DD HH:mm:ss)
-    # Tag Filter
     - in: query
       name: tag
       schema:
