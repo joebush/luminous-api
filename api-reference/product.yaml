@@ -32,7 +32,7 @@ get:
             type: object
             properties:
               data:
-                $ref: './components/product.yaml'
+                $ref: './components/product-full.yaml'
     '401':
       description: Unauthorized
       content:
