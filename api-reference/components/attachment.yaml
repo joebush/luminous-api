@@ -1,0 +1,26 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the attachment
+  name:
+    type: string
+    description: Filename of the attachment
+  type:
+    type: string
+    description: MIME type of the attachment
+  size:
+    type: integer
+    description: File size in bytes
+  full_url:
+    type: string
+    description: Full resolution URL of the attachment
+  thumb_url:
+    type: string
+    description: Thumbnail URL of the attachment (if applicable)
+required:
+  - id
+  - name
+  - type
+  - size
+  - full_url
