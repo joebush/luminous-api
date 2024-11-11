@@ -210,190 +210,178 @@ paths:
                   data:
                     type: object
                     properties:
-                      data:
+                      id:
+                        type: integer
+                        description: Unique identifier for the product
+                      name:
+                        type: string
+                        description: Product name
+                      description:
+                        type: string
+                        nullable: true
+                        description: Product description
+                      retail_price:
+                        type: number
+                        format: float
+                        description: Retail price
+                      wholesale_price:
+                        type: number
+                        format: float
+                        description: Wholesale price
+                      category:
                         type: object
+                        nullable: true
                         properties:
                           id:
                             type: integer
-                            description: Unique identifier for the product
                           name:
                             type: string
-                            description: Product name
-                          description:
+                        description: Product category information
+                      subcategory:
+                        type: object
+                        nullable: true
+                        properties:
+                          id:
+                            type: integer
+                          name:
                             type: string
-                            nullable: true
-                            description: Product description
-                          retail_price:
-                            type: number
-                            format: float
-                            description: Retail price
-                          wholesale_price:
-                            type: number
-                            format: float
-                            description: Wholesale price
-                          category:
-                            type: object
-                            nullable: true
-                            properties:
-                              id:
-                                type: integer
-                              name:
-                                type: string
-                            description: Product category information
-                          subcategory:
-                            type: object
-                            nullable: true
-                            properties:
-                              id:
-                                type: integer
-                              name:
-                                type: string
-                            description: Product subcategory information
-                          custom_fields:
-                            type: object
-                            description: Dynamic custom fields with key-value pairs
-                            additionalProperties:
+                        description: Product subcategory information
+                      custom_fields:
+                        type: object
+                        description: Dynamic custom fields with key-value pairs
+                        additionalProperties:
+                          type: string
+                      attachments:
+                        type: array
+                        description: Product attachments
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the attachment
+                            name:
                               type: string
-                          attachments:
-                            type: array
-                            description: Product attachments
-                            items:
+                              description: Filename of the attachment
+                            type:
+                              type: string
+                              description: MIME type of the attachment
+                            size:
+                              type: integer
+                              description: File size in bytes
+                            full_url:
+                              type: string
+                              description: Full resolution URL of the attachment
+                            thumb_url:
+                              type: string
+                              description: Thumbnail URL of the attachment (if applicable)
+                          required:
+                            - id
+                            - name
+                            - type
+                            - size
+                            - full_url
+                      variants:
+                        type: array
+                        description: Product variants
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            description:
+                              type: string
+                              nullable: true
+                            attachments:
+                              type: array
+                              description: Variant-specific attachments
+                              items:
+                                $ref: '#/paths/~1products~1%7Bid%7D/get/responses/200/content/application~1json/schema/properties/data/properties/attachments/items'
+                            retail_price:
+                              type: number
+                              format: float
+                            wholesale_price:
+                              type: number
+                              format: float
+                            custom_fields:
+                              type: array
+                              items:
+                                type: object
+                            variant_attributes:
                               type: object
-                              properties:
-                                id:
-                                  type: integer
-                                  description: Unique identifier for the attachment
-                                name:
-                                  type: string
-                                  description: Filename of the attachment
-                                type:
-                                  type: string
-                                  description: MIME type of the attachment
-                                size:
-                                  type: integer
-                                  description: File size in bytes
-                                full_url:
-                                  type: string
-                                  description: Full resolution URL of the attachment
-                                thumb_url:
-                                  type: string
-                                  description: Thumbnail URL of the attachment (if applicable)
-                              required:
-                                - id
-                                - name
-                                - type
-                                - size
-                                - full_url
-                          variants:
-                            type: array
-                            description: Product variants
-                            items:
-                              type: object
-                              properties:
-                                id:
-                                  type: integer
-                                name:
-                                  type: string
-                                description:
-                                  type: string
-                                  nullable: true
-                                attachments:
-                                  type: array
-                                  description: Variant-specific attachments
-                                  items:
-                                    $ref: '#/paths/~1products~1%7Bid%7D/get/responses/200/content/application~1json/schema/properties/data/properties/data/properties/attachments/items'
-                                retail_price:
-                                  type: number
-                                  format: float
-                                wholesale_price:
-                                  type: number
-                                  format: float
-                                custom_fields:
-                                  type: array
-                                  items:
-                                    type: object
-                                variant_attributes:
-                                  type: object
-                                  additionalProperties:
-                                    type: string
-                                sku:
-                                  type: string
-                                upc:
-                                  type: string
-                                created_at:
-                                  type: string
-                                  format: date-time
-                                updated_at:
-                                  type: string
-                                  format: date-time
-                          variant_attributes:
-                            type: object
-                            nullable: true
-                            description: Available variant attributes
-                          sku:
-                            type: string
-                            description: Internal SKU
-                          alternate_skus:
-                            type: array
-                            description: Alternate SKUs
-                            items:
-                              type: object
-                              properties:
-                                id:
-                                  type: integer
-                                sku:
-                                  type: string
-                          upc:
-                            type: string
-                            description: UPC/Barcode
-                          tags:
-                            type: array
-                            description: Tags associated with the product
-                            items:
-                              type: object
-                              properties:
-                                id:
-                                  type: integer
-                                  description: Unique identifier for the tag
-                                name:
-                                  type: string
-                                  description: Name of the tag
-                                description:
-                                  type: string
-                                  nullable: true
-                                  description: Description of the tag
-                                icon:
-                                  type: string
-                                  nullable: true
-                                  description: Icon identifier or URL for the tag
-                                color:
-                                  type: string
-                                  nullable: true
-                                  description: Color code for the tag
-                              required:
-                                - id
-                                - name
-                          supplier:
-                            type: object
-                            nullable: true
-                            description: Supplier information
-                          created_at:
-                            type: string
-                            format: date-time
-                            description: Timestamp when the product was created
-                          updated_at:
-                            type: string
-                            format: date-time
-                            description: Timestamp when the product was last updated
-                        required:
-                          - id
-                          - name
-                          - sku
-                          - upc
-                          - created_at
-                          - updated_at
-                      required:
-                        - data
+                              additionalProperties:
+                                type: string
+                            sku:
+                              type: string
+                            upc:
+                              type: string
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+                      variant_attributes:
+                        type: object
+                        nullable: true
+                        description: Available variant attributes
+                      sku:
+                        type: string
+                        description: Internal SKU
+                      alternate_skus:
+                        type: array
+                        description: Alternate SKUs
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            sku:
+                              type: string
+                      upc:
+                        type: string
+                        description: UPC/Barcode
+                      tags:
+                        type: array
+                        description: Tags associated with the product
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the tag
+                            name:
+                              type: string
+                              description: Name of the tag
+                            description:
+                              type: string
+                              nullable: true
+                              description: Description of the tag
+                            icon:
+                              type: string
+                              nullable: true
+                              description: Icon identifier or URL for the tag
+                            color:
+                              type: string
+                              nullable: true
+                              description: Color code for the tag
+                          required:
+                            - id
+                            - name
+                      supplier:
+                        type: object
+                        nullable: true
+                        description: Supplier information
+                      created_at:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the product was created
+                      updated_at:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the product was last updated
         '401':
           description: Unauthorized
           content:

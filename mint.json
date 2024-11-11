@@ -17,7 +17,7 @@
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:support@joinluminous.com"
+      "url": "mailto:developers@joinluminous.com"
     }
   ],
   "tabs": [
@@ -28,7 +28,7 @@
         "name": "API Reference",
         "icon": "square-terminal",
         "url": "api-reference",
-        "openapi": "/api-reference/build.yaml"
+        "openapi": "api-reference/build.yaml"
     }
   ],
   "navigation": [
