@@ -1,0 +1,47 @@
+get:
+  operationId: getProductById
+  tags:
+    - Products
+  summary: Single product
+  description: |
+    Get detailed information about a specific product by its ID.
+    
+    Returns the product with all its relationships including:
+    - Category and subcategory
+    - Images
+    - Preferred vendor
+    - Tags
+    - Variant SKUs with custom fields and RFQ attachments
+    - Alternate SKUs
+    - Custom field values
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+      description: Product ID
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/product.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '404':
+      description: Product not found
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'

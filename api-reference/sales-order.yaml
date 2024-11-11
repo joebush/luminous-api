@@ -3,7 +3,7 @@ get:
   operationId: getSalesOrder
   tags:
     - Sales Orders
-  summary: Specific sales order
+  summary: Single sales order
   description: Get details of a specific sales order by ID
   security:
     - BearerAuth: []

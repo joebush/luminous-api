@@ -1,0 +1,137 @@
+# components/product.yaml
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the product
+  name:
+    type: string
+    description: Product name
+  description:
+    type: string
+    description: Product description
+  sku:
+    type: string
+    description: Internal SKU
+  upc:
+    type: string
+    description: UPC/Barcode
+  retail_price:
+    type: number
+    format: float
+    description: Retail price
+  wholesale_price:
+    type: number
+    format: float
+    description: Wholesale price
+  package_cost:
+    type: number
+    format: float
+    description: Package cost
+  created_at:
+    type: string
+    format: date-time
+    description: Timestamp when the product was created
+  updated_at:
+    type: string
+    format: date-time
+    description: Timestamp when the product was last updated
+  status:
+    type: integer
+    description: Product status
+  product_category_id:
+    type: integer
+    description: Category identifier
+  category:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    description: Product category information
+  subcategory:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    description: Product subcategory information
+  images:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        url:
+          type: string
+        sort_order:
+          type: integer
+    description: Product images
+  preferred_vendor:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    description: Preferred vendor information
+  tags:
+    type: array
+    items:
+      $ref: './product-tag.yaml'
+    description: Tags associated with the product
+  variant_skus:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        product_name:
+          type: string
+        internal_sku:
+          type: string
+        upc:
+          type: string
+        retail_price:
+          type: number
+          format: float
+        package_cost:
+          type: number
+          format: float
+        status:
+          type: integer
+        product_variants:
+          type: object
+        custom_field_values:
+          type: array
+          items:
+            type: object
+        rfq_attachments:
+          type: array
+          items:
+            type: object
+    description: Product variants with their custom fields and attachments
+  alternate_skus:
+    type: array
+    items:
+      type: object
+      properties:
+        sku:
+          type: string
+        alternate_sku:
+          type: string
+    description: Alternate SKUs
+  custom_field_values:
+    type: array
+    items:
+      type: object
+      properties:
+        field_id:
+          type: integer
+        value:
+          type: string
+    description: Custom field values

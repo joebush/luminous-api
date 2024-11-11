@@ -19,6 +19,10 @@ components:
       description: Authenticate using a bearer token. To obtain a token, contact developers@joinluminous.com
 
 paths:
+  /products:
+    $ref: './products.yaml'
+  /products/{id}:
+    $ref: './product.yaml'
   /purchase-orders:
     $ref: './purchase-orders.yaml'
   /purchase-orders/{id}:
@@ -41,10 +45,12 @@ paths:
     $ref: './sales-order.yaml'
 
 tags:
+  - name: Products
+    description: Get and manage products
   - name: Purchase Orders
     description: Get and modify purchase orders
   - name: Inventory
-    description: Get and adjust stock levels
+    description: Get and adjust product stock levels
   - name: Transfer Orders
     description: Manage transfer orders
   - name: Receiving Reports

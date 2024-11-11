@@ -1,0 +1,143 @@
+# products.yaml
+get:
+  operationId: getProducts
+  tags:
+    - Products
+  summary: Products
+  description: |
+    Get a paginated list of products with optional filtering.
+    
+    For detailed information about the filtering system and available operators, 
+    refer to the [Filter System Documentation](/filters).
+
+    ## Available Filters
+    ### String Filters
+    - `name`: Product name
+    - `description`: Product description
+    - `sku`: Product SKU (searches both internal SKU and alternate SKUs)
+    - `upc`: Product UPC/Barcode
+    - `tag`: Product tags
+    - `q`: General search matches name OR upc OR sku
+    
+    ### Float Filters
+    - `retail_price`: Product retail price
+    - `wholesale_price`: Product wholesale price
+    
+    ### DateTime Filters
+    - `created_at`: When the product was created
+    - `updated_at`: When the product was last updated
+    
+    ## Examples
+    ```
+    # Find products by SKU (includes alternate SKUs)
+    ?sku[eq]=SKU-001
+
+    # Find products with specific price range
+    ?retail_price[gte]=50.00&retail_price[lte]=100.00
+
+    # Find recently updated products
+    ?updated_at[gte]=2024-01-01 00:00:00
+
+    # Search products by name
+    ?name[contains]=Test Product
+    ```
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: query
+      name: page
+      schema:
+        type: integer
+        default: 1
+      description: Page number for pagination
+    - in: query
+      name: per_page
+      schema:
+        type: integer
+        default: 10
+        maximum: 100
+      description: Number of items per page (max 100)
+    # String Filters
+    - in: query
+      name: q
+      schema:
+        type: string
+      description: Filter by name OR upc OR sku
+      example: "ABCD-1234"
+    - in: query
+      name: name
+      schema:
+        type: string
+      description: Filter by product name
+      example: "Test Product"
+    - in: query
+      name: description
+      schema:
+        type: string
+      description: Filter by product description
+    - in: query
+      name: sku
+      schema:
+        type: string
+      description: Filter by SKU (searches both internal and alternate SKUs)
+      example: "SKU-001"
+    - in: query
+      name: upc
+      schema:
+        type: string
+      description: Filter by UPC/Barcode
+      example: "123456789012"
+    # Float Filters
+    - in: query
+      name: retail_price
+      schema:
+        type: number
+        format: float
+      description: Filter by retail price
+      example: 99.99
+    - in: query
+      name: wholesale_price
+      schema:
+        type: number
+        format: float
+      description: Filter by wholesale price
+      example: 45.00
+    # DateTime Filters
+    - in: query
+      name: created_at
+      schema:
+        type: string
+        format: date-time
+      description: Filter by creation date (YYYY-MM-DD HH:mm:ss)
+    - in: query
+      name: updated_at
+      schema:
+        type: string
+        format: date-time
+      description: Filter by last update date (YYYY-MM-DD HH:mm:ss)
+    # Tag Filter
+    - in: query
+      name: tag
+      schema:
+        type: string
+      description: Filter by product tags
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/product.yaml'
+              meta:
+                $ref: './components/pagination-meta.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'

@@ -2,7 +2,7 @@ get:
   operationId: getTransferOrder
   tags:
     - Transfer Orders
-  summary: Transfer order
+  summary: Single transfer order
   description: Get details of a specific transfer order by ID
   security:
     - BearerAuth: []
