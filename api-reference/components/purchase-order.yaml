@@ -3,158 +3,224 @@ properties:
   id:
     type: integer
     description: Unique identifier for the purchase order
+  order_numbers:
+    type: array
+    description: List of purchase order numbers
+    items:
+      type: string
+  created_at:
+    type: string
+    format: date-time
+    description: Timestamp when the purchase order was created
+  updated_at:
+    type: string
+    format: date-time
+    description: Timestamp when the purchase order was last updated
+  order_status:
+    type: string
+    enum: [active, inactive, deleted]
+    description: Status of the purchase order
   order_date:
     type: string
     format: date
     description: Date when the purchase order was created
-  order_status_id:
+  arrival_due_date:
+    type: string
+    format: date
+    nullable: true
+    description: Expected arrival date for the order
+  requested_ship_date:
+    type: string
+    format: date
+    nullable: true
+    description: Requested shipping date
+  order_type:
     type: integer
-    description: ID representing the status of the order
-  order_status_text:
+    description: Type of the order
+  incoterm:
     type: string
-    description: Textual representation of the order status
-  order_status_date:
+    description: International Commercial Terms for the order
+  tracking_info:
     type: string
-    format: date-time
-    description: Date and time when the order status was last updated
+    nullable: true
+    description: Tracking information for the order
+  payment_terms:
+    type: string
+    description: Payment terms for the order
   supplier_id:
     type: integer
-    description: ID of the supplier associated with the order
-  order_type:
-    type: string
-    description: Type of the order
-  logistic_code:
-    type: string
-    description: Code for the logistics information
-  logistic_label:
-    type: string
-    description: Label for the logistics information
+    description: ID of the supplier
   item_count:
     type: integer
     description: Number of unique items in the order
   order_quantity:
     type: integer
-    description: Total quantity of items in the order
+    description: Total quantity of items
   order_cost:
     type: number
     format: float
-    description: Total cost of the order
+    description: Cost of the order before tax and shipping
   total_tax:
     type: number
     format: float
-    description: Total tax applied to the order
-  total_cost:
-    type: number
-    format: float
-    description: Total cost including tax
-  total_paid:
-    type: number
-    format: float
-    description: Total amount paid for the order
+    description: Total tax amount
   total_shipping_cost:
     type: number
     format: float
-    description: Total shipping cost for the order
+    description: Total shipping cost
+  total_cost:
+    type: number
+    format: float
+    description: Total cost including tax and shipping
+  total_paid:
+    type: number
+    format: float
+    description: Total amount paid
+  total_due:
+    type: number
+    format: float
+    description: Total amount due
   down_payment:
     type: number
     format: float
-    description: Down payment amount for the order
-  payment_terms:
-    type: string
-    description: Payment terms for the order
+    description: Down payment amount
   public_note:
     type: string
-    description: Public note associated with the order
+    nullable: true
+    description: Public notes
   private_note:
     type: string
-    description: Private note associated with the order
-  tracking_info:
-    type: string
-    description: Tracking information for the order
-  requested_ship_date:
-    type: string
-    format: date
-    description: Requested shipping date for the order
-  arrival_due_date:
-    type: string
-    format: date
-    description: Expected arrival date for the order
-  due_amount:
-    type: number
-    format: float
-    description: Amount due for the order
-  due_date:
-    type: string
-    format: date
-    description: Due date for the payment
+    nullable: true
+    description: Private notes
   starred:
     type: boolean
-    description: Indicates if the order is starred
-  starred_notes:
-    type: string
-    description: Notes for starred orders
-  sync_in_sku_vault:
-    type: boolean
-    description: Indicates if the order should be synced in SKUVault
-  landed_domestic:
-    type: number
-    format: float
-    description: Landed cost for domestic shipping
-  landed_intl:
-    type: number
-    format: float
-    description: Landed cost for international shipping
-  intl_shipping:
-    type: number
-    format: float
-    description: Cost of international shipping
-  street_address_one:
-    type: string
-    description: First line of the street address
-  street_address_two:
-    type: string
-    description: Second line of the street address
-  city:
-    type: string
-    description: City for shipping
-  state:
-    type: string
-    description: State for shipping
-  zip:
-    type: string
-    description: ZIP code for shipping
-  country:
-    type: string
-    description: Country for shipping
-  location_id:
-    type: integer
-    description: ID of the location associated with the order
-  warehouse_id:
-    type: integer
-    description: ID of the warehouse associated with the order
-  default_ship_to_address:
-    type: string
-    description: Default shipping address for the order
-  internal_resource_id:
-    type: integer
-    description: ID of the internal resource
-  internal_resource_type:
-    type: string
-    description: Type of the internal resource
-  supplier_order_type:
-    type: string
-    description: Type of supplier order
-  quickbooks_purchase_order_id:
-    type: string
-    description: QuickBooks purchase order ID
-  quickbooks_detailed_message:
-    type: string
-    description: Detailed message from QuickBooks
-  created_at:
-    type: string
-    format: date-time
-    description: Timestamp of when the record was created
-  updated_at:
-    type: string
-    format: date-time
-    description: Timestamp of when the record was last updated
+    description: Whether the order is starred
+  items:
+    type: array
+    description: Line items in the purchase order
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Line item ID
+        purchase_order_id:
+          type: integer
+          description: ID of the parent purchase order
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+        quantity:
+          type: integer
+          description: Quantity ordered
+        unit_price:
+          type: number
+          format: float
+          description: Price per unit
+        unit:
+          type: string
+          description: Unit of measure
+        tax:
+          type: number
+          format: float
+          description: Tax amount
+        discount_amount:
+          type: number
+          format: float
+          description: Discount amount
+        line_total:
+          type: number
+          format: float
+          description: Total for this line item
+        received_quantity:
+          type: integer
+          description: Quantity received
+        source_sku:
+          type: string
+          nullable: true
+          description: Source SKU
+        product:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            description:
+              type: string
+              nullable: true
+            retail_price:
+              type: number
+              format: float
+            wholesale_price:
+              type: number
+              format: float
+            variant_attributes:
+              type: object
+              nullable: true
+            sku:
+              type: string
+            upc:
+              type: string
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+  supplier:
+    type: object
+    properties:
+      id:
+        type: integer
+      status:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+      street_address:
+        type: string
+      city:
+        type: string
+      state:
+        type: string
+      zip:
+        type: string
+      country:
+        type: string
+      contact_name:
+        type: string
+      contact_email:
+        type: string
+      contact_phone:
+        type: string
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time
+  tags:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        icon:
+          type: string
+          nullable: true
+        color:
+          type: string
+          nullable: true

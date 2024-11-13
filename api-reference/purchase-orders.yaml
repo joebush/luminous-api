@@ -3,7 +3,60 @@ get:
   tags:
     - Purchase Orders
   summary: Purchase orders
-  description: Get a paginated list of purchase orders
+  description: |
+    Get a paginated list of purchase orders with optional filtering.
+    
+    For detailed information about the filtering system and available operators, 
+    refer to the [Filter System Documentation](/filters).
+
+    ## Available Filters
+
+    ### String Filters
+    - `order_number`: Purchase order reference number
+    - `public_note`: Public notes content
+    - `private_note`: Private notes content
+    - `tag`: Order tags
+    
+    ### Date Filters
+    - `order_date`: Date the order was placed
+    - `requested_ship_date`: Requested shipping date
+    - `arrival_due_date`: Expected arrival date
+    
+    ### DateTime Filters
+    - `created_at`: When the order was created
+    - `updated_at`: When the order was last updated
+    
+    ### Numeric Filters
+    - `order_quantity`: Total number of items ordered
+    - `order_cost`: Base cost before tax and shipping
+    - `total_cost`: Total cost including tax and shipping
+    - `total_tax`: Tax amount
+    - `total_shipping_cost`: Shipping cost
+    - `total_paid`: Amount paid
+    - `down_payment`: Down payment amount
+    
+    ### Boolean Filters
+    - `starred`: Whether the order is starred
+    
+    ### ID Filters
+    - `supplier_id`: Filter by supplier
+    - `warehouse_id`: Filter by warehouse
+    - `location_id`: Filter by location
+
+    ### Enum Filters
+    - `order_status`: Order status (active, inactive, deleted)
+    
+    ## Examples
+    ```
+    # Find active orders with total cost over $1000
+    ?order_status=active&total_cost[gt]=1000.00
+
+    # Find starred orders from a specific supplier
+    ?starred=1&supplier_id=123
+
+    # Find recent orders with specific shipping costs
+    ?total_shipping_cost=50.00&created_at[gte]=2024-10-25 00:00:00
+    ```
   security:
     - BearerAuth: []
   parameters:
@@ -18,7 +71,126 @@ get:
       schema:
         type: integer
         default: 10
-      description: Number of items per page
+        maximum: 100
+      description: Number of items per page (max 100)
+    # String Filters
+    - in: query
+      name: order_number
+      schema:
+        type: string
+      description: Filter by order number
+    - in: query
+      name: public_note
+      schema:
+        type: string
+      description: Filter by public note content
+    - in: query
+      name: private_note
+      schema:
+        type: string
+      description: Filter by private note content
+    - in: query
+      name: tag
+      schema:
+        type: string
+      description: Filter by tags
+    # Date Filters
+    - in: query
+      name: order_date
+      schema:
+        type: string
+        format: date
+      description: Filter by order date (YYYY-MM-DD)
+    - in: query
+      name: requested_ship_date
+      schema:
+        type: string
+        format: date
+      description: Filter by requested ship date (YYYY-MM-DD)
+    - in: query
+      name: arrival_due_date
+      schema:
+        type: string
+        format: date
+      description: Filter by arrival due date (YYYY-MM-DD)
+    # DateTime Filters
+    - in: query
+      name: created_at
+      schema:
+        type: string
+        format: date-time
+      description: Filter by creation date (YYYY-MM-DD HH:mm:ss)
+    - in: query
+      name: updated_at
+      schema:
+        type: string
+        format: date-time
+      description: Filter by last update date (YYYY-MM-DD HH:mm:ss)
+    # Numeric Filters
+    - in: query
+      name: order_quantity
+      schema:
+        type: number
+      description: Filter by order quantity
+    - in: query
+      name: order_cost
+      schema:
+        type: number
+      description: Filter by order cost
+    - in: query
+      name: total_cost
+      schema:
+        type: number
+      description: Filter by total cost (including tax and shipping)
+    - in: query
+      name: total_tax
+      schema:
+        type: number
+      description: Filter by tax amount
+    - in: query
+      name: total_shipping_cost
+      schema:
+        type: number
+      description: Filter by shipping cost
+    - in: query
+      name: total_paid
+      schema:
+        type: number
+      description: Filter by amount paid
+    - in: query
+      name: down_payment
+      schema:
+        type: number
+      description: Filter by down payment amount
+    # Boolean Filters
+    - in: query
+      name: starred
+      schema:
+        type: boolean
+      description: Filter by starred status
+    # ID Filters
+    - in: query
+      name: supplier_id
+      schema:
+        type: integer
+      description: Filter by supplier ID
+    - in: query
+      name: warehouse_id
+      schema:
+        type: integer
+      description: Filter by warehouse ID
+    - in: query
+      name: location_id
+      schema:
+        type: integer
+      description: Filter by location ID
+    # Enum Filters
+    - in: query
+      name: order_status
+      schema:
+        type: string
+        enum: [active, inactive, deleted]
+      description: Filter by order status
   responses:
     '200':
       description: Successful response
