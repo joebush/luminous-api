@@ -1,0 +1,148 @@
+type: object
+required:
+  - ship_date
+  - tracking_number
+  - carrier_code
+  - warehouse_id
+  - ship_to
+  - items
+properties:
+  ship_date:
+    type: string
+    format: date
+    description: Date when the shipment will be sent (YYYY-MM-DD)
+  tracking_number:
+    type: string
+    description: Tracking number for the shipment
+  is_return:
+    type: boolean
+    description: Whether this is a return shipment
+  carrier_code:
+    type: string
+    description: Code identifying the carrier
+    examples:
+      ups:
+        value: "ups"
+      fedex:
+        value: "fedex"
+      usps:
+        value: "usps"
+  service_code:
+    type: string
+    description: Code identifying the shipping service
+    examples:
+      ups_ground:
+        value: "ups_ground"
+      fedex_2day:
+        value: "fedex_2day"
+      usps_priority:
+        value: "usps_priority"
+  shipment_cost:
+    type: number
+    format: float
+    description: Cost of shipping
+  insurance_cost:
+    type: number
+    format: float
+    description: Cost of insurance
+  package_code:
+    type: string
+    description: Code identifying the package type
+    example: "flat_rate_envelope"
+  warehouse_id:
+    type: integer
+    description: ID of the warehouse shipping from
+  ship_to:
+    type: object
+    required:
+      - name
+      - street1
+      - city
+      - state
+      - postalCode
+      - country
+      - residential
+    properties:
+      name:
+        type: string
+        description: Recipient name
+      company:
+        type: string
+        description: Company name
+      street1:
+        type: string
+        description: Primary street address
+      street2:
+        type: string
+        description: Secondary street address
+      street3:
+        type: string
+        description: Additional street address
+      city:
+        type: string
+        description: City
+      state:
+        type: string
+        description: State/province
+      postalCode:
+        type: string
+        description: Postal/ZIP code
+      country:
+        type: string
+        description: Country
+      phone:
+        type: string
+        description: Contact phone number
+      residential:
+        type: boolean
+        description: Whether this is a residential address
+  weight:
+    type: object
+    required:
+      - value
+      - units
+    properties:
+      value:
+        type: number
+        format: float
+        description: Weight value
+      units:
+        type: string
+        enum:
+          - ounces
+          - pounds
+          - grams
+          - kilograms
+        description: Unit of weight measurement
+  dimensions:
+    type: object
+    required:
+      - units
+      - length
+      - width
+      - height
+    properties:
+      units:
+        type: string
+        enum:
+          - inches
+          - centimeters
+        description: Unit of dimensional measurement
+      length:
+        type: number
+        format: float
+        description: Length of the package
+      width:
+        type: number
+        format: float
+        description: Width of the package
+      height:
+        type: number
+        format: float
+        description: Height of the package
+  items:
+    type: array
+    minItems: 1
+    items:
+      $ref: './sales-order-shipment-item-create.yaml'
+    description: Items to be included in this shipment

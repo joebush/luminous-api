@@ -43,6 +43,8 @@ paths:
     $ref: './sales-orders.yaml'
   /sales-orders/{id}:
     $ref: './sales-order.yaml'
+  /sales-orders/{salesOrderId}/shipments:
+    $ref: './sales-order-shipments.yaml'
 
 tags:
   - name: Products
@@ -56,4 +58,4 @@ tags:
   - name: Receiving Reports
     description: Manage receiving reports
   - name: Sales Orders
-    description: Manage sales orders and their items
+    description: Manage sales orders and sales order shipments

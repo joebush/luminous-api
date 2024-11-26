@@ -1,0 +1,110 @@
+# sales-order-shipments.yaml
+get:
+  operationId: getSalesOrderShipments
+  tags:
+    - Sales Orders
+  summary: Get shipments for a sales order
+  description: |
+    Retrieve a paginated list of shipments associated with a specific sales order.
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: salesOrderId
+      required: true
+      schema:
+        type: integer
+      description: ID of the sales order
+    - in: query
+      name: page
+      schema:
+        type: integer
+        default: 1
+      description: Page number for pagination
+    - in: query
+      name: per_page
+      schema:
+        type: integer
+        default: 10
+        maximum: 100
+      description: Number of items per page (max 100)
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/sales-order-shipment.yaml'
+              meta:
+                $ref: './components/pagination-meta.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '404':
+      description: Sales order not found
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+
+post:
+  operationId: createSalesOrderShipment
+  tags:
+    - Sales Orders
+  summary: Create a new shipment for a sales order
+  description: |
+    Create a new shipment record for a specific sales order. Once the shipment is added, 
+    the sales order status will automatically be updated to either `shipped` or `partially_shipped`.
+    Also, any shipment costs will be added to the sales order total.
+    NOTE: At this time, inventory adjustments will not be made automatically.
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: salesOrderId
+      required: true
+      schema:
+        type: integer
+      description: ID of the sales order
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: './components/sales-order-shipment-create.yaml'
+  responses:
+    '201':
+      description: Shipment created successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/sales-order-shipment.yaml'
+    '400':
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '404':
+      description: Sales order not found
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'

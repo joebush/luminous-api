@@ -1,0 +1,40 @@
+type: object
+required:
+  - product_id
+  - order_item_id
+  - quantity
+  - unit_price
+properties:
+  product_id:
+    type: integer
+    description: ID of the product to ship
+  order_item_id:
+    type: integer
+    description: ID of the associated order item
+  weight:
+    type: object
+    required:
+      - value
+      - units
+    properties:
+      value:
+        type: number
+        format: float
+        description: Weight value
+      units:
+        type: string
+        enum:
+          - ounces
+          - pounds
+          - grams
+          - kilograms
+        description: Unit of weight measurement
+  quantity:
+    type: integer
+    minimum: 1
+    description: Quantity to ship
+  unit_price:
+    type: number
+    format: float
+    minimum: 0
+    description: Price per unit

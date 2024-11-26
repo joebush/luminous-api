@@ -1,0 +1,47 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the shipment item
+  shipment_id:
+    type: integer
+    description: ID of the parent shipment
+  product_id:
+    type: integer
+    description: ID of the product being shipped
+  order_item_id:
+    type: integer
+    description: ID of the associated order item
+  quantity:
+    type: number
+    description: Quantity being shipped
+  weight:
+    type: object
+    required:
+      - value
+      - units
+    properties:
+      value:
+        type: number
+        format: float
+        description: Weight value
+      units:
+        type: string
+        enum:
+          - ounces
+          - pounds
+          - grams
+          - kilograms
+        description: Unit of weight measurement
+  unit_price:
+    type: number
+    format: float
+    description: Price per unit
+  created_at:
+    type: string
+    format: date-time
+    description: Timestamp when the item was created
+  updated_at:
+    type: string
+    format: date-time
+    description: Timestamp when the item was last updated

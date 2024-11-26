@@ -2762,6 +2762,480 @@ paths:
             application/json:
               schema:
                 $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+  '/sales-orders/{salesOrderId}/shipments':
+    get:
+      operationId: getSalesOrderShipments
+      tags:
+        - Sales Orders
+      summary: Get shipments for a sales order
+      description: |
+        Retrieve a paginated list of shipments associated with a specific sales order.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: salesOrderId
+          required: true
+          schema:
+            type: integer
+          description: ID of the sales order
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+          description: Number of items per page (max 100)
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/paths/~1sales-orders~1%7BsalesOrderId%7D~1shipments/post/responses/201/content/application~1json/schema/properties/data'
+                  meta:
+                    $ref: '#/paths/~1products/get/responses/200/content/application~1json/schema/properties/meta'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+        '404':
+          description: Sales order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+    post:
+      operationId: createSalesOrderShipment
+      tags:
+        - Sales Orders
+      summary: Create a new shipment for a sales order
+      description: |
+        Create a new shipment record for a specific sales order. Once the shipment is added, 
+        the sales order status will automatically be updated to either `shipped` or `partially_shipped`.
+        Also, any shipment costs will be added to the sales order total.
+        NOTE: At this time, inventory adjustments will not be made automatically.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: salesOrderId
+          required: true
+          schema:
+            type: integer
+          description: ID of the sales order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ship_date
+                - tracking_number
+                - carrier_code
+                - warehouse_id
+                - ship_to
+                - items
+              properties:
+                ship_date:
+                  type: string
+                  format: date
+                  description: Date when the shipment will be sent (YYYY-MM-DD)
+                tracking_number:
+                  type: string
+                  description: Tracking number for the shipment
+                is_return:
+                  type: boolean
+                  description: Whether this is a return shipment
+                carrier_code:
+                  type: string
+                  description: Code identifying the carrier
+                  examples:
+                    ups:
+                      value: ups
+                    fedex:
+                      value: fedex
+                    usps:
+                      value: usps
+                service_code:
+                  type: string
+                  description: Code identifying the shipping service
+                  examples:
+                    ups_ground:
+                      value: ups_ground
+                    fedex_2day:
+                      value: fedex_2day
+                    usps_priority:
+                      value: usps_priority
+                shipment_cost:
+                  type: number
+                  format: float
+                  description: Cost of shipping
+                insurance_cost:
+                  type: number
+                  format: float
+                  description: Cost of insurance
+                package_code:
+                  type: string
+                  description: Code identifying the package type
+                  example: flat_rate_envelope
+                warehouse_id:
+                  type: integer
+                  description: ID of the warehouse shipping from
+                ship_to:
+                  type: object
+                  required:
+                    - name
+                    - street1
+                    - city
+                    - state
+                    - postalCode
+                    - country
+                    - residential
+                  properties:
+                    name:
+                      type: string
+                      description: Recipient name
+                    company:
+                      type: string
+                      description: Company name
+                    street1:
+                      type: string
+                      description: Primary street address
+                    street2:
+                      type: string
+                      description: Secondary street address
+                    street3:
+                      type: string
+                      description: Additional street address
+                    city:
+                      type: string
+                      description: City
+                    state:
+                      type: string
+                      description: State/province
+                    postalCode:
+                      type: string
+                      description: Postal/ZIP code
+                    country:
+                      type: string
+                      description: Country
+                    phone:
+                      type: string
+                      description: Contact phone number
+                    residential:
+                      type: boolean
+                      description: Whether this is a residential address
+                weight:
+                  type: object
+                  required:
+                    - value
+                    - units
+                  properties:
+                    value:
+                      type: number
+                      format: float
+                      description: Weight value
+                    units:
+                      type: string
+                      enum:
+                        - ounces
+                        - pounds
+                        - grams
+                        - kilograms
+                      description: Unit of weight measurement
+                dimensions:
+                  type: object
+                  required:
+                    - units
+                    - length
+                    - width
+                    - height
+                  properties:
+                    units:
+                      type: string
+                      enum:
+                        - inches
+                        - centimeters
+                      description: Unit of dimensional measurement
+                    length:
+                      type: number
+                      format: float
+                      description: Length of the package
+                    width:
+                      type: number
+                      format: float
+                      description: Width of the package
+                    height:
+                      type: number
+                      format: float
+                      description: Height of the package
+                items:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: object
+                    required:
+                      - product_id
+                      - order_item_id
+                      - quantity
+                      - unit_price
+                    properties:
+                      product_id:
+                        type: integer
+                        description: ID of the product to ship
+                      order_item_id:
+                        type: integer
+                        description: ID of the associated order item
+                      weight:
+                        type: object
+                        required:
+                          - value
+                          - units
+                        properties:
+                          value:
+                            type: number
+                            format: float
+                            description: Weight value
+                          units:
+                            type: string
+                            enum:
+                              - ounces
+                              - pounds
+                              - grams
+                              - kilograms
+                            description: Unit of weight measurement
+                      quantity:
+                        type: integer
+                        minimum: 1
+                        description: Quantity to ship
+                      unit_price:
+                        type: number
+                        format: float
+                        minimum: 0
+                        description: Price per unit
+                  description: Items to be included in this shipment
+      responses:
+        '201':
+          description: Shipment created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Unique identifier for the shipment
+                      sales_order_id:
+                        type: integer
+                        description: ID of the associated sales order
+                      ship_date:
+                        type: string
+                        format: date
+                        description: Date when the shipment was or will be sent
+                      tracking_number:
+                        type: string
+                        description: Tracking number for the shipment
+                      is_return:
+                        type: boolean
+                        description: Whether this is a return shipment
+                      carrier_code:
+                        type: string
+                        description: 'Code identifying the carrier (e.g., ups, fedex)'
+                      service_code:
+                        type: string
+                        description: Code identifying the shipping service
+                      package_code:
+                        type: string
+                        description: Code identifying the package type
+                      shipment_cost:
+                        type: number
+                        format: float
+                        description: Cost of shipping
+                      insurance_cost:
+                        type: number
+                        format: float
+                        description: Cost of insurance
+                      warehouse_id:
+                        type: integer
+                        description: ID of the warehouse shipping from
+                      status:
+                        type: integer
+                        description: Status of the shipment
+                      ship_to:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            description: Recipient name
+                          company:
+                            type: string
+                            description: Company name
+                          street1:
+                            type: string
+                            description: Primary street address
+                          street2:
+                            type: string
+                            description: Secondary street address
+                          street3:
+                            type: string
+                            description: Additional street address
+                          city:
+                            type: string
+                            description: City
+                          state:
+                            type: string
+                            description: State/province
+                          postalCode:
+                            type: string
+                            description: Postal/ZIP code
+                          country:
+                            type: string
+                            description: Country
+                          phone:
+                            type: string
+                            description: Contact phone number
+                          residential:
+                            type: boolean
+                            description: Whether this is a residential address
+                      weight:
+                        type: object
+                        required:
+                          - value
+                          - units
+                        properties:
+                          value:
+                            type: number
+                            format: float
+                            description: Weight value
+                          units:
+                            type: string
+                            enum:
+                              - ounces
+                              - pounds
+                              - grams
+                              - kilograms
+                            description: Unit of weight measurement
+                      dimensions:
+                        type: object
+                        required:
+                          - units
+                          - length
+                          - width
+                          - height
+                        properties:
+                          units:
+                            type: string
+                            enum:
+                              - inches
+                              - centimeters
+                            description: Unit of dimensional measurement
+                          length:
+                            type: number
+                            format: float
+                            description: Length of the package
+                          width:
+                            type: number
+                            format: float
+                            description: Width of the package
+                          height:
+                            type: number
+                            format: float
+                            description: Height of the package
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the shipment item
+                            shipment_id:
+                              type: integer
+                              description: ID of the parent shipment
+                            product_id:
+                              type: integer
+                              description: ID of the product being shipped
+                            order_item_id:
+                              type: integer
+                              description: ID of the associated order item
+                            quantity:
+                              type: number
+                              description: Quantity being shipped
+                            weight:
+                              type: object
+                              required:
+                                - value
+                                - units
+                              properties:
+                                value:
+                                  type: number
+                                  format: float
+                                  description: Weight value
+                                units:
+                                  type: string
+                                  enum:
+                                    - ounces
+                                    - pounds
+                                    - grams
+                                    - kilograms
+                                  description: Unit of weight measurement
+                            unit_price:
+                              type: number
+                              format: float
+                              description: Price per unit
+                            created_at:
+                              type: string
+                              format: date-time
+                              description: Timestamp when the item was created
+                            updated_at:
+                              type: string
+                              format: date-time
+                              description: Timestamp when the item was last updated
+                        description: Items included in this shipment
+                      created_at:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the shipment was created
+                      updated_at:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the shipment was last updated
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+        '404':
+          description: Sales order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
 tags:
   - name: Products
     description: Get and manage products
@@ -2774,4 +3248,4 @@ tags:
   - name: Receiving Reports
     description: Manage receiving reports
   - name: Sales Orders
-    description: Manage sales orders and their items
+    description: Manage sales orders and sales order shipments
