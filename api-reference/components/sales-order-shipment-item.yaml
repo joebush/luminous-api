@@ -11,7 +11,7 @@ properties:
     description: ID of the product being shipped
   order_item_id:
     type: integer
-    description: ID of the associated order item
+    description: ID of the associated sales order line item being shipped
   quantity:
     type: number
     description: Quantity being shipped

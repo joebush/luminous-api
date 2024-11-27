@@ -7,10 +7,10 @@ required:
 properties:
   product_id:
     type: integer
-    description: ID of the product to ship
+    description: ID of the product being shipped
   order_item_id:
     type: integer
-    description: ID of the associated order item
+    description: ID of the sales order item
   weight:
     type: object
     required:

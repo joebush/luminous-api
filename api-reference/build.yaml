@@ -2756,6 +2756,11 @@ paths:
                             markup_structure:
                               type: object
                         description: Tags associated with the order
+                      shipments:
+                        type: array
+                        items:
+                          $ref: '#/paths/~1sales-orders~1%7BsalesOrderId%7D~1shipments/post/responses/201/content/application~1json/schema'
+                        description: Shipments associated with order
         '404':
           description: Sales order not found
           content:
@@ -2985,10 +2990,10 @@ paths:
                     properties:
                       product_id:
                         type: integer
-                        description: ID of the product to ship
+                        description: ID of the product being shipped
                       order_item_id:
                         type: integer
-                        description: ID of the associated order item
+                        description: ID of the sales order item
                       weight:
                         type: object
                         required:
@@ -3160,7 +3165,7 @@ paths:
                           description: ID of the product being shipped
                         order_item_id:
                           type: integer
-                          description: ID of the associated order item
+                          description: ID of the associated sales order line item being shipped
                         quantity:
                           type: number
                           description: Quantity being shipped

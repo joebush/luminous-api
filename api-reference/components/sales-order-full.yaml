@@ -171,3 +171,8 @@ properties:
     items:
       $ref: './product-tag.yaml'
     description: Tags associated with the order
+  shipments:
+    type: array
+    items:
+      $ref: './sales-order-shipment.yaml'
+    description: Shipments associated with order
