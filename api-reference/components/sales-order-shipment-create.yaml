@@ -20,23 +20,11 @@ properties:
   carrier_code:
     type: string
     description: Code identifying the carrier
-    examples:
-      ups:
-        value: "ups"
-      fedex:
-        value: "fedex"
-      usps:
-        value: "usps"
+    example: "fedex"
   service_code:
     type: string
     description: Code identifying the shipping service
-    examples:
-      ups_ground:
-        value: "ups_ground"
-      fedex_2day:
-        value: "fedex_2day"
-      usps_priority:
-        value: "usps_priority"
+    example: "ups_ground"
   shipment_cost:
     type: number
     format: float
