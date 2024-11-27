@@ -14,6 +14,7 @@ get:
 
     ### String Filters
     - `order_number`: Order reference number
+    - `order_status`: Order status
     - `tag`: Order tags
     
     ### Date Filters
@@ -64,6 +65,11 @@ get:
       schema:
         type: string
       description: Filter by order number
+    - in: query
+      name: order_status
+      schema:
+        type: string
+      description: Filter by order status
     # Date Filters
     - in: query
       name: order_date

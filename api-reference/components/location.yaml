@@ -15,5 +15,3 @@ properties:
   updated_at:
     type: string
     format: date-time
-  parent:
-    $ref: './location.yaml'

@@ -193,7 +193,32 @@ paths:
                           type: array
                           description: Product attachments
                           items:
-                            $ref: '#/paths/~1products~1%7Bid%7D/get/responses/200/content/application~1json/schema/properties/data/properties/attachments/items'
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: Unique identifier for the attachment
+                              name:
+                                type: string
+                                description: Filename of the attachment
+                              type:
+                                type: string
+                                description: MIME type of the attachment
+                              size:
+                                type: integer
+                                description: File size in bytes
+                              full_url:
+                                type: string
+                                description: Full resolution URL of the attachment
+                              thumb_url:
+                                type: string
+                                description: Thumbnail URL of the attachment (if applicable)
+                            required:
+                              - id
+                              - name
+                              - type
+                              - size
+                              - full_url
                         variants:
                           type: array
                           description: Product variants
@@ -211,7 +236,32 @@ paths:
                                 type: array
                                 description: Variant-specific attachments
                                 items:
-                                  $ref: '#/paths/~1products~1%7Bid%7D/get/responses/200/content/application~1json/schema/properties/data/properties/attachments/items'
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: integer
+                                      description: Unique identifier for the attachment
+                                    name:
+                                      type: string
+                                      description: Filename of the attachment
+                                    type:
+                                      type: string
+                                      description: MIME type of the attachment
+                                    size:
+                                      type: integer
+                                      description: File size in bytes
+                                    full_url:
+                                      type: string
+                                      description: Full resolution URL of the attachment
+                                    thumb_url:
+                                      type: string
+                                      description: Thumbnail URL of the attachment (if applicable)
+                                  required:
+                                    - id
+                                    - name
+                                    - type
+                                    - size
+                                    - full_url
                               retail_price:
                                 type: number
                                 format: float
@@ -260,7 +310,29 @@ paths:
                           type: array
                           description: Tags associated with the product
                           items:
-                            $ref: '#/paths/~1products~1%7Bid%7D/get/responses/200/content/application~1json/schema/properties/data/properties/tags/items'
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: Unique identifier for the tag
+                              name:
+                                type: string
+                                description: Name of the tag
+                              description:
+                                type: string
+                                nullable: true
+                                description: Description of the tag
+                              icon:
+                                type: string
+                                nullable: true
+                                description: Icon identifier or URL for the tag
+                              color:
+                                type: string
+                                nullable: true
+                                description: Color code for the tag
+                            required:
+                              - id
+                              - name
                         supplier:
                           type: object
                           nullable: true
@@ -424,7 +496,32 @@ paths:
                               type: array
                               description: Variant-specific attachments
                               items:
-                                $ref: '#/paths/~1products~1%7Bid%7D/get/responses/200/content/application~1json/schema/properties/data/properties/attachments/items'
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                    description: Unique identifier for the attachment
+                                  name:
+                                    type: string
+                                    description: Filename of the attachment
+                                  type:
+                                    type: string
+                                    description: MIME type of the attachment
+                                  size:
+                                    type: integer
+                                    description: File size in bytes
+                                  full_url:
+                                    type: string
+                                    description: Full resolution URL of the attachment
+                                  thumb_url:
+                                    type: string
+                                    description: Thumbnail URL of the attachment (if applicable)
+                                required:
+                                  - id
+                                  - name
+                                  - type
+                                  - size
+                                  - full_url
                             retail_price:
                               type: number
                               format: float
@@ -513,13 +610,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
         '404':
           description: Product not found
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
   /purchase-orders:
     get:
       operationId: getPurchaseOrders
@@ -951,13 +1054,31 @@ paths:
                                 type: string
                                 nullable: true
                   meta:
-                    $ref: '#/paths/~1products/get/responses/200/content/application~1json/schema/properties/meta'
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                      from:
+                        type: integer
+                      last_page:
+                        type: integer
+                      path:
+                        type: string
+                      per_page:
+                        type: integer
+                      to:
+                        type: integer
+                      total:
+                        type: integer
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
   '/purchase-orders/{id}':
     get:
       operationId: getPurchaseOrder
@@ -1217,7 +1338,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
   /inventory/adjustments:
     post:
       operationId: createInventoryAdjustment
@@ -1291,7 +1415,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1transfer-orders/post/responses/422/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
   /inventory/stocks:
     get:
       operationId: getInventoryStocks
@@ -1428,7 +1561,23 @@ paths:
                             type: object
                             properties:
                               warehouse:
-                                $ref: '#/paths/~1inventory~1stocks/get/responses/200/content/application~1json/schema/properties/data/items/properties/location_stocks/items/properties/location'
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                  status:
+                                    type: string
+                                  name:
+                                    type: string
+                                  parent_id:
+                                    type: integer
+                                    nullable: true
+                                  created_at:
+                                    type: string
+                                    format: date-time
+                                  updated_at:
+                                    type: string
+                                    format: date-time
                               location:
                                 type: object
                                 properties:
@@ -1447,8 +1596,6 @@ paths:
                                   updated_at:
                                     type: string
                                     format: date-time
-                                  parent:
-                                    $ref: '#/paths/~1inventory~1stocks/get/responses/200/content/application~1json/schema/properties/data/items/properties/location_stocks/items/properties/location'
                               qty_onhand:
                                 type: number
                                 format: float
@@ -1467,13 +1614,31 @@ paths:
                                 description: Quantity incoming at location
                           description: List of stock entries across all locations
                   meta:
-                    $ref: '#/paths/~1products/get/responses/200/content/application~1json/schema/properties/meta'
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                      from:
+                        type: integer
+                      last_page:
+                        type: integer
+                      path:
+                        type: string
+                      per_page:
+                        type: integer
+                      to:
+                        type: integer
+                      total:
+                        type: integer
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
   /transfer-orders:
     get:
       operationId: getTransferOrders
@@ -1534,15 +1699,76 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/paths/~1transfer-orders/post/responses/200/content/application~1json/schema/properties/data'
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: Unique identifier for the transfer order
+                        number:
+                          type: string
+                          description: Transfer order number
+                        date:
+                          type: string
+                          format: date
+                          description: Date of the transfer order
+                        arrival_date:
+                          type: string
+                          format: date
+                          description: Expected arrival date
+                        items_cost:
+                          type: number
+                          format: float
+                          description: Total cost of items
+                        shipping_cost:
+                          type: number
+                          format: float
+                          description: Shipping cost
+                        shipping_method:
+                          type: string
+                          description: Method of shipping
+                        source_warehouse_id:
+                          type: integer
+                          description: ID of the source warehouse
+                        destination_warehouse_id:
+                          type: integer
+                          description: ID of the destination warehouse
+                        status:
+                          type: string
+                          description: Status of the transfer order
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: Creation timestamp
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: Last update timestamp
                   meta:
-                    $ref: '#/paths/~1products/get/responses/200/content/application~1json/schema/properties/meta'
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                      from:
+                        type: integer
+                      last_page:
+                        type: integer
+                      path:
+                        type: string
+                      per_page:
+                        type: integer
+                      to:
+                        type: integer
+                      total:
+                        type: integer
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
     post:
       operationId: createTransferOrder
       tags:
@@ -1669,7 +1895,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
         '422':
           description: Validation error
           content:
@@ -1809,7 +2038,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
   /receiving-reports:
     get:
       operationId: getReceivingReports
@@ -1843,15 +2075,64 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/paths/~1receiving-reports/post/responses/200/content/application~1json/schema'
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        created_at:
+                          type: string
+                          format: date-time
+                        updated_at:
+                          type: string
+                          format: date-time
+                        status:
+                          type: string
+                        received_date:
+                          type: string
+                          format: date
+                        tracking_number:
+                          type: string
+                        received_by:
+                          type: integer
+                        received_at:
+                          type: string
+                          format: date-time
+                        shipped_via:
+                          type: string
+                        total_quantity:
+                          type: number
+                        total_tax:
+                          type: number
+                        total_cost:
+                          type: number
+                        shipping_cost:
+                          type: number
                   meta:
-                    $ref: '#/paths/~1products/get/responses/200/content/application~1json/schema/properties/meta'
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                      from:
+                        type: integer
+                      last_page:
+                        type: integer
+                      path:
+                        type: string
+                      per_page:
+                        type: integer
+                      to:
+                        type: integer
+                      total:
+                        type: integer
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
     post:
       operationId: createReceivingReport
       tags:
@@ -1992,7 +2273,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1transfer-orders/post/responses/422/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
   '/receiving-reports/{id}':
     get:
       operationId: getSingleReceivingReport
@@ -2127,7 +2417,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
   /sales-orders:
     get:
       operationId: getSalesOrders
@@ -2144,6 +2437,7 @@ paths:
 
         ### String Filters
         - `order_number`: Order reference number
+        - `order_status`: Order status
         - `tag`: Order tags
 
         ### Date Filters
@@ -2193,6 +2487,11 @@ paths:
           schema:
             type: string
           description: Filter by order number
+        - in: query
+          name: order_status
+          schema:
+            type: string
+          description: Filter by order status
         - in: query
           name: order_date
           schema:
@@ -2423,16 +2722,49 @@ paths:
                         tags:
                           type: array
                           items:
-                            $ref: '#/paths/~1sales-orders~1%7Bid%7D/get/responses/200/content/application~1json/schema/properties/data/properties/tags/items'
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                              description:
+                                type: string
+                              icon:
+                                type: string
+                              color:
+                                type: string
+                              discount_structure:
+                                type: object
+                              markup_structure:
+                                type: object
                           description: Tags associated with the order
                   meta:
-                    $ref: '#/paths/~1products/get/responses/200/content/application~1json/schema/properties/meta'
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                      from:
+                        type: integer
+                      last_page:
+                        type: integer
+                      path:
+                        type: string
+                      per_page:
+                        type: integer
+                      to:
+                        type: integer
+                      total:
+                        type: integer
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
   '/sales-orders/{id}':
     get:
       operationId: getSalesOrder
@@ -2759,14 +3091,196 @@ paths:
                       shipments:
                         type: array
                         items:
-                          $ref: '#/paths/~1sales-orders~1%7BsalesOrderId%7D~1shipments/post/responses/201/content/application~1json/schema'
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the shipment
+                            sales_order_id:
+                              type: integer
+                              description: ID of the associated sales order
+                            ship_date:
+                              type: string
+                              format: date
+                              description: Date when the shipment was or will be sent
+                            tracking_number:
+                              type: string
+                              description: Tracking number for the shipment
+                            is_return:
+                              type: boolean
+                              description: Whether this is a return shipment
+                            carrier_code:
+                              type: string
+                              description: 'Code identifying the carrier (e.g., ups, fedex)'
+                            service_code:
+                              type: string
+                              description: Code identifying the shipping service
+                            package_code:
+                              type: string
+                              description: Code identifying the package type
+                            shipment_cost:
+                              type: number
+                              format: float
+                              description: Cost of shipping
+                            insurance_cost:
+                              type: number
+                              format: float
+                              description: Cost of insurance
+                            warehouse_id:
+                              type: integer
+                              description: ID of the warehouse shipping from
+                            status:
+                              type: integer
+                              description: Status of the shipment
+                            ship_to:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                                  description: Recipient name
+                                company:
+                                  type: string
+                                  description: Company name
+                                street1:
+                                  type: string
+                                  description: Primary street address
+                                street2:
+                                  type: string
+                                  description: Secondary street address
+                                street3:
+                                  type: string
+                                  description: Additional street address
+                                city:
+                                  type: string
+                                  description: City
+                                state:
+                                  type: string
+                                  description: State/province
+                                postalCode:
+                                  type: string
+                                  description: Postal/ZIP code
+                                country:
+                                  type: string
+                                  description: Country
+                                phone:
+                                  type: string
+                                  description: Contact phone number
+                                residential:
+                                  type: boolean
+                                  description: Whether this is a residential address
+                            weight:
+                              type: object
+                              required:
+                                - value
+                                - units
+                              properties:
+                                value:
+                                  type: number
+                                  format: float
+                                  description: Weight value
+                                units:
+                                  type: string
+                                  enum:
+                                    - ounces
+                                    - pounds
+                                    - grams
+                                    - kilograms
+                                  description: Unit of weight measurement
+                            dimensions:
+                              type: object
+                              required:
+                                - units
+                                - length
+                                - width
+                                - height
+                              properties:
+                                units:
+                                  type: string
+                                  enum:
+                                    - inches
+                                    - centimeters
+                                  description: Unit of dimensional measurement
+                                length:
+                                  type: number
+                                  format: float
+                                  description: Length of the package
+                                width:
+                                  type: number
+                                  format: float
+                                  description: Width of the package
+                                height:
+                                  type: number
+                                  format: float
+                                  description: Height of the package
+                            items:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                    description: Unique identifier for the shipment item
+                                  shipment_id:
+                                    type: integer
+                                    description: ID of the parent shipment
+                                  product_id:
+                                    type: integer
+                                    description: ID of the product being shipped
+                                  order_item_id:
+                                    type: integer
+                                    description: ID of the associated sales order line item being shipped
+                                  quantity:
+                                    type: number
+                                    description: Quantity being shipped
+                                  weight:
+                                    type: object
+                                    required:
+                                      - value
+                                      - units
+                                    properties:
+                                      value:
+                                        type: number
+                                        format: float
+                                        description: Weight value
+                                      units:
+                                        type: string
+                                        enum:
+                                          - ounces
+                                          - pounds
+                                          - grams
+                                          - kilograms
+                                        description: Unit of weight measurement
+                                  unit_price:
+                                    type: number
+                                    format: float
+                                    description: Price per unit
+                                  created_at:
+                                    type: string
+                                    format: date-time
+                                    description: Timestamp when the item was created
+                                  updated_at:
+                                    type: string
+                                    format: date-time
+                                    description: Timestamp when the item was last updated
+                              description: Items included in this shipment
+                            created_at:
+                              type: string
+                              format: date-time
+                              description: Timestamp when the shipment was created
+                            updated_at:
+                              type: string
+                              format: date-time
+                              description: Timestamp when the shipment was last updated
                         description: Shipments associated with order
         '404':
           description: Sales order not found
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
   '/sales-orders/{salesOrderId}/shipments':
     get:
       operationId: getSalesOrderShipments
@@ -2808,21 +3322,221 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/paths/~1sales-orders~1%7BsalesOrderId%7D~1shipments/post/responses/201/content/application~1json/schema'
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: Unique identifier for the shipment
+                        sales_order_id:
+                          type: integer
+                          description: ID of the associated sales order
+                        ship_date:
+                          type: string
+                          format: date
+                          description: Date when the shipment was or will be sent
+                        tracking_number:
+                          type: string
+                          description: Tracking number for the shipment
+                        is_return:
+                          type: boolean
+                          description: Whether this is a return shipment
+                        carrier_code:
+                          type: string
+                          description: 'Code identifying the carrier (e.g., ups, fedex)'
+                        service_code:
+                          type: string
+                          description: Code identifying the shipping service
+                        package_code:
+                          type: string
+                          description: Code identifying the package type
+                        shipment_cost:
+                          type: number
+                          format: float
+                          description: Cost of shipping
+                        insurance_cost:
+                          type: number
+                          format: float
+                          description: Cost of insurance
+                        warehouse_id:
+                          type: integer
+                          description: ID of the warehouse shipping from
+                        status:
+                          type: integer
+                          description: Status of the shipment
+                        ship_to:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              description: Recipient name
+                            company:
+                              type: string
+                              description: Company name
+                            street1:
+                              type: string
+                              description: Primary street address
+                            street2:
+                              type: string
+                              description: Secondary street address
+                            street3:
+                              type: string
+                              description: Additional street address
+                            city:
+                              type: string
+                              description: City
+                            state:
+                              type: string
+                              description: State/province
+                            postalCode:
+                              type: string
+                              description: Postal/ZIP code
+                            country:
+                              type: string
+                              description: Country
+                            phone:
+                              type: string
+                              description: Contact phone number
+                            residential:
+                              type: boolean
+                              description: Whether this is a residential address
+                        weight:
+                          type: object
+                          required:
+                            - value
+                            - units
+                          properties:
+                            value:
+                              type: number
+                              format: float
+                              description: Weight value
+                            units:
+                              type: string
+                              enum:
+                                - ounces
+                                - pounds
+                                - grams
+                                - kilograms
+                              description: Unit of weight measurement
+                        dimensions:
+                          type: object
+                          required:
+                            - units
+                            - length
+                            - width
+                            - height
+                          properties:
+                            units:
+                              type: string
+                              enum:
+                                - inches
+                                - centimeters
+                              description: Unit of dimensional measurement
+                            length:
+                              type: number
+                              format: float
+                              description: Length of the package
+                            width:
+                              type: number
+                              format: float
+                              description: Width of the package
+                            height:
+                              type: number
+                              format: float
+                              description: Height of the package
+                        items:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: Unique identifier for the shipment item
+                              shipment_id:
+                                type: integer
+                                description: ID of the parent shipment
+                              product_id:
+                                type: integer
+                                description: ID of the product being shipped
+                              order_item_id:
+                                type: integer
+                                description: ID of the associated sales order line item being shipped
+                              quantity:
+                                type: number
+                                description: Quantity being shipped
+                              weight:
+                                type: object
+                                required:
+                                  - value
+                                  - units
+                                properties:
+                                  value:
+                                    type: number
+                                    format: float
+                                    description: Weight value
+                                  units:
+                                    type: string
+                                    enum:
+                                      - ounces
+                                      - pounds
+                                      - grams
+                                      - kilograms
+                                    description: Unit of weight measurement
+                              unit_price:
+                                type: number
+                                format: float
+                                description: Price per unit
+                              created_at:
+                                type: string
+                                format: date-time
+                                description: Timestamp when the item was created
+                              updated_at:
+                                type: string
+                                format: date-time
+                                description: Timestamp when the item was last updated
+                          description: Items included in this shipment
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: Timestamp when the shipment was created
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: Timestamp when the shipment was last updated
                   meta:
-                    $ref: '#/paths/~1products/get/responses/200/content/application~1json/schema/properties/meta'
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                      from:
+                        type: integer
+                      last_page:
+                        type: integer
+                      path:
+                        type: string
+                      per_page:
+                        type: integer
+                      to:
+                        type: integer
+                      total:
+                        type: integer
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
         '404':
           description: Sales order not found
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
     post:
       operationId: createSalesOrderShipment
       tags:
@@ -3213,19 +3927,28 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
         '404':
           description: Sales order not found
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1products/get/responses/401/content/application~1json/schema'
+                type: object
+                properties:
+                  message:
+                    type: string
 tags:
   - name: Products
     description: Get and manage products
