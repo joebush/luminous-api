@@ -1,0 +1,161 @@
+# record-tags.yaml
+get:
+  operationId: getRecordTags
+  tags:
+    - Tags
+  summary: Get tags for a record
+  description: |
+    Retrieve all tags associated with a specific record.
+    Currently only supports sales orders as the record type.
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: recordType
+      required: true
+      schema:
+        type: string
+        enum:
+          - sales-orders
+      description: Type of record to get tags for
+    - in: path
+      name: recordId
+      required: true
+      schema:
+        type: integer
+      description: ID of the record
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/tag.yaml'
+    '400':
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+
+post:
+  operationId: attachTag
+  tags:
+    - Tags
+  summary: Attach tags to a record
+  description: |
+    Attach one or more tags to a specific record.
+    Currently only supports sales orders as the record type.
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: recordType
+      required: true
+      schema:
+        type: string
+        enum:
+          - sales-orders
+      description: Type of record to attach tags to
+    - in: path
+      name: recordId
+      required: true
+      schema:
+        type: integer
+      description: ID of the record
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          oneOf:
+            - required:
+                - tag
+              properties:
+                tag:
+                  type: string
+                  description: Single tag to attach
+            - required:
+                - tags
+              properties:
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  description: Multiple tags to attach
+  responses:
+    '201':
+      description: Tag(s) attached successfully
+    '400':
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+
+put:
+  operationId: replaceTags
+  tags:
+    - Tags
+  summary: Replace all tags on a record
+  description: |
+    Replace all existing tags on a record with a new set of tags.
+    Currently only supports sales orders as the record type.
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: recordType
+      required: true
+      schema:
+        type: string
+        enum:
+          - sales-orders
+      description: Type of record to replace tags on
+    - in: path
+      name: recordId
+      required: true
+      schema:
+        type: integer
+      description: ID of the record
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - tags
+          properties:
+            tags:
+              type: array
+              items:
+                type: string
+              description: New set of tags to replace existing ones with
+  responses:
+    '200':
+      description: Tags replaced successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Tags replaced successfully"
+              tags:
+                type: array
+                items:
+                  $ref: './components/tag.yaml'
+    '400':
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'

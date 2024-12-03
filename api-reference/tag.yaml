@@ -1,0 +1,42 @@
+delete:
+  operationId: detachTag
+  tags:
+    - Tags
+  summary: Detach a tag from a record
+  description: |
+    Remove a specific tag from a record.
+    Currently only supports sales orders as the record type.
+  security:
+    - BearerAuth: [ ]
+  parameters:
+    - in: path
+      name: recordType
+      required: true
+      schema:
+        type: string
+        enum:
+          - sales-orders
+      description: Type of record to detach tag from
+    - in: path
+      name: recordId
+      required: true
+      schema:
+        type: integer
+      description: ID of the record
+    - in: path
+      name: id
+      required: true
+      schema:
+        oneOf:
+          - type: string
+          - type: integer
+      description: Tag name or ID to detach
+  responses:
+    '204':
+      description: Tag detached successfully
+    '400':
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'

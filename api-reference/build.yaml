@@ -3949,6 +3949,264 @@ paths:
                 properties:
                   message:
                     type: string
+  '/{recordType}/{recordId}/tags':
+    get:
+      operationId: getRecordTags
+      tags:
+        - Tags
+      summary: Get tags for a record
+      description: |
+        Retrieve all tags associated with a specific record.
+        Currently only supports sales orders as the record type.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: recordType
+          required: true
+          schema:
+            type: string
+            enum:
+              - sales-orders
+          description: Type of record to get tags for
+        - in: path
+          name: recordId
+          required: true
+          schema:
+            type: integer
+          description: ID of the record
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: Unique identifier for the tag
+                        name:
+                          type: string
+                          description: Name of the tag
+                        description:
+                          type: string
+                          nullable: true
+                          description: Description of the tag
+                        icon:
+                          type: string
+                          nullable: true
+                          description: Icon identifier or URL for the tag
+                        color:
+                          type: string
+                          nullable: true
+                          description: Color code for the tag
+                      required:
+                        - id
+                        - name
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    post:
+      operationId: attachTag
+      tags:
+        - Tags
+      summary: Attach tags to a record
+      description: |
+        Attach one or more tags to a specific record.
+        Currently only supports sales orders as the record type.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: recordType
+          required: true
+          schema:
+            type: string
+            enum:
+              - sales-orders
+          description: Type of record to attach tags to
+        - in: path
+          name: recordId
+          required: true
+          schema:
+            type: integer
+          description: ID of the record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              oneOf:
+                - required:
+                    - tag
+                  properties:
+                    tag:
+                      type: string
+                      description: Single tag to attach
+                - required:
+                    - tags
+                  properties:
+                    tags:
+                      type: array
+                      items:
+                        type: string
+                      description: Multiple tags to attach
+      responses:
+        '201':
+          description: Tag(s) attached successfully
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    put:
+      operationId: replaceTags
+      tags:
+        - Tags
+      summary: Replace all tags on a record
+      description: |
+        Replace all existing tags on a record with a new set of tags.
+        Currently only supports sales orders as the record type.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: recordType
+          required: true
+          schema:
+            type: string
+            enum:
+              - sales-orders
+          description: Type of record to replace tags on
+        - in: path
+          name: recordId
+          required: true
+          schema:
+            type: integer
+          description: ID of the record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tags
+              properties:
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  description: New set of tags to replace existing ones with
+      responses:
+        '200':
+          description: Tags replaced successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Tags replaced successfully
+                  tags:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: Unique identifier for the tag
+                        name:
+                          type: string
+                          description: Name of the tag
+                        description:
+                          type: string
+                          nullable: true
+                          description: Description of the tag
+                        icon:
+                          type: string
+                          nullable: true
+                          description: Icon identifier or URL for the tag
+                        color:
+                          type: string
+                          nullable: true
+                          description: Color code for the tag
+                      required:
+                        - id
+                        - name
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  '/{recordType}/{recordId}/tags/{id}':
+    delete:
+      operationId: detachTag
+      tags:
+        - Tags
+      summary: Detach a tag from a record
+      description: |
+        Remove a specific tag from a record.
+        Currently only supports sales orders as the record type.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: recordType
+          required: true
+          schema:
+            type: string
+            enum:
+              - sales-orders
+          description: Type of record to detach tag from
+        - in: path
+          name: recordId
+          required: true
+          schema:
+            type: integer
+          description: ID of the record
+        - in: path
+          name: id
+          required: true
+          schema:
+            oneOf:
+              - type: string
+              - type: integer
+          description: Tag name or ID to detach
+      responses:
+        '204':
+          description: Tag detached successfully
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
 tags:
   - name: Products
     description: Get and manage products
@@ -3962,3 +4220,5 @@ tags:
     description: Manage receiving reports
   - name: Sales Orders
     description: Manage sales orders and sales order shipments
+  - name: Tags
+    description: Add/remove tags across various resources

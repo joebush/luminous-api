@@ -45,6 +45,10 @@ paths:
     $ref: './sales-order.yaml'
   /sales-orders/{salesOrderId}/shipments:
     $ref: './sales-order-shipments.yaml'
+  /{recordType}/{recordId}/tags:
+    $ref: './tags.yaml'
+  /{recordType}/{recordId}/tags/{id}:
+    $ref: './tag.yaml'
 
 tags:
   - name: Products
@@ -59,3 +63,5 @@ tags:
     description: Manage receiving reports
   - name: Sales Orders
     description: Manage sales orders and sales order shipments
+  - name: Tags
+    description: Add/remove tags across various resources
