@@ -4207,6 +4207,133 @@ paths:
                 properties:
                   message:
                     type: string
+  '/{recordType}/{recordId}/custom-fields':
+    get:
+      operationId: getCustomFields
+      tags:
+        - Custom Fields
+      summary: Get custom field values
+      description: |
+        Retrieve all custom field values for a specific record.
+        Currently only supports `sales-orders` as the record type.
+
+        Custom fields must be set up in Luminous before they can be updated or retrieved. Log into your Luminous account, then 
+        via the left navigation select Manage > Custom Fields.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: recordType
+          required: true
+          schema:
+            type: string
+            enum:
+              - sales-orders
+          description: Type of record to get custom fields for
+        - in: path
+          name: recordId
+          required: true
+          schema:
+            type: integer
+          description: ID of the record
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  oneOf:
+                    - type: string
+                    - type: number
+                example:
+                  Customer PO: PO-98765
+                  Expected Delivery: '2024-12-25'
+                  Priority Level: High
+                  Item Count: 42
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    put:
+      operationId: updateCustomFields
+      tags:
+        - Custom Fields
+      summary: Update custom field values
+      description: |
+        Update custom field values for a specific record.
+        Currently only supports `sales-orders` as the record type.
+        Values must match the field type (string, number, date, or dropdown).
+
+        Custom fields must be set up in Luminous before they can be updated or retrieved. Log into your Luminous account, then 
+        via the left navigation select Manage > Custom Fields.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: recordType
+          required: true
+          schema:
+            type: string
+            enum:
+              - sales-orders
+          description: Type of record to update custom fields for
+        - in: path
+          name: recordId
+          required: true
+          schema:
+            type: integer
+          description: ID of the record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                oneOf:
+                  - type: string
+                  - type: number
+              example:
+                Customer PO: PO-98765
+                Expected Delivery: '2024-12-25'
+                Priority Level: High
+                Item Count: 42
+      responses:
+        '200':
+          description: Custom fields updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Custom fields updated successfully
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
 tags:
   - name: Products
     description: Get and manage products
@@ -4222,3 +4349,5 @@ tags:
     description: Manage sales orders and sales order shipments
   - name: Tags
     description: Add/remove tags across various resources
+  - name: Custom Fields
+    description: Get and set custom fields across various resources

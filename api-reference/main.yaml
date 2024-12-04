@@ -49,6 +49,8 @@ paths:
     $ref: './tags.yaml'
   /{recordType}/{recordId}/tags/{id}:
     $ref: './tag.yaml'
+  /{recordType}/{recordId}/custom-fields:
+    $ref: './custom-fields.yaml'
 
 tags:
   - name: Products
@@ -65,3 +67,5 @@ tags:
     description: Manage sales orders and sales order shipments
   - name: Tags
     description: Add/remove tags across various resources
+  - name: Custom Fields
+    description: Get and set custom fields across various resources
