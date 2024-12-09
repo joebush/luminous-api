@@ -3995,6 +3995,9 @@ paths:
 
         # Find invoices with specific PO numbers
         ?customer_po_number[contains]=INV-123
+
+        # Find invoices by custom fields
+        ?custom_fields.My Custom Field[eq]=Some value
         ```
       security:
         - BearerAuth: []
@@ -4972,7 +4975,8 @@ paths:
         Retrieve all custom field values for a specific record.
         Supported record types: `sales-orders`,`invoices`
 
-        Custom fields must be set up in Luminous before they can be updated or retrieved. Log into your Luminous account, then 
+        Custom fields must be set up in Luminous before they can be updated or retrieved. 
+        Log into your Luminous account, then 
         via the left navigation select Manage > Custom Fields.
       security:
         - BearerAuth: []
