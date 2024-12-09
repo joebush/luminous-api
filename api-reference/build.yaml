@@ -4372,6 +4372,11 @@ paths:
                                 nullable: true
                                 description: Soft delete timestamp
                           description: Payment records for the invoice
+                        custom_fields:
+                          type: object
+                          description: Custom fields for the invoice
+                          example:
+                            Field Name 1: Some Value
                   meta:
                     type: object
                     properties:
@@ -4695,6 +4700,11 @@ paths:
                               nullable: true
                               description: Soft delete timestamp
                         description: Payment records for the invoice
+                      custom_fields:
+                        type: object
+                        description: Custom fields for the invoice
+                        example:
+                          Field Name 1: Some Value
         '404':
           description: Invoice not found
           content:

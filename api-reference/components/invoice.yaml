@@ -114,3 +114,7 @@ properties:
     items:
       $ref: './invoice-payment.yaml'
     description: Payment records for the invoice
+  custom_fields:
+    type: object
+    description: Custom fields for the invoice
+    example: {"Field Name 1": "Some Value"}
