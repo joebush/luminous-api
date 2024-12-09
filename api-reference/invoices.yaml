@@ -17,6 +17,7 @@ get:
     - `payment_status`: Payment status
     - `approval_status`: Approval status
     - `customer_po_number`: Customer PO number
+    - `tag`: Invoice tags
     
     ### Date Filters
     - `order_date`: Date the invoice was created
@@ -34,10 +35,16 @@ get:
     - `total_paid`: Amount paid
     - `total_due`: Amount still due
     
+    ### Custom Field Filters
+    - `custom_fields.{fieldName}`: Filter by specific custom fields
+    
     ## Examples
     ```
     # Find unpaid invoices over $500
     ?total[gt]=500.00&total_due[gt]=0
+    
+    # Find invoices by a specific tag
+    ?tag[eq]=Urgent
 
     # Find completed invoices from last month
     ?status[eq]=completed&created_at[gte]=2024-11-01 00:00:00
@@ -85,6 +92,11 @@ get:
       schema:
         type: string
       description: Filter by customer PO number
+    - in: query
+      name: tag
+      schema:
+        type: string
+      description: Filter by tag name
     # Date Filters
     - in: query
       name: order_date
@@ -142,6 +154,11 @@ get:
       schema:
         type: number
       description: Filter by amount due
+    - in: query
+      name: custom_fields
+      schema:
+        type: object
+      description: Filter by custom fields
   responses:
     '200':
       description: Successful response

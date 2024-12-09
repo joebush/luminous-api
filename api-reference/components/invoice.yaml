@@ -118,3 +118,8 @@ properties:
     type: object
     description: Custom fields for the invoice
     example: {"Field Name 1": "Some Value"}
+  tags:
+    type: array
+    items:
+      $ref: './tag.yaml'
+    description: Tags associated with the invoice

@@ -3968,6 +3968,7 @@ paths:
         - `payment_status`: Payment status
         - `approval_status`: Approval status
         - `customer_po_number`: Customer PO number
+        - `tag`: Invoice tags
 
         ### Date Filters
         - `order_date`: Date the invoice was created
@@ -3985,10 +3986,16 @@ paths:
         - `total_paid`: Amount paid
         - `total_due`: Amount still due
 
+        ### Custom Field Filters
+        - `custom_fields.{fieldName}`: Filter by specific custom fields
+
         ## Examples
         ```
         # Find unpaid invoices over $500
         ?total[gt]=500.00&total_due[gt]=0
+
+        # Find invoices by a specific tag
+        ?tag[eq]=Urgent
 
         # Find completed invoices from last month
         ?status[eq]=completed&created_at[gte]=2024-11-01 00:00:00
@@ -4035,6 +4042,11 @@ paths:
           schema:
             type: string
           description: Filter by customer PO number
+        - in: query
+          name: tag
+          schema:
+            type: string
+          description: Filter by tag name
         - in: query
           name: order_date
           schema:
@@ -4089,6 +4101,11 @@ paths:
           schema:
             type: number
           description: Filter by amount due
+        - in: query
+          name: custom_fields
+          schema:
+            type: object
+          description: Filter by custom fields
       responses:
         '200':
           description: Successful response
@@ -4377,6 +4394,33 @@ paths:
                           description: Custom fields for the invoice
                           example:
                             Field Name 1: Some Value
+                        tags:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: Unique identifier for the tag
+                              name:
+                                type: string
+                                description: Name of the tag
+                              description:
+                                type: string
+                                nullable: true
+                                description: Description of the tag
+                              icon:
+                                type: string
+                                nullable: true
+                                description: Icon identifier or URL for the tag
+                              color:
+                                type: string
+                                nullable: true
+                                description: Color code for the tag
+                            required:
+                              - id
+                              - name
+                          description: Tags associated with the invoice
                   meta:
                     type: object
                     properties:
@@ -4705,6 +4749,33 @@ paths:
                         description: Custom fields for the invoice
                         example:
                           Field Name 1: Some Value
+                      tags:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the tag
+                            name:
+                              type: string
+                              description: Name of the tag
+                            description:
+                              type: string
+                              nullable: true
+                              description: Description of the tag
+                            icon:
+                              type: string
+                              nullable: true
+                              description: Icon identifier or URL for the tag
+                            color:
+                              type: string
+                              nullable: true
+                              description: Color code for the tag
+                          required:
+                            - id
+                            - name
+                        description: Tags associated with the invoice
         '404':
           description: Invoice not found
           content:
