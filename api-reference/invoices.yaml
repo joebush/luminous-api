@@ -1,0 +1,161 @@
+# invoices.yaml
+get:
+  operationId: getInvoices
+  tags:
+    - Invoices
+  summary: Invoices
+  description: |
+    Get a paginated list of invoices with optional filtering.
+    
+    For detailed information about the filtering system and available operators, 
+    refer to the [Filter System Documentation](/filters).
+
+    ## Available Filters
+
+    ### String Filters
+    - `status`: Invoice status
+    - `payment_status`: Payment status
+    - `approval_status`: Approval status
+    - `customer_po_number`: Customer PO number
+    
+    ### Date Filters
+    - `order_date`: Date the invoice was created
+    - `ship_by_date`: Required ship by date
+    
+    ### DateTime Filters
+    - `created_at`: When the invoice was created
+    - `updated_at`: When the invoice was last updated
+    
+    ### Numeric Filters
+    - `total_qty`: Total quantity of items
+    - `total`: Invoice total amount
+    - `total_shipping`: Shipping cost
+    - `total_discount`: Discount amount
+    - `total_paid`: Amount paid
+    - `total_due`: Amount still due
+    
+    ## Examples
+    ```
+    # Find unpaid invoices over $500
+    ?total[gt]=500.00&total_due[gt]=0
+
+    # Find completed invoices from last month
+    ?status[eq]=completed&created_at[gte]=2024-11-01 00:00:00
+
+    # Find invoices with specific PO numbers
+    ?customer_po_number[contains]=INV-123
+    ```
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: query
+      name: page
+      schema:
+        type: integer
+        default: 1
+      description: Page number for pagination
+    - in: query
+      name: per_page
+      schema:
+        type: integer
+        default: 10
+        maximum: 100
+      description: Number of items per page (max 100)
+    # String Filters
+    - in: query
+      name: status
+      schema:
+        type: string
+      description: Filter by invoice status
+    - in: query
+      name: payment_status
+      schema:
+        type: string
+      description: Filter by payment status
+    - in: query
+      name: approval_status
+      schema:
+        type: string
+      description: Filter by approval status
+    - in: query
+      name: customer_po_number
+      schema:
+        type: string
+      description: Filter by customer PO number
+    # Date Filters
+    - in: query
+      name: order_date
+      schema:
+        type: string
+        format: date
+      description: Filter by order date (YYYY-MM-DD)
+    - in: query
+      name: ship_by_date
+      schema:
+        type: string
+        format: date
+      description: Filter by ship by date (YYYY-MM-DD)
+    # DateTime Filters
+    - in: query
+      name: created_at
+      schema:
+        type: string
+        format: date-time
+      description: Filter by creation date (YYYY-MM-DD HH:mm:ss)
+    - in: query
+      name: updated_at
+      schema:
+        type: string
+        format: date-time
+      description: Filter by last update date (YYYY-MM-DD HH:mm:ss)
+    # Numeric Filters
+    - in: query
+      name: total_qty
+      schema:
+        type: number
+      description: Filter by total quantity
+    - in: query
+      name: total
+      schema:
+        type: number
+      description: Filter by invoice total amount
+    - in: query
+      name: total_shipping
+      schema:
+        type: number
+      description: Filter by shipping amount
+    - in: query
+      name: total_discount
+      schema:
+        type: number
+      description: Filter by discount amount
+    - in: query
+      name: total_paid
+      schema:
+        type: number
+      description: Filter by amount paid
+    - in: query
+      name: total_due
+      schema:
+        type: number
+      description: Filter by amount due
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/invoice.yaml'
+              meta:
+                $ref: './components/pagination-meta.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'

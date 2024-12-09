@@ -1,0 +1,73 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the payment
+  invoice_id:
+    type: integer
+    description: Associated invoice ID
+  gateway:
+    type: string
+    description: Payment gateway used
+  type:
+    type: string
+    description: Payment type
+  charge_type:
+    type: string
+    description: Type of charge
+  amount:
+    type: number
+    format: float
+    description: Payment amount
+  date:
+    type: string
+    format: date-time
+    description: Payment date
+  status:
+    type: string
+    description: Payment status
+  external_id:
+    type: string
+    nullable: true
+    description: External payment identifier
+  notes:
+    type: string
+    nullable: true
+    description: Payment notes
+  reference_id:
+    type: string
+    nullable: true
+    description: Reference identifier
+  gateway_response:
+    type: object
+    properties:
+      status:
+        type: string
+        description: Gateway response status
+      code:
+        type: string
+        description: Response code
+      message:
+        type: string
+        description: Response message
+      metadata:
+        type: string
+        description: Additional metadata
+    description: Payment gateway response details
+  created_by:
+    type: integer
+    nullable: true
+    description: User who created the payment
+  created_at:
+    type: string
+    format: date-time
+    description: Timestamp when payment was created
+  updated_at:
+    type: string
+    format: date-time
+    description: Timestamp when payment was last updated
+  deleted_at:
+    type: string
+    format: date-time
+    nullable: true
+    description: Soft delete timestamp

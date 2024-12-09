@@ -5,7 +5,7 @@ get:
   summary: Get custom field values
   description: |
     Retrieve all custom field values for a specific record.
-    Currently only supports `sales-orders` as the record type.
+    Supported record types: `sales-orders`,`invoices`
     
     Custom fields must be set up in Luminous before they can be updated or retrieved. Log into your Luminous account, then 
     via the left navigation select Manage > Custom Fields.
@@ -19,6 +19,7 @@ get:
         type: string
         enum:
           - sales-orders
+          - invoices
       description: Type of record to get custom fields for
     - in: path
       name: recordId
@@ -56,7 +57,7 @@ put:
   summary: Update custom field values
   description: |
     Update custom field values for a specific record.
-    Currently only supports `sales-orders` as the record type.
+    Supported record types: `sales-orders`,`invoices`
     Values must match the field type (string, number, date, or dropdown).
     
     Custom fields must be set up in Luminous before they can be updated or retrieved. Log into your Luminous account, then 
@@ -71,6 +72,7 @@ put:
         type: string
         enum:
           - sales-orders
+          - invoices
       description: Type of record to update custom fields for
     - in: path
       name: recordId

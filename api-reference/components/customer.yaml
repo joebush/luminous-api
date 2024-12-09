@@ -1,0 +1,48 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the customer
+  name:
+    type: string
+    description: Business name
+  address_1:
+    type: string
+    nullable: true
+    description: Primary address
+  address_2:
+    type: string
+    nullable: true
+    description: Secondary address
+  city:
+    type: string
+    nullable: true
+    description: City
+  state:
+    type: string
+    nullable: true
+    description: State/Province
+  zip:
+    type: string
+    nullable: true
+    description: Postal code
+  country:
+    type: string
+    nullable: true
+    description: Country
+  phone:
+    type: string
+    nullable: true
+    description: Phone number
+  email:
+    type: string
+    nullable: true
+    description: Email address
+  created_at:
+    type: string
+    format: date-time
+    description: Timestamp when customer was created
+  updated_at:
+    type: string
+    format: date-time
+    description: Timestamp when customer was last updated

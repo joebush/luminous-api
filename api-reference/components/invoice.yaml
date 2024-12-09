@@ -1,0 +1,116 @@
+# components/invoice.yaml
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the invoice
+  created_at:
+    type: string
+    format: date-time
+    description: Timestamp when the invoice was created
+  updated_at:
+    type: string
+    format: date-time
+    description: Timestamp when the invoice was last updated
+  status:
+    type: string
+    description: Current status of the invoice
+  payment_status:
+    type: string
+    description: Payment status of the invoice
+  order_date:
+    type: string
+    format: date-time
+    description: Date when the invoice was created
+  ship_by_date:
+    type: string
+    format: date-time
+    description: Required ship by date
+  approval_status:
+    type: string
+    description: Approval status of the invoice
+  customer_po_number:
+    type: string
+    description: Customer PO number
+  payment_terms:
+    type: string
+    nullable: true
+    description: Payment terms for the invoice
+  public_note:
+    type: string
+    nullable: true
+    description: Public note visible to customer
+  private_note:
+    type: string
+    nullable: true
+    description: Private internal note
+  total_qty:
+    type: number
+    format: float
+    description: Total quantity of items
+  total_shipping:
+    type: number
+    format: float
+    description: Total shipping amount
+  total_discount:
+    type: number
+    format: float
+    description: Total discount amount
+  total:
+    type: number
+    format: float
+    description: Total invoice amount
+  total_paid:
+    type: number
+    format: float
+    description: Amount paid
+  total_due:
+    type: number
+    format: float
+    description: Amount still due
+  warehouse_id:
+    type: integer
+    nullable: true
+    description: Associated warehouse ID
+  ship_to:
+    type: object
+    properties:
+      address_1:
+        type: string
+        nullable: true
+      address_2:
+        type: string
+        nullable: true
+      city:
+        type: string
+        nullable: true
+      state:
+        type: string
+        nullable: true
+      zip:
+        type: string
+        nullable: true
+      country:
+        type: string
+        nullable: true
+    description: Shipping address details
+  quickbooks_invoice_id:
+    type: string
+    nullable: true
+    description: QuickBooks invoice ID
+  quickbooks_message:
+    type: string
+    description: Message from QuickBooks integration
+  customer:
+    $ref: './customer.yaml'
+    description: Customer information
+  items:
+    type: array
+    items:
+      $ref: './invoice-item.yaml'
+    description: Line items in the invoice
+  payments:
+    type: array
+    items:
+      $ref: './invoice-payment.yaml'
+    description: Payment records for the invoice

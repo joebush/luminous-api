@@ -1,0 +1,32 @@
+# invoice.yaml
+get:
+  operationId: getInvoice
+  tags:
+    - Invoices
+  summary: Single invoice
+  description: Get details of a specific invoice by ID
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+      description: ID of the invoice to retrieve
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/invoice.yaml'
+    '404':
+      description: Invoice not found
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'

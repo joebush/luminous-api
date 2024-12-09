@@ -6,7 +6,7 @@ get:
   summary: Get tags for a record
   description: |
     Retrieve all tags associated with a specific record.
-    Currently only supports sales orders as the record type.
+    Supported record types: `sales-orders`,`invoices`
   security:
     - BearerAuth: []
   parameters:
@@ -17,6 +17,7 @@ get:
         type: string
         enum:
           - sales-orders
+          - invoices
       description: Type of record to get tags for
     - in: path
       name: recordId
@@ -50,7 +51,7 @@ post:
   summary: Attach tags to a record
   description: |
     Attach one or more tags to a specific record.
-    Currently only supports sales orders as the record type.
+    Supported record types: `sales-orders`,`invoices`
   security:
     - BearerAuth: []
   parameters:
@@ -61,6 +62,7 @@ post:
         type: string
         enum:
           - sales-orders
+          - invoices
       description: Type of record to attach tags to
     - in: path
       name: recordId
@@ -106,7 +108,7 @@ put:
   summary: Replace all tags on a record
   description: |
     Replace all existing tags on a record with a new set of tags.
-    Currently only supports sales orders as the record type.
+    Supported record types: `sales-orders`,`invoices`
   security:
     - BearerAuth: []
   parameters:
@@ -117,6 +119,7 @@ put:
         type: string
         enum:
           - sales-orders
+          - invoices
       description: Type of record to replace tags on
     - in: path
       name: recordId

@@ -3949,6 +3949,758 @@ paths:
                 properties:
                   message:
                     type: string
+  /invoices:
+    get:
+      operationId: getInvoices
+      tags:
+        - Invoices
+      summary: Invoices
+      description: |
+        Get a paginated list of invoices with optional filtering.
+
+        For detailed information about the filtering system and available operators, 
+        refer to the [Filter System Documentation](/filters).
+
+        ## Available Filters
+
+        ### String Filters
+        - `status`: Invoice status
+        - `payment_status`: Payment status
+        - `approval_status`: Approval status
+        - `customer_po_number`: Customer PO number
+
+        ### Date Filters
+        - `order_date`: Date the invoice was created
+        - `ship_by_date`: Required ship by date
+
+        ### DateTime Filters
+        - `created_at`: When the invoice was created
+        - `updated_at`: When the invoice was last updated
+
+        ### Numeric Filters
+        - `total_qty`: Total quantity of items
+        - `total`: Invoice total amount
+        - `total_shipping`: Shipping cost
+        - `total_discount`: Discount amount
+        - `total_paid`: Amount paid
+        - `total_due`: Amount still due
+
+        ## Examples
+        ```
+        # Find unpaid invoices over $500
+        ?total[gt]=500.00&total_due[gt]=0
+
+        # Find completed invoices from last month
+        ?status[eq]=completed&created_at[gte]=2024-11-01 00:00:00
+
+        # Find invoices with specific PO numbers
+        ?customer_po_number[contains]=INV-123
+        ```
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+          description: Number of items per page (max 100)
+        - in: query
+          name: status
+          schema:
+            type: string
+          description: Filter by invoice status
+        - in: query
+          name: payment_status
+          schema:
+            type: string
+          description: Filter by payment status
+        - in: query
+          name: approval_status
+          schema:
+            type: string
+          description: Filter by approval status
+        - in: query
+          name: customer_po_number
+          schema:
+            type: string
+          description: Filter by customer PO number
+        - in: query
+          name: order_date
+          schema:
+            type: string
+            format: date
+          description: Filter by order date (YYYY-MM-DD)
+        - in: query
+          name: ship_by_date
+          schema:
+            type: string
+            format: date
+          description: Filter by ship by date (YYYY-MM-DD)
+        - in: query
+          name: created_at
+          schema:
+            type: string
+            format: date-time
+          description: 'Filter by creation date (YYYY-MM-DD HH:mm:ss)'
+        - in: query
+          name: updated_at
+          schema:
+            type: string
+            format: date-time
+          description: 'Filter by last update date (YYYY-MM-DD HH:mm:ss)'
+        - in: query
+          name: total_qty
+          schema:
+            type: number
+          description: Filter by total quantity
+        - in: query
+          name: total
+          schema:
+            type: number
+          description: Filter by invoice total amount
+        - in: query
+          name: total_shipping
+          schema:
+            type: number
+          description: Filter by shipping amount
+        - in: query
+          name: total_discount
+          schema:
+            type: number
+          description: Filter by discount amount
+        - in: query
+          name: total_paid
+          schema:
+            type: number
+          description: Filter by amount paid
+        - in: query
+          name: total_due
+          schema:
+            type: number
+          description: Filter by amount due
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: Unique identifier for the invoice
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: Timestamp when the invoice was created
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: Timestamp when the invoice was last updated
+                        status:
+                          type: string
+                          description: Current status of the invoice
+                        payment_status:
+                          type: string
+                          description: Payment status of the invoice
+                        order_date:
+                          type: string
+                          format: date-time
+                          description: Date when the invoice was created
+                        ship_by_date:
+                          type: string
+                          format: date-time
+                          description: Required ship by date
+                        approval_status:
+                          type: string
+                          description: Approval status of the invoice
+                        customer_po_number:
+                          type: string
+                          description: Customer PO number
+                        payment_terms:
+                          type: string
+                          nullable: true
+                          description: Payment terms for the invoice
+                        public_note:
+                          type: string
+                          nullable: true
+                          description: Public note visible to customer
+                        private_note:
+                          type: string
+                          nullable: true
+                          description: Private internal note
+                        total_qty:
+                          type: number
+                          format: float
+                          description: Total quantity of items
+                        total_shipping:
+                          type: number
+                          format: float
+                          description: Total shipping amount
+                        total_discount:
+                          type: number
+                          format: float
+                          description: Total discount amount
+                        total:
+                          type: number
+                          format: float
+                          description: Total invoice amount
+                        total_paid:
+                          type: number
+                          format: float
+                          description: Amount paid
+                        total_due:
+                          type: number
+                          format: float
+                          description: Amount still due
+                        warehouse_id:
+                          type: integer
+                          nullable: true
+                          description: Associated warehouse ID
+                        ship_to:
+                          type: object
+                          properties:
+                            address_1:
+                              type: string
+                              nullable: true
+                            address_2:
+                              type: string
+                              nullable: true
+                            city:
+                              type: string
+                              nullable: true
+                            state:
+                              type: string
+                              nullable: true
+                            zip:
+                              type: string
+                              nullable: true
+                            country:
+                              type: string
+                              nullable: true
+                          description: Shipping address details
+                        quickbooks_invoice_id:
+                          type: string
+                          nullable: true
+                          description: QuickBooks invoice ID
+                        quickbooks_message:
+                          type: string
+                          description: Message from QuickBooks integration
+                        customer:
+                          description: Customer information
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the customer
+                            name:
+                              type: string
+                              description: Business name
+                            address_1:
+                              type: string
+                              nullable: true
+                              description: Primary address
+                            address_2:
+                              type: string
+                              nullable: true
+                              description: Secondary address
+                            city:
+                              type: string
+                              nullable: true
+                              description: City
+                            state:
+                              type: string
+                              nullable: true
+                              description: State/Province
+                            zip:
+                              type: string
+                              nullable: true
+                              description: Postal code
+                            country:
+                              type: string
+                              nullable: true
+                              description: Country
+                            phone:
+                              type: string
+                              nullable: true
+                              description: Phone number
+                            email:
+                              type: string
+                              nullable: true
+                              description: Email address
+                            created_at:
+                              type: string
+                              format: date-time
+                              description: Timestamp when customer was created
+                            updated_at:
+                              type: string
+                              format: date-time
+                              description: Timestamp when customer was last updated
+                        items:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: Unique identifier for the line item
+                              created_at:
+                                type: string
+                                format: date-time
+                                description: Timestamp when the item was created
+                              updated_at:
+                                type: string
+                                format: date-time
+                                description: Timestamp when the item was last updated
+                              sku:
+                                type: string
+                                description: Product SKU
+                              name:
+                                type: string
+                                description: Product name
+                              product_id:
+                                type: integer
+                                description: Product identifier
+                              qty:
+                                type: number
+                                format: float
+                                description: Quantity ordered
+                              unit_price:
+                                type: number
+                                format: float
+                                description: Price per unit
+                              discount:
+                                type: number
+                                format: float
+                                nullable: true
+                                description: Discount amount
+                              total:
+                                type: number
+                                format: float
+                                description: Total line item amount
+                          description: Line items in the invoice
+                        payments:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: Unique identifier for the payment
+                              invoice_id:
+                                type: integer
+                                description: Associated invoice ID
+                              gateway:
+                                type: string
+                                description: Payment gateway used
+                              type:
+                                type: string
+                                description: Payment type
+                              charge_type:
+                                type: string
+                                description: Type of charge
+                              amount:
+                                type: number
+                                format: float
+                                description: Payment amount
+                              date:
+                                type: string
+                                format: date-time
+                                description: Payment date
+                              status:
+                                type: string
+                                description: Payment status
+                              external_id:
+                                type: string
+                                nullable: true
+                                description: External payment identifier
+                              notes:
+                                type: string
+                                nullable: true
+                                description: Payment notes
+                              reference_id:
+                                type: string
+                                nullable: true
+                                description: Reference identifier
+                              gateway_response:
+                                type: object
+                                properties:
+                                  status:
+                                    type: string
+                                    description: Gateway response status
+                                  code:
+                                    type: string
+                                    description: Response code
+                                  message:
+                                    type: string
+                                    description: Response message
+                                  metadata:
+                                    type: string
+                                    description: Additional metadata
+                                description: Payment gateway response details
+                              created_by:
+                                type: integer
+                                nullable: true
+                                description: User who created the payment
+                              created_at:
+                                type: string
+                                format: date-time
+                                description: Timestamp when payment was created
+                              updated_at:
+                                type: string
+                                format: date-time
+                                description: Timestamp when payment was last updated
+                              deleted_at:
+                                type: string
+                                format: date-time
+                                nullable: true
+                                description: Soft delete timestamp
+                          description: Payment records for the invoice
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                      from:
+                        type: integer
+                      last_page:
+                        type: integer
+                      path:
+                        type: string
+                      per_page:
+                        type: integer
+                      to:
+                        type: integer
+                      total:
+                        type: integer
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  '/invoices/{id}':
+    get:
+      operationId: getInvoice
+      tags:
+        - Invoices
+      summary: Single invoice
+      description: Get details of a specific invoice by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the invoice to retrieve
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Unique identifier for the invoice
+                      created_at:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the invoice was created
+                      updated_at:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the invoice was last updated
+                      status:
+                        type: string
+                        description: Current status of the invoice
+                      payment_status:
+                        type: string
+                        description: Payment status of the invoice
+                      order_date:
+                        type: string
+                        format: date-time
+                        description: Date when the invoice was created
+                      ship_by_date:
+                        type: string
+                        format: date-time
+                        description: Required ship by date
+                      approval_status:
+                        type: string
+                        description: Approval status of the invoice
+                      customer_po_number:
+                        type: string
+                        description: Customer PO number
+                      payment_terms:
+                        type: string
+                        nullable: true
+                        description: Payment terms for the invoice
+                      public_note:
+                        type: string
+                        nullable: true
+                        description: Public note visible to customer
+                      private_note:
+                        type: string
+                        nullable: true
+                        description: Private internal note
+                      total_qty:
+                        type: number
+                        format: float
+                        description: Total quantity of items
+                      total_shipping:
+                        type: number
+                        format: float
+                        description: Total shipping amount
+                      total_discount:
+                        type: number
+                        format: float
+                        description: Total discount amount
+                      total:
+                        type: number
+                        format: float
+                        description: Total invoice amount
+                      total_paid:
+                        type: number
+                        format: float
+                        description: Amount paid
+                      total_due:
+                        type: number
+                        format: float
+                        description: Amount still due
+                      warehouse_id:
+                        type: integer
+                        nullable: true
+                        description: Associated warehouse ID
+                      ship_to:
+                        type: object
+                        properties:
+                          address_1:
+                            type: string
+                            nullable: true
+                          address_2:
+                            type: string
+                            nullable: true
+                          city:
+                            type: string
+                            nullable: true
+                          state:
+                            type: string
+                            nullable: true
+                          zip:
+                            type: string
+                            nullable: true
+                          country:
+                            type: string
+                            nullable: true
+                        description: Shipping address details
+                      quickbooks_invoice_id:
+                        type: string
+                        nullable: true
+                        description: QuickBooks invoice ID
+                      quickbooks_message:
+                        type: string
+                        description: Message from QuickBooks integration
+                      customer:
+                        description: Customer information
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique identifier for the customer
+                          name:
+                            type: string
+                            description: Business name
+                          address_1:
+                            type: string
+                            nullable: true
+                            description: Primary address
+                          address_2:
+                            type: string
+                            nullable: true
+                            description: Secondary address
+                          city:
+                            type: string
+                            nullable: true
+                            description: City
+                          state:
+                            type: string
+                            nullable: true
+                            description: State/Province
+                          zip:
+                            type: string
+                            nullable: true
+                            description: Postal code
+                          country:
+                            type: string
+                            nullable: true
+                            description: Country
+                          phone:
+                            type: string
+                            nullable: true
+                            description: Phone number
+                          email:
+                            type: string
+                            nullable: true
+                            description: Email address
+                          created_at:
+                            type: string
+                            format: date-time
+                            description: Timestamp when customer was created
+                          updated_at:
+                            type: string
+                            format: date-time
+                            description: Timestamp when customer was last updated
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the line item
+                            created_at:
+                              type: string
+                              format: date-time
+                              description: Timestamp when the item was created
+                            updated_at:
+                              type: string
+                              format: date-time
+                              description: Timestamp when the item was last updated
+                            sku:
+                              type: string
+                              description: Product SKU
+                            name:
+                              type: string
+                              description: Product name
+                            product_id:
+                              type: integer
+                              description: Product identifier
+                            qty:
+                              type: number
+                              format: float
+                              description: Quantity ordered
+                            unit_price:
+                              type: number
+                              format: float
+                              description: Price per unit
+                            discount:
+                              type: number
+                              format: float
+                              nullable: true
+                              description: Discount amount
+                            total:
+                              type: number
+                              format: float
+                              description: Total line item amount
+                        description: Line items in the invoice
+                      payments:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the payment
+                            invoice_id:
+                              type: integer
+                              description: Associated invoice ID
+                            gateway:
+                              type: string
+                              description: Payment gateway used
+                            type:
+                              type: string
+                              description: Payment type
+                            charge_type:
+                              type: string
+                              description: Type of charge
+                            amount:
+                              type: number
+                              format: float
+                              description: Payment amount
+                            date:
+                              type: string
+                              format: date-time
+                              description: Payment date
+                            status:
+                              type: string
+                              description: Payment status
+                            external_id:
+                              type: string
+                              nullable: true
+                              description: External payment identifier
+                            notes:
+                              type: string
+                              nullable: true
+                              description: Payment notes
+                            reference_id:
+                              type: string
+                              nullable: true
+                              description: Reference identifier
+                            gateway_response:
+                              type: object
+                              properties:
+                                status:
+                                  type: string
+                                  description: Gateway response status
+                                code:
+                                  type: string
+                                  description: Response code
+                                message:
+                                  type: string
+                                  description: Response message
+                                metadata:
+                                  type: string
+                                  description: Additional metadata
+                              description: Payment gateway response details
+                            created_by:
+                              type: integer
+                              nullable: true
+                              description: User who created the payment
+                            created_at:
+                              type: string
+                              format: date-time
+                              description: Timestamp when payment was created
+                            updated_at:
+                              type: string
+                              format: date-time
+                              description: Timestamp when payment was last updated
+                            deleted_at:
+                              type: string
+                              format: date-time
+                              nullable: true
+                              description: Soft delete timestamp
+                        description: Payment records for the invoice
+        '404':
+          description: Invoice not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
   '/{recordType}/{recordId}/tags':
     get:
       operationId: getRecordTags
@@ -3957,7 +4709,7 @@ paths:
       summary: Get tags for a record
       description: |
         Retrieve all tags associated with a specific record.
-        Currently only supports sales orders as the record type.
+        Supported record types: `sales-orders`,`invoices`
       security:
         - BearerAuth: []
       parameters:
@@ -3968,6 +4720,7 @@ paths:
             type: string
             enum:
               - sales-orders
+              - invoices
           description: Type of record to get tags for
         - in: path
           name: recordId
@@ -4025,7 +4778,7 @@ paths:
       summary: Attach tags to a record
       description: |
         Attach one or more tags to a specific record.
-        Currently only supports sales orders as the record type.
+        Supported record types: `sales-orders`,`invoices`
       security:
         - BearerAuth: []
       parameters:
@@ -4036,6 +4789,7 @@ paths:
             type: string
             enum:
               - sales-orders
+              - invoices
           description: Type of record to attach tags to
         - in: path
           name: recordId
@@ -4083,7 +4837,7 @@ paths:
       summary: Replace all tags on a record
       description: |
         Replace all existing tags on a record with a new set of tags.
-        Currently only supports sales orders as the record type.
+        Supported record types: `sales-orders`,`invoices`
       security:
         - BearerAuth: []
       parameters:
@@ -4094,6 +4848,7 @@ paths:
             type: string
             enum:
               - sales-orders
+              - invoices
           description: Type of record to replace tags on
         - in: path
           name: recordId
@@ -4215,7 +4970,7 @@ paths:
       summary: Get custom field values
       description: |
         Retrieve all custom field values for a specific record.
-        Currently only supports `sales-orders` as the record type.
+        Supported record types: `sales-orders`,`invoices`
 
         Custom fields must be set up in Luminous before they can be updated or retrieved. Log into your Luminous account, then 
         via the left navigation select Manage > Custom Fields.
@@ -4229,6 +4984,7 @@ paths:
             type: string
             enum:
               - sales-orders
+              - invoices
           description: Type of record to get custom fields for
         - in: path
           name: recordId
@@ -4268,7 +5024,7 @@ paths:
       summary: Update custom field values
       description: |
         Update custom field values for a specific record.
-        Currently only supports `sales-orders` as the record type.
+        Supported record types: `sales-orders`,`invoices`
         Values must match the field type (string, number, date, or dropdown).
 
         Custom fields must be set up in Luminous before they can be updated or retrieved. Log into your Luminous account, then 
@@ -4283,6 +5039,7 @@ paths:
             type: string
             enum:
               - sales-orders
+              - invoices
           description: Type of record to update custom fields for
         - in: path
           name: recordId
@@ -4347,6 +5104,8 @@ tags:
     description: Manage receiving reports
   - name: Sales Orders
     description: Manage sales orders and sales order shipments
+  - name: Invoices
+    description: Get and manage invoices
   - name: Tags
     description: Add/remove tags across various resources
   - name: Custom Fields

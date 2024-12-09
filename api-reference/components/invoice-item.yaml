@@ -1,0 +1,39 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the line item
+  created_at:
+    type: string
+    format: date-time
+    description: Timestamp when the item was created
+  updated_at:
+    type: string
+    format: date-time
+    description: Timestamp when the item was last updated
+  sku:
+    type: string
+    description: Product SKU
+  name:
+    type: string
+    description: Product name
+  product_id:
+    type: integer
+    description: Product identifier
+  qty:
+    type: number
+    format: float
+    description: Quantity ordered
+  unit_price:
+    type: number
+    format: float
+    description: Price per unit
+  discount:
+    type: number
+    format: float
+    nullable: true
+    description: Discount amount
+  total:
+    type: number
+    format: float
+    description: Total line item amount
