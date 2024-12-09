@@ -5008,7 +5008,7 @@ paths:
       summary: Detach a tag from a record
       description: |
         Remove a specific tag from a record.
-        Currently only supports sales orders as the record type.
+        Supported record types: `sales-orders`,`invoices`
       security:
         - BearerAuth: []
       parameters:
@@ -5019,6 +5019,7 @@ paths:
             type: string
             enum:
               - sales-orders
+              - invoices
           description: Type of record to detach tag from
         - in: path
           name: recordId
