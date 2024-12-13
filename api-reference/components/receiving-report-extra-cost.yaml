@@ -8,7 +8,7 @@ properties:
   updated_at:
     type: string
     format: date-time
-  supplier_receiving_report_id:
+  receiving_report_id:
     type: integer
   name:
     type: string

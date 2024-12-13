@@ -24,6 +24,10 @@ properties:
     type: string
     format: date
     description: Date when the purchase order was created
+  invoice_date:
+    type: string
+    format: date
+    description: Date when the purchase order was invoiced
   arrival_due_date:
     type: string
     format: date

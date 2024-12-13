@@ -645,6 +645,7 @@ paths:
 
         ### Date Filters
         - `order_date`: Date the order was placed
+        - `invoice_date`: Date the order was invoiced
         - `requested_ship_date`: Requested shipping date
         - `arrival_due_date`: Expected arrival date
 
@@ -725,6 +726,12 @@ paths:
             type: string
             format: date
           description: Filter by order date (YYYY-MM-DD)
+        - in: query
+          name: invoice_date
+          schema:
+            type: string
+            format: date
+          description: Filter by invoice date (YYYY-MM-DD)
         - in: query
           name: requested_ship_date
           schema:
@@ -853,6 +860,10 @@ paths:
                           type: string
                           format: date
                           description: Date when the purchase order was created
+                        invoice_date:
+                          type: string
+                          format: date
+                          description: Date when the purchase order was invoiced
                         arrival_due_date:
                           type: string
                           format: date
@@ -1133,6 +1144,10 @@ paths:
                         type: string
                         format: date
                         description: Date when the purchase order was created
+                      invoice_date:
+                        type: string
+                        format: date
+                        description: Date when the purchase order was invoiced
                       arrival_due_date:
                         type: string
                         format: date
@@ -2048,7 +2063,47 @@ paths:
       tags:
         - Receiving Reports
       summary: Receiving reports
-      description: Get a paginated list of receiving reports
+      description: |
+        Get a paginated list of receiving reports with optional filtering.
+
+        For detailed information about the filtering system and available operators, 
+        refer to the [Filter System Documentation](/filters).
+
+        ## Available Filters
+
+        ### String Filters
+        - `tracking_number`: Report tracking number
+        - `received_by`: Name of person who received the shipment
+        - `shipped_via`: Shipping carrier or method used
+
+        ### DateTime Filters
+        - `received_date`: When the shipment was received
+        - `created_at`: When the report was created
+        - `updated_at`: When the report was last updated
+
+        ### Numeric Filters
+        - `total_quantity`: Total quantity of items received
+        - `total_cost`: Total cost including tax and shipping
+        - `total_tax`: Tax amount
+        - `shipping_cost`: Shipping cost
+
+        ## Examples
+        ```
+        # Find all receiving reports with tracking numbers containing "TRACK"
+        ?tracking_number[contains]=TRACK
+
+        # Find reports received by specific person
+        ?received_by[eq]=John Doe
+
+        # Find reports shipped via specific carriers
+        ?shipped_via[in]=FedEx,UPS
+
+        # Find reports with dates and costs in ranges
+        ?received_date[gt]=2024-01-01 00:00:00&total_cost[gte]=1000&shipping_cost[lt]=100
+
+        # Find reports with specific quantity ranges
+        ?total_quantity[gte]=150&total_quantity[lte]=250
+        ```
       security:
         - BearerAuth: []
       parameters:
@@ -2063,7 +2118,65 @@ paths:
           schema:
             type: integer
             default: 10
-          description: Number of items per page
+            maximum: 100
+          description: Number of items per page (max 100)
+        - in: query
+          name: tracking_number
+          schema:
+            type: string
+          description: Filter by tracking number
+        - in: query
+          name: received_by
+          schema:
+            type: string
+          description: Filter by receiver name
+        - in: query
+          name: shipped_via
+          schema:
+            type: string
+          description: Filter by shipping carrier
+        - in: query
+          name: received_date
+          schema:
+            type: string
+            format: date-time
+          description: 'Filter by received date (YYYY-MM-DD HH:mm:ss)'
+        - in: query
+          name: created_at
+          schema:
+            type: string
+            format: date-time
+          description: 'Filter by creation date (YYYY-MM-DD HH:mm:ss)'
+        - in: query
+          name: updated_at
+          schema:
+            type: string
+            format: date-time
+          description: 'Filter by last update date (YYYY-MM-DD HH:mm:ss)'
+        - in: query
+          name: total_quantity
+          schema:
+            type: number
+            format: float
+          description: Filter by total quantity
+        - in: query
+          name: total_cost
+          schema:
+            type: number
+            format: float
+          description: Filter by total cost (including tax and shipping)
+        - in: query
+          name: total_tax
+          schema:
+            type: number
+            format: float
+          description: Filter by tax amount
+        - in: query
+          name: shipping_cost
+          schema:
+            type: number
+            format: float
+          description: Filter by shipping cost
       responses:
         '200':
           description: Successful response
@@ -2089,14 +2202,15 @@ paths:
                           type: string
                         received_date:
                           type: string
-                          format: date
+                          format: date-time
                         tracking_number:
                           type: string
                         received_by:
-                          type: integer
+                          type: string
                         received_at:
                           type: string
                           format: date-time
+                          nullable: true
                         shipped_via:
                           type: string
                         total_quantity:
@@ -2107,6 +2221,222 @@ paths:
                           type: number
                         shipping_cost:
                           type: number
+                        purchase_orders:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: Unique identifier for the purchase order
+                              order_numbers:
+                                type: array
+                                description: List of purchase order numbers
+                                items:
+                                  type: string
+                              created_at:
+                                type: string
+                                format: date-time
+                                description: Timestamp when the purchase order was created
+                              updated_at:
+                                type: string
+                                format: date-time
+                                description: Timestamp when the purchase order was last updated
+                              order_status:
+                                type: string
+                                enum:
+                                  - active
+                                  - inactive
+                                  - deleted
+                                description: Status of the purchase order
+                              order_date:
+                                type: string
+                                format: date
+                                description: Date when the purchase order was created
+                              invoice_date:
+                                type: string
+                                format: date
+                                description: Date when the purchase order was invoiced
+                              arrival_due_date:
+                                type: string
+                                format: date
+                                nullable: true
+                                description: Expected arrival date for the order
+                              requested_ship_date:
+                                type: string
+                                format: date
+                                nullable: true
+                                description: Requested shipping date
+                              order_type:
+                                type: integer
+                                description: Type of the order
+                              incoterm:
+                                type: string
+                                description: International Commercial Terms for the order
+                              tracking_info:
+                                type: string
+                                nullable: true
+                                description: Tracking information for the order
+                              payment_terms:
+                                type: string
+                                description: Payment terms for the order
+                              supplier_id:
+                                type: integer
+                                description: ID of the supplier
+                              item_count:
+                                type: integer
+                                description: Number of unique items in the order
+                              order_quantity:
+                                type: integer
+                                description: Total quantity of items
+                              order_cost:
+                                type: number
+                                format: float
+                                description: Cost of the order before tax and shipping
+                              total_tax:
+                                type: number
+                                format: float
+                                description: Total tax amount
+                              total_shipping_cost:
+                                type: number
+                                format: float
+                                description: Total shipping cost
+                              total_cost:
+                                type: number
+                                format: float
+                                description: Total cost including tax and shipping
+                              total_paid:
+                                type: number
+                                format: float
+                                description: Total amount paid
+                              total_due:
+                                type: number
+                                format: float
+                                description: Total amount due
+                              down_payment:
+                                type: number
+                                format: float
+                                description: Down payment amount
+                              public_note:
+                                type: string
+                                nullable: true
+                                description: Public notes
+                              private_note:
+                                type: string
+                                nullable: true
+                                description: Private notes
+                              starred:
+                                type: boolean
+                                description: Whether the order is starred
+                              supplier:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                  status:
+                                    type: integer
+                                  name:
+                                    type: string
+                                  description:
+                                    type: string
+                                  street_address:
+                                    type: string
+                                  city:
+                                    type: string
+                                  state:
+                                    type: string
+                                  zip:
+                                    type: string
+                                  country:
+                                    type: string
+                                  contact_name:
+                                    type: string
+                                  contact_email:
+                                    type: string
+                                  contact_phone:
+                                    type: string
+                                  created_at:
+                                    type: string
+                                    format: date-time
+                                  updated_at:
+                                    type: string
+                                    format: date-time
+                        items:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              created_at:
+                                type: string
+                                format: date-time
+                              updated_at:
+                                type: string
+                                format: date-time
+                              receiving_report_id:
+                                type: integer
+                              purchase_order_id:
+                                type: integer
+                              purchase_order_item_id:
+                                type: integer
+                              purchase_order_shipment_id:
+                                type: integer
+                                nullable: true
+                              quantity:
+                                type: number
+                              unit:
+                                type: string
+                              unit_price:
+                                type: number
+                              tax:
+                                type: number
+                              discount_amount:
+                                type: number
+                              discount_percent:
+                                type: number
+                              line_total:
+                                type: number
+                              remarks:
+                                type: string
+                                nullable: true
+                              stock_id:
+                                type: integer
+                              received_quantity:
+                                type: number
+                              base_unit_of_measure_id:
+                                type: integer
+                                nullable: true
+                              received_unit_of_measure_id:
+                                type: integer
+                              location_id:
+                                type: integer
+                              lot_id:
+                                type: integer
+                                nullable: true
+                        extra_costs:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              created_at:
+                                type: string
+                                format: date-time
+                              updated_at:
+                                type: string
+                                format: date-time
+                              receiving_report_id:
+                                type: integer
+                              name:
+                                type: string
+                              quantity:
+                                type: number
+                              unit_price:
+                                type: number
+                              line_total:
+                                type: number
                   meta:
                     type: object
                     properties:
@@ -2250,14 +2580,15 @@ paths:
                     type: string
                   received_date:
                     type: string
-                    format: date
+                    format: date-time
                   tracking_number:
                     type: string
                   received_by:
-                    type: integer
+                    type: string
                   received_at:
                     type: string
                     format: date-time
+                    nullable: true
                   shipped_via:
                     type: string
                   total_quantity:
@@ -2268,6 +2599,222 @@ paths:
                     type: number
                   shipping_cost:
                     type: number
+                  purchase_orders:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: Unique identifier for the purchase order
+                        order_numbers:
+                          type: array
+                          description: List of purchase order numbers
+                          items:
+                            type: string
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: Timestamp when the purchase order was created
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: Timestamp when the purchase order was last updated
+                        order_status:
+                          type: string
+                          enum:
+                            - active
+                            - inactive
+                            - deleted
+                          description: Status of the purchase order
+                        order_date:
+                          type: string
+                          format: date
+                          description: Date when the purchase order was created
+                        invoice_date:
+                          type: string
+                          format: date
+                          description: Date when the purchase order was invoiced
+                        arrival_due_date:
+                          type: string
+                          format: date
+                          nullable: true
+                          description: Expected arrival date for the order
+                        requested_ship_date:
+                          type: string
+                          format: date
+                          nullable: true
+                          description: Requested shipping date
+                        order_type:
+                          type: integer
+                          description: Type of the order
+                        incoterm:
+                          type: string
+                          description: International Commercial Terms for the order
+                        tracking_info:
+                          type: string
+                          nullable: true
+                          description: Tracking information for the order
+                        payment_terms:
+                          type: string
+                          description: Payment terms for the order
+                        supplier_id:
+                          type: integer
+                          description: ID of the supplier
+                        item_count:
+                          type: integer
+                          description: Number of unique items in the order
+                        order_quantity:
+                          type: integer
+                          description: Total quantity of items
+                        order_cost:
+                          type: number
+                          format: float
+                          description: Cost of the order before tax and shipping
+                        total_tax:
+                          type: number
+                          format: float
+                          description: Total tax amount
+                        total_shipping_cost:
+                          type: number
+                          format: float
+                          description: Total shipping cost
+                        total_cost:
+                          type: number
+                          format: float
+                          description: Total cost including tax and shipping
+                        total_paid:
+                          type: number
+                          format: float
+                          description: Total amount paid
+                        total_due:
+                          type: number
+                          format: float
+                          description: Total amount due
+                        down_payment:
+                          type: number
+                          format: float
+                          description: Down payment amount
+                        public_note:
+                          type: string
+                          nullable: true
+                          description: Public notes
+                        private_note:
+                          type: string
+                          nullable: true
+                          description: Private notes
+                        starred:
+                          type: boolean
+                          description: Whether the order is starred
+                        supplier:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            status:
+                              type: integer
+                            name:
+                              type: string
+                            description:
+                              type: string
+                            street_address:
+                              type: string
+                            city:
+                              type: string
+                            state:
+                              type: string
+                            zip:
+                              type: string
+                            country:
+                              type: string
+                            contact_name:
+                              type: string
+                            contact_email:
+                              type: string
+                            contact_phone:
+                              type: string
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        created_at:
+                          type: string
+                          format: date-time
+                        updated_at:
+                          type: string
+                          format: date-time
+                        receiving_report_id:
+                          type: integer
+                        purchase_order_id:
+                          type: integer
+                        purchase_order_item_id:
+                          type: integer
+                        purchase_order_shipment_id:
+                          type: integer
+                          nullable: true
+                        quantity:
+                          type: number
+                        unit:
+                          type: string
+                        unit_price:
+                          type: number
+                        tax:
+                          type: number
+                        discount_amount:
+                          type: number
+                        discount_percent:
+                          type: number
+                        line_total:
+                          type: number
+                        remarks:
+                          type: string
+                          nullable: true
+                        stock_id:
+                          type: integer
+                        received_quantity:
+                          type: number
+                        base_unit_of_measure_id:
+                          type: integer
+                          nullable: true
+                        received_unit_of_measure_id:
+                          type: integer
+                        location_id:
+                          type: integer
+                        lot_id:
+                          type: integer
+                          nullable: true
+                  extra_costs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        created_at:
+                          type: string
+                          format: date-time
+                        updated_at:
+                          type: string
+                          format: date-time
+                        receiving_report_id:
+                          type: integer
+                        name:
+                          type: string
+                        quantity:
+                          type: number
+                        unit_price:
+                          type: number
+                        line_total:
+                          type: number
         '422':
           description: Validation error
           content:
@@ -2322,14 +2869,15 @@ paths:
                         type: string
                       received_date:
                         type: string
-                        format: date
+                        format: date-time
                       tracking_number:
                         type: string
                       received_by:
-                        type: integer
+                        type: string
                       received_at:
                         type: string
                         format: date-time
+                        nullable: true
                       shipped_via:
                         type: string
                       total_quantity:
@@ -2340,6 +2888,146 @@ paths:
                         type: number
                       shipping_cost:
                         type: number
+                      purchase_orders:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the purchase order
+                            order_numbers:
+                              type: array
+                              description: List of purchase order numbers
+                              items:
+                                type: string
+                            created_at:
+                              type: string
+                              format: date-time
+                              description: Timestamp when the purchase order was created
+                            updated_at:
+                              type: string
+                              format: date-time
+                              description: Timestamp when the purchase order was last updated
+                            order_status:
+                              type: string
+                              enum:
+                                - active
+                                - inactive
+                                - deleted
+                              description: Status of the purchase order
+                            order_date:
+                              type: string
+                              format: date
+                              description: Date when the purchase order was created
+                            invoice_date:
+                              type: string
+                              format: date
+                              description: Date when the purchase order was invoiced
+                            arrival_due_date:
+                              type: string
+                              format: date
+                              nullable: true
+                              description: Expected arrival date for the order
+                            requested_ship_date:
+                              type: string
+                              format: date
+                              nullable: true
+                              description: Requested shipping date
+                            order_type:
+                              type: integer
+                              description: Type of the order
+                            incoterm:
+                              type: string
+                              description: International Commercial Terms for the order
+                            tracking_info:
+                              type: string
+                              nullable: true
+                              description: Tracking information for the order
+                            payment_terms:
+                              type: string
+                              description: Payment terms for the order
+                            supplier_id:
+                              type: integer
+                              description: ID of the supplier
+                            item_count:
+                              type: integer
+                              description: Number of unique items in the order
+                            order_quantity:
+                              type: integer
+                              description: Total quantity of items
+                            order_cost:
+                              type: number
+                              format: float
+                              description: Cost of the order before tax and shipping
+                            total_tax:
+                              type: number
+                              format: float
+                              description: Total tax amount
+                            total_shipping_cost:
+                              type: number
+                              format: float
+                              description: Total shipping cost
+                            total_cost:
+                              type: number
+                              format: float
+                              description: Total cost including tax and shipping
+                            total_paid:
+                              type: number
+                              format: float
+                              description: Total amount paid
+                            total_due:
+                              type: number
+                              format: float
+                              description: Total amount due
+                            down_payment:
+                              type: number
+                              format: float
+                              description: Down payment amount
+                            public_note:
+                              type: string
+                              nullable: true
+                              description: Public notes
+                            private_note:
+                              type: string
+                              nullable: true
+                              description: Private notes
+                            starred:
+                              type: boolean
+                              description: Whether the order is starred
+                            supplier:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                status:
+                                  type: integer
+                                name:
+                                  type: string
+                                description:
+                                  type: string
+                                street_address:
+                                  type: string
+                                city:
+                                  type: string
+                                state:
+                                  type: string
+                                zip:
+                                  type: string
+                                country:
+                                  type: string
+                                contact_name:
+                                  type: string
+                                contact_email:
+                                  type: string
+                                contact_phone:
+                                  type: string
+                                created_at:
+                                  type: string
+                                  format: date-time
+                                updated_at:
+                                  type: string
+                                  format: date-time
                       items:
                         type: array
                         items:
@@ -2361,6 +3049,7 @@ paths:
                               type: integer
                             purchase_order_shipment_id:
                               type: integer
+                              nullable: true
                             quantity:
                               type: number
                             unit:
@@ -2377,18 +3066,21 @@ paths:
                               type: number
                             remarks:
                               type: string
+                              nullable: true
                             stock_id:
                               type: integer
                             received_quantity:
                               type: number
                             base_unit_of_measure_id:
                               type: integer
+                              nullable: true
                             received_unit_of_measure_id:
                               type: integer
                             location_id:
                               type: integer
                             lot_id:
                               type: integer
+                              nullable: true
                       extra_costs:
                         type: array
                         items:
@@ -2402,7 +3094,7 @@ paths:
                             updated_at:
                               type: string
                               format: date-time
-                            supplier_receiving_report_id:
+                            receiving_report_id:
                               type: integer
                             name:
                               type: string

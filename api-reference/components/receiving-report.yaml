@@ -12,14 +12,15 @@ properties:
     type: string
   received_date:
     type: string
-    format: date
+    format: date-time
   tracking_number:
     type: string
   received_by:
-    type: integer
+    type: string
   received_at:
     type: string
     format: date-time
+    nullable: true
   shipped_via:
     type: string
   total_quantity:
@@ -30,3 +31,15 @@ properties:
     type: number
   shipping_cost:
     type: number
+  purchase_orders:
+    type: array
+    items:
+      $ref: './receiving-report-purchase-order.yaml'
+  items:
+    type: array
+    items:
+      $ref: './receiving-report-item.yaml'
+  extra_costs:
+    type: array
+    items:
+      $ref: './receiving-report-extra-cost.yaml'

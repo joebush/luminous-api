@@ -22,7 +22,7 @@ get:
             type: object
             properties:
               data:
-                $ref: './components/receiving-report-full.yaml'
+                $ref: './components/receiving-report.yaml'
     '404':
       description: Receiving report not found
       content:

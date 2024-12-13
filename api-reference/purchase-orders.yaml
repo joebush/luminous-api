@@ -19,6 +19,7 @@ get:
     
     ### Date Filters
     - `order_date`: Date the order was placed
+    - `invoice_date`: Date the order was invoiced
     - `requested_ship_date`: Requested shipping date
     - `arrival_due_date`: Expected arrival date
     
@@ -101,6 +102,12 @@ get:
         type: string
         format: date
       description: Filter by order date (YYYY-MM-DD)
+    - in: query
+      name: invoice_date
+      schema:
+        type: string
+        format: date
+      description: Filter by invoice date (YYYY-MM-DD)
     - in: query
       name: requested_ship_date
       schema:

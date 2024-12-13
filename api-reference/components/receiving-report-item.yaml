@@ -16,6 +16,7 @@ properties:
     type: integer
   purchase_order_shipment_id:
     type: integer
+    nullable: true
   quantity:
     type: number
   unit:
@@ -32,15 +33,18 @@ properties:
     type: number
   remarks:
     type: string
+    nullable: true
   stock_id:
     type: integer
   received_quantity:
     type: number
   base_unit_of_measure_id:
     type: integer
+    nullable: true
   received_unit_of_measure_id:
     type: integer
   location_id:
     type: integer
   lot_id:
     type: integer
+    nullable: true

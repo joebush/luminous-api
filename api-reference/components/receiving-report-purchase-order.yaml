@@ -99,84 +99,6 @@ properties:
   starred:
     type: boolean
     description: Whether the order is starred
-  items:
-    type: array
-    description: Line items in the purchase order
-    items:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Line item ID
-        purchase_order_id:
-          type: integer
-          description: ID of the parent purchase order
-        created_at:
-          type: string
-          format: date-time
-          description: Creation timestamp
-        updated_at:
-          type: string
-          format: date-time
-          description: Last update timestamp
-        quantity:
-          type: integer
-          description: Quantity ordered
-        unit_price:
-          type: number
-          format: float
-          description: Price per unit
-        unit:
-          type: string
-          description: Unit of measure
-        tax:
-          type: number
-          format: float
-          description: Tax amount
-        discount_amount:
-          type: number
-          format: float
-          description: Discount amount
-        line_total:
-          type: number
-          format: float
-          description: Total for this line item
-        received_quantity:
-          type: integer
-          description: Quantity received
-        source_sku:
-          type: string
-          nullable: true
-          description: Source SKU
-        product:
-          type: object
-          properties:
-            id:
-              type: integer
-            name:
-              type: string
-            description:
-              type: string
-              nullable: true
-            retail_price:
-              type: number
-              format: float
-            wholesale_price:
-              type: number
-              format: float
-            variant_attributes:
-              type: object
-              nullable: true
-            sku:
-              type: string
-            upc:
-              type: string
-            created_at:
-              type: string
-              format: date-time
-            updated_at:
-              type: string
-              format: date-time
   supplier:
     type: object
     properties:
@@ -210,21 +132,3 @@ properties:
       updated_at:
         type: string
         format: date-time
-  tags:
-    type: array
-    items:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        description:
-          type: string
-          nullable: true
-        icon:
-          type: string
-          nullable: true
-        color:
-          type: string
-          nullable: true
