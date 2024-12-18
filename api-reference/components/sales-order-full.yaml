@@ -176,3 +176,8 @@ properties:
     items:
       $ref: './sales-order-shipment.yaml'
     description: Shipments associated with order
+  custom_fields:
+    type: object
+    description: Dynamic custom fields with key-value pairs
+    additionalProperties:
+      type: string

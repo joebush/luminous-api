@@ -161,6 +161,11 @@ properties:
   customer_po_number:
     type: string
     description: Customer PO number
+  custom_fields:
+    type: object
+    description: Dynamic custom fields with key-value pairs
+    additionalProperties:
+      type: string
   tags:
     type: array
     items:

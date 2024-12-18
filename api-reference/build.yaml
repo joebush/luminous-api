@@ -3411,6 +3411,11 @@ paths:
                         customer_po_number:
                           type: string
                           description: Customer PO number
+                        custom_fields:
+                          type: object
+                          description: Dynamic custom fields with key-value pairs
+                          additionalProperties:
+                            type: string
                         tags:
                           type: array
                           items:
@@ -3759,6 +3764,11 @@ paths:
                               type: string
                               format: date
                               description: Estimated shipping date
+                            custom_fields:
+                              type: object
+                              description: Dynamic custom fields with key-value pairs
+                              additionalProperties:
+                                type: string
                         description: Line items in the order
                       tags:
                         type: array
@@ -3964,6 +3974,11 @@ paths:
                               format: date-time
                               description: Timestamp when the shipment was last updated
                         description: Shipments associated with order
+                      custom_fields:
+                        type: object
+                        description: Dynamic custom fields with key-value pairs
+                        additionalProperties:
+                          type: string
         '404':
           description: Sales order not found
           content:
@@ -5747,7 +5762,7 @@ paths:
       summary: Get custom field values
       description: |
         Retrieve all custom field values for a specific record.
-        Supported record types: `sales-orders`,`invoices`
+        Supported record types: `sales-orders`,`sales-order-items`,`invoices`
 
         Custom fields must be set up in Luminous before they can be updated or retrieved. 
         Log into your Luminous account, then 
@@ -5762,6 +5777,7 @@ paths:
             type: string
             enum:
               - sales-orders
+              - sales-order-items
               - invoices
           description: Type of record to get custom fields for
         - in: path
@@ -5802,7 +5818,7 @@ paths:
       summary: Update custom field values
       description: |
         Update custom field values for a specific record.
-        Supported record types: `sales-orders`,`invoices`
+        Supported record types: `sales-orders`,`sales-order-items`,`invoices`
         Values must match the field type (string, number, date, or dropdown).
 
         Custom fields must be set up in Luminous before they can be updated or retrieved. Log into your Luminous account, then 
@@ -5817,6 +5833,7 @@ paths:
             type: string
             enum:
               - sales-orders
+              - sales-order-items
               - invoices
           description: Type of record to update custom fields for
         - in: path

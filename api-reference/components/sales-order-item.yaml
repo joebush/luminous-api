@@ -111,3 +111,8 @@ properties:
     type: string
     format: date
     description: Estimated shipping date
+  custom_fields:
+    type: object
+    description: Dynamic custom fields with key-value pairs
+    additionalProperties:
+      type: string
