@@ -1,0 +1,220 @@
+type: object
+properties:
+  name:
+    type: string
+    maxLength: 200
+    description: Product name
+  category_id:
+    type: integer
+    description: ID of the product category
+  sku:
+    type: string
+    maxLength: 100
+    description: Internal SKU
+  qty_low_alert:
+    type: integer
+    nullable: true
+    description: Quantity threshold for low stock alerts
+  qty_reorder_threshold:
+    type: integer
+    nullable: true
+    description: Quantity threshold for reordering
+  qty_minimum:
+    type: integer
+    nullable: true
+    description: Minimum quantity to maintain
+  supplier_id:
+    type: integer
+    nullable: true
+    description: ID of the preferred supplier
+  image_url:
+    type: string
+    maxLength: 255
+    nullable: true
+    description: URL to product image
+  sellable:
+    type: boolean
+    nullable: true
+    description: Whether the product can be sold
+  lot_tracking:
+    type: boolean
+    nullable: true
+    description: Whether to track product by lots
+  sub_category_id:
+    type: integer
+    nullable: true
+    description: ID of the product subcategory
+  default_receiving_location_id:
+    type: integer
+    nullable: true
+    description: Default location ID for receiving this product
+  description:
+    type: string
+    nullable: true
+    description: Product description
+  wholesale_price:
+    type: number
+    format: float
+    minimum: 0
+    nullable: true
+    description: Wholesale price
+  retail_price:
+    type: number
+    format: float
+    minimum: 0
+    nullable: true
+    description: Retail price
+  unit_cost:
+    type: number
+    format: float
+    minimum: 0
+    nullable: true
+    description: Cost per unit
+  product_weight:
+    type: number
+    format: float
+    minimum: 0
+    nullable: true
+    description: Weight of the product
+  product_length:
+    type: number
+    format: float
+    minimum: 0
+    nullable: true
+    description: Length of the product
+  product_width:
+    type: number
+    format: float
+    minimum: 0
+    nullable: true
+    description: Width of the product
+  product_height:
+    type: number
+    format: float
+    minimum: 0
+    nullable: true
+    description: Height of the product
+  upc:
+    type: string
+    nullable: true
+    description: UPC/Barcode
+  custom_fields:
+    type: object
+    nullable: true
+    description: Custom field values
+    additionalProperties:
+      type: string
+  tags:
+    type: array
+    nullable: true
+    description: Tags to associate with the product
+    items:
+      type: string
+  variants:
+    type: array
+    nullable: true
+    description: Product variants
+    items:
+      type: object
+      required:
+        - sku
+      properties:
+        name:
+          type: string
+          maxLength: 200
+          description: Variant name
+        sku:
+          type: string
+          maxLength: 100
+          description: Variant SKU
+        image_url:
+          type: string
+          maxLength: 255
+          nullable: true
+          description: URL to variant image
+        qty_low_alert:
+          type: integer
+          nullable: true
+          description: Quantity threshold for low stock alerts
+        qty_reorder_threshold:
+          type: integer
+          nullable: true
+          description: Quantity threshold for reordering
+        qty_minimum:
+          type: integer
+          nullable: true
+          description: Minimum quantity to maintain
+        supplier_id:
+          type: integer
+          nullable: true
+          description: ID of the variant's preferred supplier
+        sellable:
+          type: boolean
+          nullable: true
+          description: Whether the variant can be sold
+        default_receiving_location_id:
+          type: integer
+          nullable: true
+          description: Default location ID for receiving this variant
+        description:
+          type: string
+          nullable: true
+          description: Variant description
+        wholesale_price:
+          type: number
+          format: float
+          minimum: 0
+          nullable: true
+          description: Variant wholesale price
+        retail_price:
+          type: number
+          format: float
+          minimum: 0
+          nullable: true
+          description: Variant retail price
+        unit_cost:
+          type: number
+          format: float
+          minimum: 0
+          nullable: true
+          description: Variant cost per unit
+        product_weight:
+          type: number
+          format: float
+          minimum: 0
+          nullable: true
+          description: Weight of the variant
+        product_length:
+          type: number
+          format: float
+          minimum: 0
+          nullable: true
+          description: Length of the variant
+        product_width:
+          type: number
+          format: float
+          minimum: 0
+          nullable: true
+          description: Width of the variant
+        product_height:
+          type: number
+          format: float
+          minimum: 0
+          nullable: true
+          description: Height of the variant
+        upc:
+          type: string
+          nullable: true
+          description: Variant UPC/Barcode
+        custom_fields:
+          type: object
+          nullable: true
+          description: Custom field values for the variant
+          additionalProperties:
+            type: string
+        tags:
+          type: array
+          nullable: true
+          description: Tags to associate with the variant
+          items:
+            type: string

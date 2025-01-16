@@ -41,6 +41,9 @@ paths:
         - `retail_price`: Product retail price
         - `wholesale_price`: Product wholesale price
 
+        ### Boolean Filters
+        - `sellable`: If product is sellable or not
+
         ### DateTime Filters
         - `created_at`: When the product was created
         - `updated_at`: When the product was last updated
@@ -80,13 +83,11 @@ paths:
           schema:
             type: string
           description: Filter by name OR upc OR sku
-          example: ABCD-1234
         - in: query
           name: name
           schema:
             type: string
           description: Filter by product name
-          example: Test Product
         - in: query
           name: description
           schema:
@@ -97,39 +98,40 @@ paths:
           schema:
             type: string
           description: Filter by SKU (searches both internal and alternate SKUs)
-          example: SKU-001
         - in: query
           name: upc
           schema:
             type: string
           description: Filter by UPC/Barcode
-          example: '123456789012'
+        - in: query
+          name: sellable
+          schema:
+            type: boolean
+          description: Filter by sellable status
         - in: query
           name: retail_price
           schema:
             type: number
             format: float
           description: Filter by retail price
-          example: 99.99
         - in: query
           name: wholesale_price
           schema:
             type: number
             format: float
           description: Filter by wholesale price
-          example: 45
         - in: query
           name: created_at
           schema:
             type: string
             format: date-time
-          description: 'Filter by creation date (YYYY-MM-DD HH:mm:ss)'
+          description: Filter by creation date
         - in: query
           name: updated_at
           schema:
             type: string
             format: date-time
-          description: 'Filter by last update date (YYYY-MM-DD HH:mm:ss)'
+          description: Filter by last update date
         - in: query
           name: tag
           schema:
@@ -166,6 +168,33 @@ paths:
                           type: number
                           format: float
                           description: Wholesale price
+                        unit_cost:
+                          type: number
+                          format: float
+                          description: Cost per unit
+                        product_weight:
+                          type: number
+                          format: float
+                          description: Weight of the product
+                        product_length:
+                          type: number
+                          format: float
+                          description: Length of the product
+                        product_width:
+                          type: number
+                          format: float
+                          description: Width of the product
+                        product_height:
+                          type: number
+                          format: float
+                          description: Height of the product
+                        sellable:
+                          type: boolean
+                          description: Whether the product can be sold
+                        image_url:
+                          type: string
+                          nullable: true
+                          description: URL to the product's main image
                         category:
                           type: object
                           nullable: true
@@ -371,32 +400,220 @@ paths:
                 properties:
                   message:
                     type: string
-  '/products/{id}':
-    get:
-      operationId: getProductById
+    post:
+      operationId: createProduct
       tags:
         - Products
-      summary: Single product
-      description: |
-        Get detailed information about a specific product by its ID.
-
-        Returns the product with all its relationships including:
-        - Category and subcategory
-        - Images
-        - Preferred vendor
-        - Tags
-        - Variant SKUs with custom fields and RFQ attachments
-        - Alternate SKUs
-        - Custom field values
+      summary: Create a product
+      description: 'Create a new product with optional variants, custom fields, and tags'
       security:
         - BearerAuth: []
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-          description: Product ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - category_id
+                - sku
+              properties:
+                name:
+                  type: string
+                  maxLength: 200
+                  description: Product name
+                category_id:
+                  type: integer
+                  description: ID of the product category
+                sku:
+                  type: string
+                  maxLength: 100
+                  description: Internal SKU
+                supplier_id:
+                  type: integer
+                  nullable: true
+                  description: ID of the preferred supplier
+                image_url:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: URL to product image
+                sellable:
+                  type: boolean
+                  nullable: true
+                  description: Whether the product can be sold
+                lot_tracking:
+                  type: boolean
+                  nullable: true
+                  description: Whether to track product by lots
+                sub_category_id:
+                  type: integer
+                  nullable: true
+                  description: ID of the product subcategory
+                default_receiving_location_id:
+                  type: integer
+                  nullable: true
+                  description: Default location ID for receiving this product
+                description:
+                  type: string
+                  nullable: true
+                  description: Product description
+                wholesale_price:
+                  type: number
+                  format: float
+                  minimum: 0
+                  nullable: true
+                  description: Wholesale price
+                retail_price:
+                  type: number
+                  format: float
+                  minimum: 0
+                  nullable: true
+                  description: Retail price
+                unit_cost:
+                  type: number
+                  format: float
+                  minimum: 0
+                  nullable: true
+                  description: Cost per unit
+                product_weight:
+                  type: number
+                  format: float
+                  minimum: 0
+                  nullable: true
+                  description: Weight of the product
+                product_length:
+                  type: number
+                  format: float
+                  minimum: 0
+                  nullable: true
+                  description: Length of the product
+                product_width:
+                  type: number
+                  format: float
+                  minimum: 0
+                  nullable: true
+                  description: Width of the product
+                product_height:
+                  type: number
+                  format: float
+                  minimum: 0
+                  nullable: true
+                  description: Height of the product
+                upc:
+                  type: string
+                  nullable: true
+                  description: UPC/Barcode
+                custom_fields:
+                  type: object
+                  nullable: true
+                  description: Custom field values
+                  additionalProperties:
+                    type: string
+                tags:
+                  type: array
+                  nullable: true
+                  description: Tags to associate with the product
+                  items:
+                    type: string
+                variants:
+                  type: array
+                  nullable: true
+                  description: Product variants
+                  items:
+                    type: object
+                    required:
+                      - name
+                      - sku
+                    properties:
+                      name:
+                        type: string
+                        maxLength: 200
+                        description: Variant name
+                      sku:
+                        type: string
+                        maxLength: 100
+                        description: Variant SKU
+                      image_url:
+                        type: string
+                        maxLength: 255
+                        nullable: true
+                        description: URL to variant image
+                      supplier_id:
+                        type: integer
+                        nullable: true
+                        description: ID of the variant's preferred supplier
+                      sellable:
+                        type: boolean
+                        nullable: true
+                        description: Whether the variant can be sold
+                      default_receiving_location_id:
+                        type: integer
+                        nullable: true
+                        description: Default location ID for receiving this variant
+                      description:
+                        type: string
+                        nullable: true
+                        description: Variant description
+                      wholesale_price:
+                        type: number
+                        format: float
+                        minimum: 0
+                        nullable: true
+                        description: Variant wholesale price
+                      retail_price:
+                        type: number
+                        format: float
+                        minimum: 0
+                        nullable: true
+                        description: Variant retail price
+                      unit_cost:
+                        type: number
+                        format: float
+                        minimum: 0
+                        nullable: true
+                        description: Variant cost per unit
+                      product_weight:
+                        type: number
+                        format: float
+                        minimum: 0
+                        nullable: true
+                        description: Weight of the variant
+                      product_length:
+                        type: number
+                        format: float
+                        minimum: 0
+                        nullable: true
+                        description: Length of the variant
+                      product_width:
+                        type: number
+                        format: float
+                        minimum: 0
+                        nullable: true
+                        description: Width of the variant
+                      product_height:
+                        type: number
+                        format: float
+                        minimum: 0
+                        nullable: true
+                        description: Height of the variant
+                      upc:
+                        type: string
+                        nullable: true
+                        description: Variant UPC/Barcode
+                      custom_fields:
+                        type: object
+                        nullable: true
+                        description: Custom field values for the variant
+                        additionalProperties:
+                          type: string
+                      tags:
+                        type: array
+                        nullable: true
+                        description: Tags to associate with the variant
+                        items:
+                          type: string
       responses:
         '200':
           description: Successful response
@@ -426,6 +643,33 @@ paths:
                         type: number
                         format: float
                         description: Wholesale price
+                      unit_cost:
+                        type: number
+                        format: float
+                        description: Cost per unit
+                      product_weight:
+                        type: number
+                        format: float
+                        description: Weight of the product
+                      product_length:
+                        type: number
+                        format: float
+                        description: Length of the product
+                      product_width:
+                        type: number
+                        format: float
+                        description: Width of the product
+                      product_height:
+                        type: number
+                        format: float
+                        description: Height of the product
+                      sellable:
+                        type: boolean
+                        description: Whether the product can be sold
+                      image_url:
+                        type: string
+                        nullable: true
+                        description: URL to the product's main image
                       category:
                         type: object
                         nullable: true
@@ -605,6 +849,1351 @@ paths:
                         type: string
                         format: date-time
                         description: Timestamp when the product was last updated
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '409':
+          description: Conflict - SKU already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+    patch:
+      operationId: createOrUpdateProduct
+      tags:
+        - Products
+      summary: Create or update product
+      description: Create a new product or update an existing one by SKU or ID
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    name:
+                      type: string
+                      maxLength: 200
+                      description: Product name
+                    category_id:
+                      type: integer
+                      description: ID of the product category
+                    sku:
+                      type: string
+                      maxLength: 100
+                      description: Internal SKU
+                    qty_low_alert:
+                      type: integer
+                      nullable: true
+                      description: Quantity threshold for low stock alerts
+                    qty_reorder_threshold:
+                      type: integer
+                      nullable: true
+                      description: Quantity threshold for reordering
+                    qty_minimum:
+                      type: integer
+                      nullable: true
+                      description: Minimum quantity to maintain
+                    supplier_id:
+                      type: integer
+                      nullable: true
+                      description: ID of the preferred supplier
+                    image_url:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: URL to product image
+                    sellable:
+                      type: boolean
+                      nullable: true
+                      description: Whether the product can be sold
+                    lot_tracking:
+                      type: boolean
+                      nullable: true
+                      description: Whether to track product by lots
+                    sub_category_id:
+                      type: integer
+                      nullable: true
+                      description: ID of the product subcategory
+                    default_receiving_location_id:
+                      type: integer
+                      nullable: true
+                      description: Default location ID for receiving this product
+                    description:
+                      type: string
+                      nullable: true
+                      description: Product description
+                    wholesale_price:
+                      type: number
+                      format: float
+                      minimum: 0
+                      nullable: true
+                      description: Wholesale price
+                    retail_price:
+                      type: number
+                      format: float
+                      minimum: 0
+                      nullable: true
+                      description: Retail price
+                    unit_cost:
+                      type: number
+                      format: float
+                      minimum: 0
+                      nullable: true
+                      description: Cost per unit
+                    product_weight:
+                      type: number
+                      format: float
+                      minimum: 0
+                      nullable: true
+                      description: Weight of the product
+                    product_length:
+                      type: number
+                      format: float
+                      minimum: 0
+                      nullable: true
+                      description: Length of the product
+                    product_width:
+                      type: number
+                      format: float
+                      minimum: 0
+                      nullable: true
+                      description: Width of the product
+                    product_height:
+                      type: number
+                      format: float
+                      minimum: 0
+                      nullable: true
+                      description: Height of the product
+                    upc:
+                      type: string
+                      nullable: true
+                      description: UPC/Barcode
+                    custom_fields:
+                      type: object
+                      nullable: true
+                      description: Custom field values
+                      additionalProperties:
+                        type: string
+                    tags:
+                      type: array
+                      nullable: true
+                      description: Tags to associate with the product
+                      items:
+                        type: string
+                    variants:
+                      type: array
+                      nullable: true
+                      description: Product variants
+                      items:
+                        type: object
+                        required:
+                          - sku
+                        properties:
+                          name:
+                            type: string
+                            maxLength: 200
+                            description: Variant name
+                          sku:
+                            type: string
+                            maxLength: 100
+                            description: Variant SKU
+                          image_url:
+                            type: string
+                            maxLength: 255
+                            nullable: true
+                            description: URL to variant image
+                          qty_low_alert:
+                            type: integer
+                            nullable: true
+                            description: Quantity threshold for low stock alerts
+                          qty_reorder_threshold:
+                            type: integer
+                            nullable: true
+                            description: Quantity threshold for reordering
+                          qty_minimum:
+                            type: integer
+                            nullable: true
+                            description: Minimum quantity to maintain
+                          supplier_id:
+                            type: integer
+                            nullable: true
+                            description: ID of the variant's preferred supplier
+                          sellable:
+                            type: boolean
+                            nullable: true
+                            description: Whether the variant can be sold
+                          default_receiving_location_id:
+                            type: integer
+                            nullable: true
+                            description: Default location ID for receiving this variant
+                          description:
+                            type: string
+                            nullable: true
+                            description: Variant description
+                          wholesale_price:
+                            type: number
+                            format: float
+                            minimum: 0
+                            nullable: true
+                            description: Variant wholesale price
+                          retail_price:
+                            type: number
+                            format: float
+                            minimum: 0
+                            nullable: true
+                            description: Variant retail price
+                          unit_cost:
+                            type: number
+                            format: float
+                            minimum: 0
+                            nullable: true
+                            description: Variant cost per unit
+                          product_weight:
+                            type: number
+                            format: float
+                            minimum: 0
+                            nullable: true
+                            description: Weight of the variant
+                          product_length:
+                            type: number
+                            format: float
+                            minimum: 0
+                            nullable: true
+                            description: Length of the variant
+                          product_width:
+                            type: number
+                            format: float
+                            minimum: 0
+                            nullable: true
+                            description: Width of the variant
+                          product_height:
+                            type: number
+                            format: float
+                            minimum: 0
+                            nullable: true
+                            description: Height of the variant
+                          upc:
+                            type: string
+                            nullable: true
+                            description: Variant UPC/Barcode
+                          custom_fields:
+                            type: object
+                            nullable: true
+                            description: Custom field values for the variant
+                            additionalProperties:
+                              type: string
+                          tags:
+                            type: array
+                            nullable: true
+                            description: Tags to associate with the variant
+                            items:
+                              type: string
+                - type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: Product ID (required if SKU not provided)
+                    sku:
+                      type: string
+                      description: Product SKU (required if ID not provided)
+                  oneOf:
+                    - required:
+                        - id
+                    - required:
+                        - sku
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Unique identifier for the product
+                      name:
+                        type: string
+                        description: Product name
+                      description:
+                        type: string
+                        nullable: true
+                        description: Product description
+                      retail_price:
+                        type: number
+                        format: float
+                        description: Retail price
+                      wholesale_price:
+                        type: number
+                        format: float
+                        description: Wholesale price
+                      unit_cost:
+                        type: number
+                        format: float
+                        description: Cost per unit
+                      product_weight:
+                        type: number
+                        format: float
+                        description: Weight of the product
+                      product_length:
+                        type: number
+                        format: float
+                        description: Length of the product
+                      product_width:
+                        type: number
+                        format: float
+                        description: Width of the product
+                      product_height:
+                        type: number
+                        format: float
+                        description: Height of the product
+                      sellable:
+                        type: boolean
+                        description: Whether the product can be sold
+                      image_url:
+                        type: string
+                        nullable: true
+                        description: URL to the product's main image
+                      category:
+                        type: object
+                        nullable: true
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                        description: Product category information
+                      subcategory:
+                        type: object
+                        nullable: true
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                        description: Product subcategory information
+                      custom_fields:
+                        type: object
+                        description: Dynamic custom fields with key-value pairs
+                        additionalProperties:
+                          type: string
+                      attachments:
+                        type: array
+                        description: Product attachments
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the attachment
+                            name:
+                              type: string
+                              description: Filename of the attachment
+                            type:
+                              type: string
+                              description: MIME type of the attachment
+                            size:
+                              type: integer
+                              description: File size in bytes
+                            full_url:
+                              type: string
+                              description: Full resolution URL of the attachment
+                            thumb_url:
+                              type: string
+                              description: Thumbnail URL of the attachment (if applicable)
+                          required:
+                            - id
+                            - name
+                            - type
+                            - size
+                            - full_url
+                      variants:
+                        type: array
+                        description: Product variants
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            description:
+                              type: string
+                              nullable: true
+                            attachments:
+                              type: array
+                              description: Variant-specific attachments
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                    description: Unique identifier for the attachment
+                                  name:
+                                    type: string
+                                    description: Filename of the attachment
+                                  type:
+                                    type: string
+                                    description: MIME type of the attachment
+                                  size:
+                                    type: integer
+                                    description: File size in bytes
+                                  full_url:
+                                    type: string
+                                    description: Full resolution URL of the attachment
+                                  thumb_url:
+                                    type: string
+                                    description: Thumbnail URL of the attachment (if applicable)
+                                required:
+                                  - id
+                                  - name
+                                  - type
+                                  - size
+                                  - full_url
+                            retail_price:
+                              type: number
+                              format: float
+                            wholesale_price:
+                              type: number
+                              format: float
+                            custom_fields:
+                              type: array
+                              items:
+                                type: object
+                            variant_attributes:
+                              type: object
+                              additionalProperties:
+                                type: string
+                            sku:
+                              type: string
+                            upc:
+                              type: string
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+                      variant_attributes:
+                        type: object
+                        nullable: true
+                        description: Available variant attributes
+                      sku:
+                        type: string
+                        description: Internal SKU
+                      alternate_skus:
+                        type: array
+                        description: Alternate SKUs
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            sku:
+                              type: string
+                      upc:
+                        type: string
+                        description: UPC/Barcode
+                      tags:
+                        type: array
+                        description: Tags associated with the product
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the tag
+                            name:
+                              type: string
+                              description: Name of the tag
+                            description:
+                              type: string
+                              nullable: true
+                              description: Description of the tag
+                            icon:
+                              type: string
+                              nullable: true
+                              description: Icon identifier or URL for the tag
+                            color:
+                              type: string
+                              nullable: true
+                              description: Color code for the tag
+                          required:
+                            - id
+                            - name
+                      supplier:
+                        type: object
+                        nullable: true
+                        description: Supplier information
+                      created_at:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the product was created
+                      updated_at:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the product was last updated
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+  '/products/{id}':
+    get:
+      operationId: getProductById
+      tags:
+        - Products
+      summary: Single product
+      description: |
+        Get detailed information about a specific product by its ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Product ID
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Unique identifier for the product
+                      name:
+                        type: string
+                        description: Product name
+                      description:
+                        type: string
+                        nullable: true
+                        description: Product description
+                      retail_price:
+                        type: number
+                        format: float
+                        description: Retail price
+                      wholesale_price:
+                        type: number
+                        format: float
+                        description: Wholesale price
+                      unit_cost:
+                        type: number
+                        format: float
+                        description: Cost per unit
+                      product_weight:
+                        type: number
+                        format: float
+                        description: Weight of the product
+                      product_length:
+                        type: number
+                        format: float
+                        description: Length of the product
+                      product_width:
+                        type: number
+                        format: float
+                        description: Width of the product
+                      product_height:
+                        type: number
+                        format: float
+                        description: Height of the product
+                      sellable:
+                        type: boolean
+                        description: Whether the product can be sold
+                      image_url:
+                        type: string
+                        nullable: true
+                        description: URL to the product's main image
+                      category:
+                        type: object
+                        nullable: true
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                        description: Product category information
+                      subcategory:
+                        type: object
+                        nullable: true
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                        description: Product subcategory information
+                      custom_fields:
+                        type: object
+                        description: Dynamic custom fields with key-value pairs
+                        additionalProperties:
+                          type: string
+                      attachments:
+                        type: array
+                        description: Product attachments
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the attachment
+                            name:
+                              type: string
+                              description: Filename of the attachment
+                            type:
+                              type: string
+                              description: MIME type of the attachment
+                            size:
+                              type: integer
+                              description: File size in bytes
+                            full_url:
+                              type: string
+                              description: Full resolution URL of the attachment
+                            thumb_url:
+                              type: string
+                              description: Thumbnail URL of the attachment (if applicable)
+                          required:
+                            - id
+                            - name
+                            - type
+                            - size
+                            - full_url
+                      variants:
+                        type: array
+                        description: Product variants
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            description:
+                              type: string
+                              nullable: true
+                            attachments:
+                              type: array
+                              description: Variant-specific attachments
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                    description: Unique identifier for the attachment
+                                  name:
+                                    type: string
+                                    description: Filename of the attachment
+                                  type:
+                                    type: string
+                                    description: MIME type of the attachment
+                                  size:
+                                    type: integer
+                                    description: File size in bytes
+                                  full_url:
+                                    type: string
+                                    description: Full resolution URL of the attachment
+                                  thumb_url:
+                                    type: string
+                                    description: Thumbnail URL of the attachment (if applicable)
+                                required:
+                                  - id
+                                  - name
+                                  - type
+                                  - size
+                                  - full_url
+                            retail_price:
+                              type: number
+                              format: float
+                            wholesale_price:
+                              type: number
+                              format: float
+                            custom_fields:
+                              type: array
+                              items:
+                                type: object
+                            variant_attributes:
+                              type: object
+                              additionalProperties:
+                                type: string
+                            sku:
+                              type: string
+                            upc:
+                              type: string
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+                      variant_attributes:
+                        type: object
+                        nullable: true
+                        description: Available variant attributes
+                      sku:
+                        type: string
+                        description: Internal SKU
+                      alternate_skus:
+                        type: array
+                        description: Alternate SKUs
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            sku:
+                              type: string
+                      upc:
+                        type: string
+                        description: UPC/Barcode
+                      tags:
+                        type: array
+                        description: Tags associated with the product
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the tag
+                            name:
+                              type: string
+                              description: Name of the tag
+                            description:
+                              type: string
+                              nullable: true
+                              description: Description of the tag
+                            icon:
+                              type: string
+                              nullable: true
+                              description: Icon identifier or URL for the tag
+                            color:
+                              type: string
+                              nullable: true
+                              description: Color code for the tag
+                          required:
+                            - id
+                            - name
+                      supplier:
+                        type: object
+                        nullable: true
+                        description: Supplier information
+                      created_at:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the product was created
+                      updated_at:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the product was last updated
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    post:
+      operationId: updateProductById
+      tags:
+        - Products
+      summary: Update a product
+      description: Update a specific product's information
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 200
+                  description: Product name
+                category_id:
+                  type: integer
+                  description: ID of the product category
+                sku:
+                  type: string
+                  maxLength: 100
+                  description: Internal SKU
+                qty_low_alert:
+                  type: integer
+                  nullable: true
+                  description: Quantity threshold for low stock alerts
+                qty_reorder_threshold:
+                  type: integer
+                  nullable: true
+                  description: Quantity threshold for reordering
+                qty_minimum:
+                  type: integer
+                  nullable: true
+                  description: Minimum quantity to maintain
+                supplier_id:
+                  type: integer
+                  nullable: true
+                  description: ID of the preferred supplier
+                image_url:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: URL to product image
+                sellable:
+                  type: boolean
+                  nullable: true
+                  description: Whether the product can be sold
+                lot_tracking:
+                  type: boolean
+                  nullable: true
+                  description: Whether to track product by lots
+                sub_category_id:
+                  type: integer
+                  nullable: true
+                  description: ID of the product subcategory
+                default_receiving_location_id:
+                  type: integer
+                  nullable: true
+                  description: Default location ID for receiving this product
+                description:
+                  type: string
+                  nullable: true
+                  description: Product description
+                wholesale_price:
+                  type: number
+                  format: float
+                  minimum: 0
+                  nullable: true
+                  description: Wholesale price
+                retail_price:
+                  type: number
+                  format: float
+                  minimum: 0
+                  nullable: true
+                  description: Retail price
+                unit_cost:
+                  type: number
+                  format: float
+                  minimum: 0
+                  nullable: true
+                  description: Cost per unit
+                product_weight:
+                  type: number
+                  format: float
+                  minimum: 0
+                  nullable: true
+                  description: Weight of the product
+                product_length:
+                  type: number
+                  format: float
+                  minimum: 0
+                  nullable: true
+                  description: Length of the product
+                product_width:
+                  type: number
+                  format: float
+                  minimum: 0
+                  nullable: true
+                  description: Width of the product
+                product_height:
+                  type: number
+                  format: float
+                  minimum: 0
+                  nullable: true
+                  description: Height of the product
+                upc:
+                  type: string
+                  nullable: true
+                  description: UPC/Barcode
+                custom_fields:
+                  type: object
+                  nullable: true
+                  description: Custom field values
+                  additionalProperties:
+                    type: string
+                tags:
+                  type: array
+                  nullable: true
+                  description: Tags to associate with the product
+                  items:
+                    type: string
+                variants:
+                  type: array
+                  nullable: true
+                  description: Product variants
+                  items:
+                    type: object
+                    required:
+                      - sku
+                    properties:
+                      name:
+                        type: string
+                        maxLength: 200
+                        description: Variant name
+                      sku:
+                        type: string
+                        maxLength: 100
+                        description: Variant SKU
+                      image_url:
+                        type: string
+                        maxLength: 255
+                        nullable: true
+                        description: URL to variant image
+                      qty_low_alert:
+                        type: integer
+                        nullable: true
+                        description: Quantity threshold for low stock alerts
+                      qty_reorder_threshold:
+                        type: integer
+                        nullable: true
+                        description: Quantity threshold for reordering
+                      qty_minimum:
+                        type: integer
+                        nullable: true
+                        description: Minimum quantity to maintain
+                      supplier_id:
+                        type: integer
+                        nullable: true
+                        description: ID of the variant's preferred supplier
+                      sellable:
+                        type: boolean
+                        nullable: true
+                        description: Whether the variant can be sold
+                      default_receiving_location_id:
+                        type: integer
+                        nullable: true
+                        description: Default location ID for receiving this variant
+                      description:
+                        type: string
+                        nullable: true
+                        description: Variant description
+                      wholesale_price:
+                        type: number
+                        format: float
+                        minimum: 0
+                        nullable: true
+                        description: Variant wholesale price
+                      retail_price:
+                        type: number
+                        format: float
+                        minimum: 0
+                        nullable: true
+                        description: Variant retail price
+                      unit_cost:
+                        type: number
+                        format: float
+                        minimum: 0
+                        nullable: true
+                        description: Variant cost per unit
+                      product_weight:
+                        type: number
+                        format: float
+                        minimum: 0
+                        nullable: true
+                        description: Weight of the variant
+                      product_length:
+                        type: number
+                        format: float
+                        minimum: 0
+                        nullable: true
+                        description: Length of the variant
+                      product_width:
+                        type: number
+                        format: float
+                        minimum: 0
+                        nullable: true
+                        description: Width of the variant
+                      product_height:
+                        type: number
+                        format: float
+                        minimum: 0
+                        nullable: true
+                        description: Height of the variant
+                      upc:
+                        type: string
+                        nullable: true
+                        description: Variant UPC/Barcode
+                      custom_fields:
+                        type: object
+                        nullable: true
+                        description: Custom field values for the variant
+                        additionalProperties:
+                          type: string
+                      tags:
+                        type: array
+                        nullable: true
+                        description: Tags to associate with the variant
+                        items:
+                          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Unique identifier for the product
+                      name:
+                        type: string
+                        description: Product name
+                      description:
+                        type: string
+                        nullable: true
+                        description: Product description
+                      retail_price:
+                        type: number
+                        format: float
+                        description: Retail price
+                      wholesale_price:
+                        type: number
+                        format: float
+                        description: Wholesale price
+                      unit_cost:
+                        type: number
+                        format: float
+                        description: Cost per unit
+                      product_weight:
+                        type: number
+                        format: float
+                        description: Weight of the product
+                      product_length:
+                        type: number
+                        format: float
+                        description: Length of the product
+                      product_width:
+                        type: number
+                        format: float
+                        description: Width of the product
+                      product_height:
+                        type: number
+                        format: float
+                        description: Height of the product
+                      sellable:
+                        type: boolean
+                        description: Whether the product can be sold
+                      image_url:
+                        type: string
+                        nullable: true
+                        description: URL to the product's main image
+                      category:
+                        type: object
+                        nullable: true
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                        description: Product category information
+                      subcategory:
+                        type: object
+                        nullable: true
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                        description: Product subcategory information
+                      custom_fields:
+                        type: object
+                        description: Dynamic custom fields with key-value pairs
+                        additionalProperties:
+                          type: string
+                      attachments:
+                        type: array
+                        description: Product attachments
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the attachment
+                            name:
+                              type: string
+                              description: Filename of the attachment
+                            type:
+                              type: string
+                              description: MIME type of the attachment
+                            size:
+                              type: integer
+                              description: File size in bytes
+                            full_url:
+                              type: string
+                              description: Full resolution URL of the attachment
+                            thumb_url:
+                              type: string
+                              description: Thumbnail URL of the attachment (if applicable)
+                          required:
+                            - id
+                            - name
+                            - type
+                            - size
+                            - full_url
+                      variants:
+                        type: array
+                        description: Product variants
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            description:
+                              type: string
+                              nullable: true
+                            attachments:
+                              type: array
+                              description: Variant-specific attachments
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                    description: Unique identifier for the attachment
+                                  name:
+                                    type: string
+                                    description: Filename of the attachment
+                                  type:
+                                    type: string
+                                    description: MIME type of the attachment
+                                  size:
+                                    type: integer
+                                    description: File size in bytes
+                                  full_url:
+                                    type: string
+                                    description: Full resolution URL of the attachment
+                                  thumb_url:
+                                    type: string
+                                    description: Thumbnail URL of the attachment (if applicable)
+                                required:
+                                  - id
+                                  - name
+                                  - type
+                                  - size
+                                  - full_url
+                            retail_price:
+                              type: number
+                              format: float
+                            wholesale_price:
+                              type: number
+                              format: float
+                            custom_fields:
+                              type: array
+                              items:
+                                type: object
+                            variant_attributes:
+                              type: object
+                              additionalProperties:
+                                type: string
+                            sku:
+                              type: string
+                            upc:
+                              type: string
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+                      variant_attributes:
+                        type: object
+                        nullable: true
+                        description: Available variant attributes
+                      sku:
+                        type: string
+                        description: Internal SKU
+                      alternate_skus:
+                        type: array
+                        description: Alternate SKUs
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            sku:
+                              type: string
+                      upc:
+                        type: string
+                        description: UPC/Barcode
+                      tags:
+                        type: array
+                        description: Tags associated with the product
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the tag
+                            name:
+                              type: string
+                              description: Name of the tag
+                            description:
+                              type: string
+                              nullable: true
+                              description: Description of the tag
+                            icon:
+                              type: string
+                              nullable: true
+                              description: Icon identifier or URL for the tag
+                            color:
+                              type: string
+                              nullable: true
+                              description: Color code for the tag
+                          required:
+                            - id
+                            - name
+                      supplier:
+                        type: object
+                        nullable: true
+                        description: Supplier information
+                      created_at:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the product was created
+                      updated_at:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the product was last updated
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '409':
+          description: Conflict - SKU already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+    delete:
+      operationId: deleteProduct
+      tags:
+        - Products
+      summary: Delete product
+      description: Delete a product by ID. An error will be thrown if the item is part of a kit or BOM
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: integer
+          description: Product ID
+      responses:
+        '200':
+          description: Product successfully deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Product deleted
+        '400':
+          description: Error deleting product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         '401':
           description: Unauthorized
           content:
@@ -5628,7 +7217,7 @@ paths:
       summary: Replace all tags on a record
       description: |
         Replace all existing tags on a record with a new set of tags.
-        Supported record types: `sales-orders`,`invoices`
+        Supported record types: `sales-orders`,`invoices`,`products`
       security:
         - BearerAuth: []
       parameters:
@@ -5640,6 +7229,7 @@ paths:
             enum:
               - sales-orders
               - invoices
+              - products
           description: Type of record to replace tags on
         - in: path
           name: recordId
@@ -5715,7 +7305,7 @@ paths:
       summary: Detach a tag from a record
       description: |
         Remove a specific tag from a record.
-        Supported record types: `sales-orders`,`invoices`
+        Supported record types: `sales-orders`,`invoices`, `products`
       security:
         - BearerAuth: []
       parameters:
@@ -5727,6 +7317,7 @@ paths:
             enum:
               - sales-orders
               - invoices
+              - products
           description: Type of record to detach tag from
         - in: path
           name: recordId
@@ -5762,7 +7353,7 @@ paths:
       summary: Get custom field values
       description: |
         Retrieve all custom field values for a specific record.
-        Supported record types: `sales-orders`,`sales-order-items`,`invoices`
+        Supported record types: `sales-orders`,`sales-order-items`,`invoices`,`products`
 
         Custom fields must be set up in Luminous before they can be updated or retrieved. 
         Log into your Luminous account, then 
@@ -5779,6 +7370,7 @@ paths:
               - sales-orders
               - sales-order-items
               - invoices
+              - products
           description: Type of record to get custom fields for
         - in: path
           name: recordId
@@ -5818,7 +7410,7 @@ paths:
       summary: Update custom field values
       description: |
         Update custom field values for a specific record.
-        Supported record types: `sales-orders`,`sales-order-items`,`invoices`
+        Supported record types: `sales-orders`,`sales-order-items`,`invoices`,`products`
         Values must match the field type (string, number, date, or dropdown).
 
         Custom fields must be set up in Luminous before they can be updated or retrieved. Log into your Luminous account, then 
@@ -5835,6 +7427,7 @@ paths:
               - sales-orders
               - sales-order-items
               - invoices
+              - products
           description: Type of record to update custom fields for
         - in: path
           name: recordId

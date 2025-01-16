@@ -18,6 +18,33 @@ properties:
     type: number
     format: float
     description: Wholesale price
+  unit_cost:
+    type: number
+    format: float
+    description: Cost per unit
+  product_weight:
+    type: number
+    format: float
+    description: Weight of the product
+  product_length:
+    type: number
+    format: float
+    description: Length of the product
+  product_width:
+    type: number
+    format: float
+    description: Width of the product
+  product_height:
+    type: number
+    format: float
+    description: Height of the product
+  sellable:
+    type: boolean
+    description: Whether the product can be sold
+  image_url:
+    type: string
+    nullable: true
+    description: URL to the product's main image
   category:
     type: object
     nullable: true

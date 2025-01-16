@@ -4,16 +4,7 @@ get:
     - Products
   summary: Single product
   description: |
-    Get detailed information about a specific product by its ID.
-    
-    Returns the product with all its relationships including:
-    - Category and subcategory
-    - Images
-    - Preferred vendor
-    - Tags
-    - Variant SKUs with custom fields and RFQ attachments
-    - Alternate SKUs
-    - Custom field values
+    Get detailed information about a specific product by its ID
   security:
     - BearerAuth: []
   parameters:
@@ -32,7 +23,7 @@ get:
             type: object
             properties:
               data:
-                $ref: './components/product-full.yaml'
+                $ref: './components/product.yaml'
     '401':
       description: Unauthorized
       content:
@@ -41,6 +32,92 @@ get:
             $ref: './components/error.yaml'
     '404':
       description: Product not found
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+post:
+  operationId: updateProductById
+  tags:
+    - Products
+  summary: Update a product
+  description: Update a specific product's information
+  security:
+    - BearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: './components/product-update.yaml'
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/product.yaml'
+    '409':
+      description: Conflict - SKU already exists
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '422':
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: './components/validation-error.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+delete:
+  operationId: deleteProduct
+  tags:
+    - Products
+  summary: Delete product
+  description: Delete a product by ID. An error will be thrown if the item is part of a kit or BOM
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: productId
+      required: true
+      schema:
+        type: integer
+      description: Product ID
+  responses:
+    '200':
+      description: Product successfully deleted
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Product deleted"
+    '400':
+      description: Error deleting product
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '404':
+      description: Product not found
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '401':
+      description: Unauthorized
       content:
         application/json:
           schema:

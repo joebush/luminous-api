@@ -22,6 +22,9 @@ get:
     - `retail_price`: Product retail price
     - `wholesale_price`: Product wholesale price
     
+    ### Boolean Filters
+    - `sellable`: If product is sellable or not
+    
     ### DateTime Filters
     - `created_at`: When the product was created
     - `updated_at`: When the product was last updated
@@ -61,13 +64,11 @@ get:
       schema:
         type: string
       description: Filter by name OR upc OR sku
-      example: "ABCD-1234"
     - in: query
       name: name
       schema:
         type: string
       description: Filter by product name
-      example: "Test Product"
     - in: query
       name: description
       schema:
@@ -78,39 +79,40 @@ get:
       schema:
         type: string
       description: Filter by SKU (searches both internal and alternate SKUs)
-      example: "SKU-001"
     - in: query
       name: upc
       schema:
         type: string
       description: Filter by UPC/Barcode
-      example: "123456789012"
+    - in: query
+      name: sellable
+      schema:
+        type: boolean
+      description: Filter by sellable status
     - in: query
       name: retail_price
       schema:
         type: number
         format: float
       description: Filter by retail price
-      example: 99.99
     - in: query
       name: wholesale_price
       schema:
         type: number
         format: float
       description: Filter by wholesale price
-      example: 45.00
     - in: query
       name: created_at
       schema:
         type: string
         format: date-time
-      description: Filter by creation date (YYYY-MM-DD HH:mm:ss)
+      description: Filter by creation date
     - in: query
       name: updated_at
       schema:
         type: string
         format: date-time
-      description: Filter by last update date (YYYY-MM-DD HH:mm:ss)
+      description: Filter by last update date
     - in: query
       name: tag
       schema:
@@ -130,6 +132,97 @@ get:
                   $ref: './components/product.yaml'
               meta:
                 $ref: './components/pagination-meta.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+
+post:
+  operationId: createProduct
+  tags:
+    - Products
+  summary: Create a product
+  description: Create a new product with optional variants, custom fields, and tags
+  security:
+    - BearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: './components/product-create.yaml'
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/product.yaml'
+    '409':
+      description: Conflict - SKU already exists
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '422':
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: './components/validation-error.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+patch:
+  operationId: createOrUpdateProduct
+  tags:
+    - Products
+  summary: Create or update product
+  description: Create a new product or update an existing one by SKU or ID
+  security:
+    - BearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: './components/product-update.yaml'
+            - type: object
+              properties:
+                id:
+                  type: integer
+                  description: Product ID (required if SKU not provided)
+                sku:
+                  type: string
+                  description: Product SKU (required if ID not provided)
+              oneOf:
+                - required: [id]
+                - required: [sku]
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/product.yaml'
+    '422':
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: './components/validation-error.yaml'
     '401':
       description: Unauthorized
       content:

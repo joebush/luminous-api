@@ -108,7 +108,7 @@ put:
   summary: Replace all tags on a record
   description: |
     Replace all existing tags on a record with a new set of tags.
-    Supported record types: `sales-orders`,`invoices`
+    Supported record types: `sales-orders`,`invoices`,`products`
   security:
     - BearerAuth: []
   parameters:
@@ -120,6 +120,7 @@ put:
         enum:
           - sales-orders
           - invoices
+          - products
       description: Type of record to replace tags on
     - in: path
       name: recordId
