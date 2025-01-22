@@ -41,6 +41,9 @@ properties:
   sellable:
     type: boolean
     description: Whether the product can be sold
+  discontinued:
+    type: boolean
+    description: Whether the product is discontinued. Discontinued products will be hidden in the Luminous UI by default.
   image_url:
     type: string
     nullable: true

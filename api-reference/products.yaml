@@ -23,7 +23,8 @@ get:
     - `wholesale_price`: Product wholesale price
     
     ### Boolean Filters
-    - `sellable`: If product is sellable or not
+    - `sellable`: If the product is sellable or not
+    - `discontinued`: If the product is discontinued
     
     ### DateTime Filters
     - `created_at`: When the product was created
@@ -89,6 +90,11 @@ get:
       schema:
         type: boolean
       description: Filter by sellable status
+    - in: query
+      name: discontinued
+      schema:
+        type: boolean
+      description: Filter by whether the product is discontinued
     - in: query
       name: retail_price
       schema:

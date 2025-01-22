@@ -7,6 +7,14 @@ properties:
   category_id:
     type: integer
     description: ID of the product category
+  category:
+    type: object
+    nullable: true
+    properties:
+      name:
+        type: string
+        description: Name of the product category. If the category is not found in Luminous, it will be created.
+    description: Product category information
   sku:
     type: string
     maxLength: 100
@@ -27,6 +35,14 @@ properties:
     type: integer
     nullable: true
     description: ID of the preferred supplier
+  supplier:
+    type: object
+    nullable: true
+    properties:
+      name:
+        type: string
+        description: Name of the preferred supplier. If the supplier is not found in Luminous, it will be created.
+    description: Product preferred supplier information
   image_url:
     type: string
     maxLength: 255
@@ -44,6 +60,14 @@ properties:
     type: integer
     nullable: true
     description: ID of the product subcategory
+  subcategory:
+    type: object
+    nullable: true
+    properties:
+      name:
+        type: string
+        description: Name of the product sub-category. If the sub-category is not found in Luminous, it will be created.
+    description: Product sub-category information
   default_receiving_location_id:
     type: integer
     nullable: true
@@ -148,10 +172,22 @@ properties:
           type: integer
           nullable: true
           description: ID of the variant's preferred supplier
+        supplier:
+          type: object
+          nullable: true
+          properties:
+            name:
+              type: string
+              description: Name of the preferred supplier. If the supplier is not found in Luminous, it will be created.
+          description: Product preferred supplier information
         sellable:
           type: boolean
           nullable: true
           description: Whether the variant can be sold
+        discontinued:
+          type: boolean
+          nullable: true
+          description: If an item is discontinued it will be hidden by default in the Luminous UI
         default_receiving_location_id:
           type: integer
           nullable: true
