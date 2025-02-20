@@ -1,0 +1,75 @@
+get:
+  operationId: getLocations
+  tags:
+    - Locations
+  summary: Locations
+  description: |
+    Get a paginated list of locations with optional filtering.
+    
+    For detailed information about the filtering system and available operators, 
+    refer to the [Filter System Documentation](/filters).
+
+    ## Available Filters
+    ### String Filters
+    - `name`: Location name
+    
+    ### Boolean Filters
+    - `is_pick_location`: Filter pick locations
+
+    ## Examples
+    ```
+    # Find locations by name
+    ?name[contains]=Aisle
+
+    # Find pick locations
+    ?is_pick_location[eq]=true
+
+    # Paginate results
+    ?per_page=5&page=2
+    ```
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: query
+      name: page
+      schema:
+        type: integer
+        default: 1
+      description: Page number for pagination
+    - in: query
+      name: per_page
+      schema:
+        type: integer
+        default: 10
+        maximum: 100
+      description: Number of items per page (max 100)
+    - in: query
+      name: name
+      schema:
+        type: string
+      description: Filter by location name
+    - in: query
+      name: is_pick_location
+      schema:
+        type: boolean
+      description: Filter by pick location status
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/location.yaml'
+              meta:
+                $ref: './components/pagination-meta.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'

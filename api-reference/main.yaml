@@ -55,8 +55,18 @@ paths:
     $ref: './tag.yaml'
   /{recordType}/{recordId}/custom-fields:
     $ref: './custom-fields.yaml'
+  /warehouses:
+    $ref: './warehouses.yaml'
+  /warehouses/{warehouseId}:
+    $ref: './warehouse.yaml'
+  /locations:
+    $ref: './locations.yaml'
+  /locations/{locationId}:
+    $ref: './location.yaml'
 
 tags:
+  - name: Locations
+    description: Manage warehouses and locations
   - name: Products
     description: Get and manage products
   - name: Purchase Orders

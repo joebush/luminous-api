@@ -1,0 +1,64 @@
+get:
+  operationId: getWarehouses
+  tags:
+    - Locations
+  summary: Warehouses
+  description: |
+    Get a paginated list of warehouses with optional filtering.
+    
+    For detailed information about the filtering system and available operators, 
+    refer to the [Filter System Documentation](/filters).
+
+    ## Available Filters
+    ### String Filters
+    - `name`: Warehouse name
+
+    ## Examples
+    ```
+    # Find warehouses by name
+    ?name[contains]=Main
+
+    # Paginate results
+    ?per_page=5&page=2
+    ```
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: query
+      name: page
+      schema:
+        type: integer
+        default: 1
+      description: Page number for pagination
+    - in: query
+      name: per_page
+      schema:
+        type: integer
+        default: 10
+        maximum: 100
+      description: Number of items per page (max 100)
+    - in: query
+      name: name
+      schema:
+        type: string
+      description: Filter by warehouse name
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/location.yaml'
+              meta:
+                $ref: './components/pagination-meta.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'

@@ -7608,7 +7608,332 @@ paths:
                 properties:
                   message:
                     type: string
+  /warehouses:
+    get:
+      operationId: getWarehouses
+      tags:
+        - Locations
+      summary: Warehouses
+      description: |
+        Get a paginated list of warehouses with optional filtering.
+
+        For detailed information about the filtering system and available operators, 
+        refer to the [Filter System Documentation](/filters).
+
+        ## Available Filters
+        ### String Filters
+        - `name`: Warehouse name
+
+        ## Examples
+        ```
+        # Find warehouses by name
+        ?name[contains]=Main
+
+        # Paginate results
+        ?per_page=5&page=2
+        ```
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+          description: Number of items per page (max 100)
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: Filter by warehouse name
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        status:
+                          type: string
+                        name:
+                          type: string
+                        parent_id:
+                          type: integer
+                          nullable: true
+                        created_at:
+                          type: string
+                          format: date-time
+                        updated_at:
+                          type: string
+                          format: date-time
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                      from:
+                        type: integer
+                      last_page:
+                        type: integer
+                      path:
+                        type: string
+                      per_page:
+                        type: integer
+                      to:
+                        type: integer
+                      total:
+                        type: integer
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  '/warehouses/{warehouseId}':
+    get:
+      operationId: getWarehouseById
+      tags:
+        - Locations
+      summary: Get warehouse by ID
+      description: Retrieve a specific warehouse by its ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: warehouseId
+          required: true
+          schema:
+            type: integer
+          description: Warehouse ID
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  status:
+                    type: string
+                  name:
+                    type: string
+                  parent_id:
+                    type: integer
+                    nullable: true
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Warehouse not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /locations:
+    get:
+      operationId: getLocations
+      tags:
+        - Locations
+      summary: Locations
+      description: |
+        Get a paginated list of locations with optional filtering.
+
+        For detailed information about the filtering system and available operators, 
+        refer to the [Filter System Documentation](/filters).
+
+        ## Available Filters
+        ### String Filters
+        - `name`: Location name
+
+        ### Boolean Filters
+        - `is_pick_location`: Filter pick locations
+
+        ## Examples
+        ```
+        # Find locations by name
+        ?name[contains]=Aisle
+
+        # Find pick locations
+        ?is_pick_location[eq]=true
+
+        # Paginate results
+        ?per_page=5&page=2
+        ```
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+          description: Number of items per page (max 100)
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: Filter by location name
+        - in: query
+          name: is_pick_location
+          schema:
+            type: boolean
+          description: Filter by pick location status
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        status:
+                          type: string
+                        name:
+                          type: string
+                        parent_id:
+                          type: integer
+                          nullable: true
+                        created_at:
+                          type: string
+                          format: date-time
+                        updated_at:
+                          type: string
+                          format: date-time
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                      from:
+                        type: integer
+                      last_page:
+                        type: integer
+                      path:
+                        type: string
+                      per_page:
+                        type: integer
+                      to:
+                        type: integer
+                      total:
+                        type: integer
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  '/locations/{locationId}':
+    get:
+      operationId: getLocationById
+      tags:
+        - Locations
+      summary: Get location by ID
+      description: Retrieve a specific location by its ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: locationId
+          required: true
+          schema:
+            type: integer
+          description: Location ID
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  status:
+                    type: string
+                  name:
+                    type: string
+                  parent_id:
+                    type: integer
+                    nullable: true
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Location not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
 tags:
+  - name: Locations
+    description: Manage warehouses and locations
   - name: Products
     description: Get and manage products
   - name: Purchase Orders
