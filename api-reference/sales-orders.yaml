@@ -45,6 +45,7 @@ get:
     - `item.supplier.name`: Filter by line item product supplier name
     
     #### Integer Filters
+    - `item.id`: Filter by line item product ID
     - `item.category.id`: Filter by line item product category ID
     - `item.sub_category.id`: Filter by line item product sub-category ID
     - `item.supplier.id`: Filter by line item product supplier ID
@@ -206,6 +207,11 @@ get:
       description: Filter by line item product supplier name
 
     # Item Filters - Integer
+    - in: query
+      name: item.id
+      schema:
+        type: string
+      description: Filter by line item product ID
     - in: query
       name: item.category.id
       schema:

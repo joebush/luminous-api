@@ -166,6 +166,11 @@ properties:
     description: Dynamic custom fields with key-value pairs
     additionalProperties:
       type: string
+  items:
+    type: array
+    items:
+      $ref: './sales-order-item.yaml'
+    description: Line items in the order
   tags:
     type: array
     items:
