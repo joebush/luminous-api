@@ -32,6 +32,31 @@ get:
     - `total_tax`: Tax amount
     - `total_paid`: Amount paid
     
+    ### Item Filters
+    Item filters allow you to filter all sales orders that contain a specific product or set of products.
+    #### String Filters
+    - `item.name`: Filter by line item product name
+    - `item.description`: Filter by line item product description
+    - `item.sku`: Filter by line item product SKU (searches both internal SKU and alternate SKUs)
+    - `item.upc`: Filter by line item product UPC/Barcode
+    - `item.tag`: Filter by line item product tags
+    - `item.category.name`: Filter by line item product category name
+    - `item.sub_category.name`: Filter by line item product sub-category name
+    - `item.supplier.name`: Filter by line item product supplier name
+    
+    #### Integer Filters
+    - `item.category.id`: Filter by line item product category ID
+    - `item.sub_category.id`: Filter by line item product sub-category ID
+    - `item.supplier.id`: Filter by line item product supplier ID
+    
+    #### Float Filters
+    - `item.retail_price`: Filter by line item product retail price
+    - `item.wholesale_price`: Filter by line item product wholesale price
+    
+    #### Boolean Filters
+    - `item.sellable`: Filter by line item product sellable status
+    - `item.discontinued`: Filter by whether the line item product is discontinued
+    
     ## Examples
     ```
     # Find orders over $500 created this year
@@ -42,6 +67,15 @@ get:
 
     # Find orders with specific shipping costs
     ?total_shipping[gte]=10.00&total_shipping[lte]=50.00
+    
+    # Find orders containing a specific product SKU
+    ?item.sku[eq]=SKU-123
+    
+    # Find orders with discontinued products
+    ?item.discontinued[eq]=true
+    
+    # Find orders with products from a specific supplier
+    ?item.supplier.name[contains]=Acme
     ```
   security:
     - BearerAuth: []
@@ -128,6 +162,91 @@ get:
       schema:
         type: string
       description: Filter by tags
+
+    # Item Filters - String
+    - in: query
+      name: item.name
+      schema:
+        type: string
+      description: Filter by line item product name
+    - in: query
+      name: item.description
+      schema:
+        type: string
+      description: Filter by line item product description
+    - in: query
+      name: item.sku
+      schema:
+        type: string
+      description: Filter by line item product SKU (searches both internal and alternate SKUs)
+    - in: query
+      name: item.upc
+      schema:
+        type: string
+      description: Filter by line item product UPC/Barcode
+    - in: query
+      name: item.tag
+      schema:
+        type: string
+      description: Filter by line item product tags
+    - in: query
+      name: item.category.name
+      schema:
+        type: string
+      description: Filter by line item product category name
+    - in: query
+      name: item.sub_category.name
+      schema:
+        type: string
+      description: Filter by line item product sub-category name
+    - in: query
+      name: item.supplier.name
+      schema:
+        type: string
+      description: Filter by line item product supplier name
+
+    # Item Filters - Integer
+    - in: query
+      name: item.category.id
+      schema:
+        type: integer
+      description: Filter by line item product category ID
+    - in: query
+      name: item.sub_category.id
+      schema:
+        type: integer
+      description: Filter by line item product sub-category ID
+    - in: query
+      name: item.supplier.id
+      schema:
+        type: integer
+      description: Filter by line item product supplier ID
+
+    # Item Filters - Float
+    - in: query
+      name: item.retail_price
+      schema:
+        type: number
+        format: float
+      description: Filter by line item product retail price
+    - in: query
+      name: item.wholesale_price
+      schema:
+        type: number
+        format: float
+      description: Filter by line item product wholesale price
+
+    # Item Filters - Boolean
+    - in: query
+      name: item.sellable
+      schema:
+        type: boolean
+      description: Filter by line item product sellable status
+    - in: query
+      name: item.discontinued
+      schema:
+        type: boolean
+      description: Filter by whether the line item product is discontinued
   responses:
     '200':
       description: Successful response

@@ -17,6 +17,14 @@ get:
     - `upc`: Product UPC/Barcode
     - `tag`: Product tags
     - `q`: General search matches name OR upc OR sku
+    - `category.name`: Filter by category name
+    - `sub_category.name`: Filter by sub-category name
+    - `supplier.name`: Filter by supplier name
+    
+    ### Integer Filters
+    - `category.id`: Filter by category ID
+    - `sub_category.id`: Filter by sub-category ID
+    - `supplier.id`: Filter by supplier ID
     
     ### Float Filters
     - `retail_price`: Product retail price
@@ -43,6 +51,12 @@ get:
 
     # Search products by name
     ?name[contains]=Test Product
+    
+    # Find products by category and sub-category
+    ?category.name[eq]=Electronics&sub_category.name[eq]=Smartphones
+    
+    # Find products by supplier
+    ?supplier.name[contains]=Acme
     ```
   security:
     - BearerAuth: []
@@ -124,6 +138,36 @@ get:
       schema:
         type: string
       description: Filter by product tags
+    - in: query
+      name: category.id
+      schema:
+        type: integer
+      description: Filter by category ID
+    - in: query
+      name: category.name
+      schema:
+        type: string
+      description: Filter by category name
+    - in: query
+      name: sub_category.id
+      schema:
+        type: integer
+      description: Filter by sub-category ID
+    - in: query
+      name: sub_category.name
+      schema:
+        type: string
+      description: Filter by sub-category name
+    - in: query
+      name: supplier.id
+      schema:
+        type: integer
+      description: Filter by supplier ID
+    - in: query
+      name: supplier.name
+      schema:
+        type: string
+      description: Filter by supplier name
   responses:
     '200':
       description: Successful response
