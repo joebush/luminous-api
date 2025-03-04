@@ -6,7 +6,7 @@ get:
   summary: Get tags for a record
   description: |
     Retrieve all tags associated with a specific record.
-    Supported record types: `sales-orders`,`sales-order-items`,`invoices`
+    Supported record types: `sales-orders`,`sales-order-items`,`invoices`,`products`
   security:
     - BearerAuth: []
   parameters:
@@ -19,6 +19,7 @@ get:
           - sales-orders
           - sales-order-items
           - invoices
+          - products
       description: Type of record to get tags for
     - in: path
       name: recordId
@@ -52,7 +53,7 @@ post:
   summary: Attach tags to a record
   description: |
     Attach one or more tags to a specific record.
-    Supported record types: `sales-orders`,`sales-order-items`,`invoices`
+    Supported record types: `sales-orders`,`sales-order-items`,`invoices`,`products`
   security:
     - BearerAuth: []
   parameters:
@@ -65,6 +66,7 @@ post:
           - sales-orders
           - sales-order-items
           - invoices
+          - products
       description: Type of record to attach tags to
     - in: path
       name: recordId

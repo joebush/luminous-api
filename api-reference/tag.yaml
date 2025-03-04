@@ -5,7 +5,7 @@ delete:
   summary: Detach a tag from a record
   description: |
     Remove a specific tag from a record.
-    Supported record types: `sales-orders`,`invoices`, `products`
+    Supported record types: `sales-orders`,`sales-order-items`,`invoices`,`products`
   security:
     - BearerAuth: [ ]
   parameters:
@@ -16,6 +16,7 @@ delete:
         type: string
         enum:
           - sales-orders
+          - sales-order-items
           - invoices
           - products
       description: Type of record to detach tag from
