@@ -32,6 +32,9 @@ get:
     - `total_tax`: Tax amount
     - `total_paid`: Amount paid
     
+    ### Line Item Filters
+    - `item.tag`: Filter by sales orders containing line items with a specific tag
+    
     ### Line Item Product Filters
     Product filters allow you to filter by sales orders with line items connected to a specific product or set of products.
     #### String Filters
@@ -77,6 +80,9 @@ get:
     
     # Find orders with products from a specific supplier
     ?product.supplier.name[contains]=Acme
+    
+    # Find a sales order containing a line item with a specific tag
+    ?item.tag[eq]=urgent
     ```
   security:
     - BearerAuth: []
@@ -163,6 +169,13 @@ get:
       schema:
         type: string
       description: Filter by tags
+
+    # Line Item Filters
+    - in: query
+      name: item.tag
+      schema:
+        type: string
+      description: Filter by sales orders containing line items with specific tags
 
     # Product Filters - String
     - in: query

@@ -116,3 +116,8 @@ properties:
     description: Dynamic custom fields with key-value pairs
     additionalProperties:
       type: string
+  tags:
+    type: array
+    items:
+      $ref: './product-tag.yaml'
+    description: Tags associated with the sales order item

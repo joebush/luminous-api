@@ -4909,6 +4909,9 @@ paths:
         - `total_tax`: Tax amount
         - `total_paid`: Amount paid
 
+        ### Line Item Filters
+        - `item.tag`: Filter by sales orders containing line items with a specific tag
+
         ### Line Item Product Filters
         Product filters allow you to filter by sales orders with line items connected to a specific product or set of products.
         #### String Filters
@@ -4954,6 +4957,9 @@ paths:
 
         # Find orders with products from a specific supplier
         ?product.supplier.name[contains]=Acme
+
+        # Find a sales order containing a line item with a specific tag
+        ?item.tag[eq]=urgent
         ```
       security:
         - BearerAuth: []
@@ -5035,6 +5041,11 @@ paths:
           schema:
             type: string
           description: Filter by tags
+        - in: query
+          name: item.tag
+          schema:
+            type: string
+          description: Filter by sales orders containing line items with specific tags
         - in: query
           name: product.name
           schema:
@@ -5415,6 +5426,26 @@ paths:
                                 description: Dynamic custom fields with key-value pairs
                                 additionalProperties:
                                   type: string
+                              tags:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: integer
+                                    name:
+                                      type: string
+                                    description:
+                                      type: string
+                                    icon:
+                                      type: string
+                                    color:
+                                      type: string
+                                    discount_structure:
+                                      type: object
+                                    markup_structure:
+                                      type: object
+                                description: Tags associated with the sales order item
                           description: Line items in the order
                         tags:
                           type: array
@@ -5769,6 +5800,26 @@ paths:
                               description: Dynamic custom fields with key-value pairs
                               additionalProperties:
                                 type: string
+                            tags:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                  name:
+                                    type: string
+                                  description:
+                                    type: string
+                                  icon:
+                                    type: string
+                                  color:
+                                    type: string
+                                  discount_structure:
+                                    type: object
+                                  markup_structure:
+                                    type: object
+                              description: Tags associated with the sales order item
                         description: Line items in the order
                       tags:
                         type: array
@@ -7500,7 +7551,7 @@ paths:
       summary: Get tags for a record
       description: |
         Retrieve all tags associated with a specific record.
-        Supported record types: `sales-orders`,`invoices`
+        Supported record types: `sales-orders`,`sales-order-items`,`invoices`
       security:
         - BearerAuth: []
       parameters:
@@ -7511,6 +7562,7 @@ paths:
             type: string
             enum:
               - sales-orders
+              - sales-order-items
               - invoices
           description: Type of record to get tags for
         - in: path
@@ -7569,7 +7621,7 @@ paths:
       summary: Attach tags to a record
       description: |
         Attach one or more tags to a specific record.
-        Supported record types: `sales-orders`,`invoices`
+        Supported record types: `sales-orders`,`sales-order-items`,`invoices`
       security:
         - BearerAuth: []
       parameters:
@@ -7580,6 +7632,7 @@ paths:
             type: string
             enum:
               - sales-orders
+              - sales-order-items
               - invoices
           description: Type of record to attach tags to
         - in: path
@@ -7628,7 +7681,7 @@ paths:
       summary: Replace all tags on a record
       description: |
         Replace all existing tags on a record with a new set of tags.
-        Supported record types: `sales-orders`,`invoices`,`products`
+        Supported record types: `sales-orders`,`sales-order-items`,`invoices`,`products`
       security:
         - BearerAuth: []
       parameters:
@@ -7639,6 +7692,7 @@ paths:
             type: string
             enum:
               - sales-orders
+              - sales-order-items
               - invoices
               - products
           description: Type of record to replace tags on
