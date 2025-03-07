@@ -54,6 +54,9 @@ get:
     
     # Find invoices by custom fields
     ?custom_fields.My Custom Field[eq]=Some value
+    
+    # Find invoices where a specific custom field is empty
+    ?custom_fields.My Custom Field[notset]
     ```
   security:
     - BearerAuth: []

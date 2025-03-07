@@ -14,6 +14,8 @@ or compare numeric values, these filtering capabilities help you build efficient
 
 ## Available Operators
 
+By default, if no operator is specified, the `eq` operator is used. `field[eq]=value` is equivalent to `field=value`.
+
 Fields can be filtered using operators in square brackets: `field[operator]=value`
 
   - `eq`: Equals (default if no operator specified)
@@ -22,6 +24,8 @@ Fields can be filtered using operators in square brackets: `field[operator]=valu
   - `gte`: Greater than or equal
   - `lt`: Less than
   - `lte`: Less than or equal
+  - `set`: Is set (is not null and not an empty string)
+  - `notset`: Is not set (null or empty string)
   - `contains`: Contains string (case-sensitive)
   - `notcontains`: Does not contain string (case-sensitive)
   - `in`: In array (comma-separated values)
@@ -30,7 +34,7 @@ Fields can be filtered using operators in square brackets: `field[operator]=valu
 ## Field Types and Operators
 
 ### String Fields
-Supported operators: eq, neq, contains, notcontains, in, notin
+Supported operators: eq, neq, contains, notcontains, in, notin, set, notset
   ```
   # Exact match
   ?field[eq]=value
@@ -40,10 +44,16 @@ Supported operators: eq, neq, contains, notcontains, in, notin
 
   # Multiple values, will match value1 OR value2
   ?field[in]=value1,value2
+
+  # Field is set (has some value in it)
+  ?field[set]
+
+  # Field is not set (no value, null or empty string)
+  ?field[notset]
   ```
 
 ### Date Fields
-Supported operators: eq, neq, gt, gte, lt, lte
+Supported operators: eq, neq, gt, gte, lt, lte, set, notset
 Format: YYYY-MM-DD
   ```
   # After specific date
@@ -54,7 +64,7 @@ Format: YYYY-MM-DD
   ```
 
 ### DateTime Fields
-Supported operators: eq, neq, gt, gte, lt, lte
+Supported operators: eq, neq, gt, gte, lt, lte, set, notset
 Format: YYYY-MM-DD HH:mm:ss
   ```
   # After specific time
@@ -65,7 +75,7 @@ Format: YYYY-MM-DD HH:mm:ss
   ```
 
 ### Numeric Fields
-Supported operators: eq, neq, gt, gte, lt, lte
+Supported operators: eq, neq, gt, gte, lt, lte, set, notset
   ```
   # Greater than
   ?field[gt]=100
