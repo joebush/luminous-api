@@ -114,6 +114,11 @@ properties:
     items:
       $ref: './invoice-payment.yaml'
     description: Payment records for the invoice
+  sales_order:
+    type: object
+    nullable: true
+    $ref: './invoice-sales-order.yaml'
+    description: Sales order associated with the invoice (if any)
   custom_fields:
     type: object
     description: Custom fields for the invoice

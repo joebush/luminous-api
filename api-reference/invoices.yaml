@@ -14,6 +14,7 @@ get:
 
     ### String Filters
     - `status`: Invoice status
+    - `sales_order.order_number`: Sales order number (if sales order attached)
     - `payment_status`: Payment status
     - `approval_status`: Approval status
     - `customer_po_number`: Customer PO number
@@ -80,6 +81,11 @@ get:
       schema:
         type: string
       description: Filter by invoice status
+    - in: query
+      name: sales_order.order_number
+      schema:
+        type: string
+      description: Filter by sales order number (if sales order is attached to invoice)
     - in: query
       name: payment_status
       schema:
