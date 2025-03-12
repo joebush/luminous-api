@@ -53,6 +53,10 @@ properties:
   ship_to:
     type: object
     description: Shipping information
+  requested_shipping_service:
+    type: string
+    nullable: true
+    description: What shipping service to use when shipping this order
   total:
     type: number
     format: float

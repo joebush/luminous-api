@@ -163,6 +163,11 @@ get:
       schema:
         type: number
       description: Filter by amount paid
+    - in: query
+      name: requested_shipping_service
+      schema:
+        type: string
+      description: Filter by requested shipping service
     # Tag Filter
     - in: query
       name: tag
