@@ -5037,6 +5037,11 @@ paths:
             type: number
           description: Filter by amount paid
         - in: query
+          name: requested_shipping_service
+          schema:
+            type: string
+          description: Filter by requested shipping service
+        - in: query
           name: tag
           schema:
             type: string
@@ -5194,6 +5199,10 @@ paths:
                         ship_to:
                           type: object
                           description: Shipping information
+                        requested_shipping_service:
+                          type: string
+                          nullable: true
+                          description: What shipping service to use when shipping this order
                         total:
                           type: number
                           format: float
@@ -5573,6 +5582,10 @@ paths:
                       ship_to:
                         type: object
                         description: Shipping information
+                      requested_shipping_service:
+                        type: string
+                        nullable: true
+                        description: What shipping service to use when shipping this order
                       total:
                         type: number
                         format: float
@@ -7214,6 +7227,10 @@ paths:
                             ship_to:
                               type: object
                               description: Shipping information
+                            requested_shipping_service:
+                              type: string
+                              nullable: true
+                              description: What shipping service to use when shipping this order
                             total:
                               type: number
                               format: float
@@ -7734,6 +7751,10 @@ paths:
                           ship_to:
                             type: object
                             description: Shipping information
+                          requested_shipping_service:
+                            type: string
+                            nullable: true
+                            description: What shipping service to use when shipping this order
                           total:
                             type: number
                             format: float
