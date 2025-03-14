@@ -2385,6 +2385,190 @@ paths:
                 properties:
                   message:
                     type: string
+  '/products/{productId}/pricing':
+    get:
+      operationId: getProductPricing
+      tags:
+        - Products
+        - Pricing
+      summary: Product Pricing
+      description: |
+        Retrieve comprehensive pricing information for a specific product, including base price, 
+        price levels, price schedules, and any specific overrides that might be applied.
+
+        This endpoint returns a more detailed pricing structure than the standard price endpoint,
+        showing how different price levels and schedules affect the product's final price.
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the product
+      responses:
+        '200':
+          description: Detailed pricing information for the product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  base_price:
+                    type: number
+                    format: float
+                    description: The base/retail price of the product
+                    example: 49.99
+                  price_levels:
+                    type: array
+                    description: Pricing at different price levels
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Price level ID
+                          example: '789'
+                        name:
+                          type: string
+                          description: Price level name
+                          example: Wholesale
+                        calculation_type:
+                          type: string
+                          enum:
+                            - percentage
+                            - fixed
+                          description: How the price is calculated
+                          example: percentage
+                        value:
+                          type: number
+                          format: float
+                          description: Discount percentage or fixed price value
+                          example: 15.5
+                        effective_price:
+                          type: number
+                          format: float
+                          description: Final calculated price at this level
+                          example: 42.24
+                  price_schedules:
+                    type: array
+                    description: Pricing affected by active price schedules
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Price schedule ID
+                          example: '456789'
+                        name:
+                          type: string
+                          description: Price schedule name
+                          example: Holiday Sale 2023
+                        calculation_type:
+                          type: string
+                          enum:
+                            - percentage
+                            - fixed
+                          description: How the price is calculated
+                          example: percentage
+                        value:
+                          type: number
+                          format: float
+                          description: Discount percentage or fixed price value
+                          example: 10
+                        effective_price:
+                          type: number
+                          format: float
+                          description: Final calculated price with this schedule
+                          example: 44.99
+                        start_date:
+                          type: string
+                          format: date
+                          description: When the schedule starts
+                          example: '2023-11-01'
+                        end_date:
+                          type: string
+                          format: date
+                          description: When the schedule ends
+                          example: '2023-12-31'
+                  company_specific_prices:
+                    type: array
+                    description: Company-specific price overrides
+                    items:
+                      type: object
+                      properties:
+                        company_id:
+                          type: string
+                          description: Company ID
+                          example: '123456'
+                        company_name:
+                          type: string
+                          description: Company name
+                          example: Acme Corporation
+                        override_type:
+                          type: string
+                          enum:
+                            - percentage
+                            - fixed
+                          description: Type of price override
+                          example: fixed
+                        value:
+                          type: number
+                          format: float
+                          description: Override value (either percentage or fixed price)
+                          example: 39.99
+                        effective_price:
+                          type: number
+                          format: float
+                          description: Final calculated price for this company
+                          example: 39.99
+        '401':
+          description: Authentication credentials were missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+                  message:
+                    type: string
+                    example: Authentication credentials are missing or invalid
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: You do not have permission to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Forbidden
+                  message:
+                    type: string
+                    example: You do not have permission to access this resource
+                  status_code:
+                    type: integer
+                    example: 403
+        '404':
+          description: The requested resource was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Not Found
+                  message:
+                    type: string
+                    example: The requested resource could not be found
+                  status_code:
+                    type: integer
+                    example: 404
   /purchase-orders:
     get:
       operationId: getPurchaseOrders
@@ -8630,6 +8814,2287 @@ paths:
                 properties:
                   message:
                     type: string
+  /companies:
+    get:
+      operationId: getCompanies
+      tags:
+        - Companies
+      summary: Companies
+      description: |
+        Get a paginated list of companies (business accounts) with optional filtering.
+
+        For detailed information about the filtering system and available operators, 
+        refer to the [Filter System Documentation](/filters).
+
+        ## Available Filters
+        ### String Filters
+        - `name`: Company name
+        - `external_id`: Company external ID
+        - `email`: Company email
+        - `phone`: Company phone number
+        - `tag`: Company tags
+        - `q`: General search matches name OR external_id
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Page number for pagination (starts at 1)
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+          description: Number of items per page (max 100)
+        - name: sort
+          in: query
+          schema:
+            type: string
+            default: 'id:desc'
+          description: |
+            Sort results by field and direction. Format: `field:direction`
+
+            Examples:
+            - `name:asc` - Sort by name in ascending order
+            - `created_at:desc` - Sort by creation date in descending order
+            - `id:asc` - Sort by ID in ascending order
+
+            Default is `id:desc` 
+        - name: filter
+          in: query
+          schema:
+            type: string
+          description: |
+            Filter results based on specific criteria. Supports various operators.
+
+            For detailed information about the filtering system and available operators, 
+            refer to the [Filter System Documentation](/filters).
+
+            Common filter operators:
+            - `eq`: Equal to
+            - `neq`: Not equal to
+            - `gt`: Greater than
+            - `gte`: Greater than or equal to
+            - `lt`: Less than
+            - `lte`: Less than or equal to
+            - `contains`: Contains string (case-insensitive)
+            - `starts_with`: Starts with string
+            - `ends_with`: Ends with string
+
+            Examples:
+            - `?name[contains]=test`
+            - `?created_at[gte]=2023-01-01`
+            - `?price[gt]=100` 
+      responses:
+        '200':
+          description: A list of companies
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Unique identifier for the company
+                          example: '123456'
+                        name:
+                          type: string
+                          description: Company name
+                          example: Acme Corporation
+                        external_id:
+                          type: string
+                          description: External identifier for the company
+                          example: ACME-123
+                        status:
+                          type: string
+                          description: Company status
+                          enum:
+                            - active
+                            - inactive
+                          example: active
+                        email:
+                          type: string
+                          format: email
+                          description: Primary email address for the company
+                          example: info@acmecorp.com
+                        phone:
+                          type: string
+                          description: Primary phone number for the company
+                          example: 555-123-4567
+                        fax:
+                          type: string
+                          description: Fax number for the company
+                          example: 555-123-9876
+                        website:
+                          type: string
+                          description: Company website
+                          example: 'https://www.acmecorp.com'
+                        billing_address:
+                          type: object
+                          properties:
+                            street1:
+                              type: string
+                              example: 123 Main St
+                            street2:
+                              type: string
+                              example: Suite 500
+                            city:
+                              type: string
+                              example: Austin
+                            state:
+                              type: string
+                              example: TX
+                            postal_code:
+                              type: string
+                              example: '78701'
+                            country:
+                              type: string
+                              example: USA
+                        shipping_address:
+                          type: object
+                          properties:
+                            street1:
+                              type: string
+                              example: 456 Warehouse Blvd
+                            street2:
+                              type: string
+                              example: Building 2
+                            city:
+                              type: string
+                              example: Austin
+                            state:
+                              type: string
+                              example: TX
+                            postal_code:
+                              type: string
+                              example: '78745'
+                            country:
+                              type: string
+                              example: USA
+                        price_level:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: '789'
+                            name:
+                              type: string
+                              example: Wholesale
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: When the company was created
+                          example: '2023-03-15T14:30:00Z'
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: When the company was last updated
+                          example: '2023-03-15T14:30:00Z'
+                        tags:
+                          type: array
+                          description: List of tags associated with the company
+                          items:
+                            type: string
+                          example:
+                            - wholesale
+                            - preferred
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        description: The current page number
+                        example: 1
+                      from:
+                        type: integer
+                        description: The starting index of the paginated results
+                        example: 1
+                      last_page:
+                        type: integer
+                        description: The last page number
+                        example: 5
+                      per_page:
+                        type: integer
+                        description: Number of items per page
+                        example: 10
+                      to:
+                        type: integer
+                        description: The ending index of the paginated results
+                        example: 10
+                      total:
+                        type: integer
+                        description: Total number of items across all pages
+                        example: 50
+                      links:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                              nullable: true
+                              example: 'https://api.example.com/companies?page=2'
+                            label:
+                              type: string
+                              example: '2'
+                            active:
+                              type: boolean
+                              example: false
+        '401':
+          description: Authentication credentials were missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+                  message:
+                    type: string
+                    example: Authentication credentials are missing or invalid
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: You do not have permission to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Forbidden
+                  message:
+                    type: string
+                    example: You do not have permission to access this resource
+                  status_code:
+                    type: integer
+                    example: 403
+  '/companies/{companyId}':
+    get:
+      operationId: getCompany
+      tags:
+        - Companies
+      summary: Company
+      description: Get detailed information for a specific company
+      parameters:
+        - name: companyId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the company
+      responses:
+        '200':
+          description: Company details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique identifier for the company
+                    example: '123456'
+                  name:
+                    type: string
+                    description: Company name
+                    example: Acme Corporation
+                  external_id:
+                    type: string
+                    description: External identifier for the company
+                    example: ACME-123
+                  status:
+                    type: string
+                    description: Company status
+                    enum:
+                      - active
+                      - inactive
+                    example: active
+                  email:
+                    type: string
+                    format: email
+                    description: Primary email address for the company
+                    example: info@acmecorp.com
+                  phone:
+                    type: string
+                    description: Primary phone number for the company
+                    example: 555-123-4567
+                  fax:
+                    type: string
+                    description: Fax number for the company
+                    example: 555-123-9876
+                  website:
+                    type: string
+                    description: Company website
+                    example: 'https://www.acmecorp.com'
+                  billing_address:
+                    type: object
+                    properties:
+                      street1:
+                        type: string
+                        example: 123 Main St
+                      street2:
+                        type: string
+                        example: Suite 500
+                      city:
+                        type: string
+                        example: Austin
+                      state:
+                        type: string
+                        example: TX
+                      postal_code:
+                        type: string
+                        example: '78701'
+                      country:
+                        type: string
+                        example: USA
+                  shipping_address:
+                    type: object
+                    properties:
+                      street1:
+                        type: string
+                        example: 456 Warehouse Blvd
+                      street2:
+                        type: string
+                        example: Building 2
+                      city:
+                        type: string
+                        example: Austin
+                      state:
+                        type: string
+                        example: TX
+                      postal_code:
+                        type: string
+                        example: '78745'
+                      country:
+                        type: string
+                        example: USA
+                  price_level:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: '789'
+                      name:
+                        type: string
+                        example: Wholesale
+                  created_at:
+                    type: string
+                    format: date-time
+                    description: When the company was created
+                    example: '2023-03-15T14:30:00Z'
+                  updated_at:
+                    type: string
+                    format: date-time
+                    description: When the company was last updated
+                    example: '2023-03-15T14:30:00Z'
+                  tags:
+                    type: array
+                    description: List of tags associated with the company
+                    items:
+                      type: string
+                    example:
+                      - wholesale
+                      - preferred
+        '401':
+          description: Authentication credentials were missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+                  message:
+                    type: string
+                    example: Authentication credentials are missing or invalid
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: You do not have permission to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Forbidden
+                  message:
+                    type: string
+                    example: You do not have permission to access this resource
+                  status_code:
+                    type: integer
+                    example: 403
+        '404':
+          description: The requested resource was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Not Found
+                  message:
+                    type: string
+                    example: The requested resource could not be found
+                  status_code:
+                    type: integer
+                    example: 404
+  '/companies/{companyId}/contacts':
+    get:
+      operationId: getCompanyContacts
+      tags:
+        - Companies
+        - Contacts
+      summary: Company Contacts
+      description: |
+        Get a paginated list of contacts associated with a specific company.
+
+        For detailed information about the filtering system and available operators, 
+        refer to the [Filter System Documentation](/filters).
+
+        ## Available Filters
+        ### String Filters
+        - `first_name`: Contact first name
+        - `last_name`: Contact last name
+        - `email`: Contact email
+        - `phone`: Contact phone number
+        - `q`: General search matches first_name OR last_name OR email
+      parameters:
+        - name: companyId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the company
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Page number for pagination (starts at 1)
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+          description: Number of items per page (max 100)
+        - name: sort
+          in: query
+          schema:
+            type: string
+            default: 'id:desc'
+          description: |
+            Sort results by field and direction. Format: `field:direction`
+
+            Examples:
+            - `name:asc` - Sort by name in ascending order
+            - `created_at:desc` - Sort by creation date in descending order
+            - `id:asc` - Sort by ID in ascending order
+
+            Default is `id:desc` 
+        - name: filter
+          in: query
+          schema:
+            type: string
+          description: |
+            Filter results based on specific criteria. Supports various operators.
+
+            For detailed information about the filtering system and available operators, 
+            refer to the [Filter System Documentation](/filters).
+
+            Common filter operators:
+            - `eq`: Equal to
+            - `neq`: Not equal to
+            - `gt`: Greater than
+            - `gte`: Greater than or equal to
+            - `lt`: Less than
+            - `lte`: Less than or equal to
+            - `contains`: Contains string (case-insensitive)
+            - `starts_with`: Starts with string
+            - `ends_with`: Ends with string
+
+            Examples:
+            - `?name[contains]=test`
+            - `?created_at[gte]=2023-01-01`
+            - `?price[gt]=100` 
+      responses:
+        '200':
+          description: A list of company contacts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Unique identifier for the contact
+                          example: '789123'
+                        company_id:
+                          type: string
+                          description: ID of the company this contact belongs to
+                          example: '123456'
+                        first_name:
+                          type: string
+                          description: Contact's first name
+                          example: John
+                        last_name:
+                          type: string
+                          description: Contact's last name
+                          example: Smith
+                        email:
+                          type: string
+                          format: email
+                          description: Contact's email address
+                          example: john.smith@acmecorp.com
+                        phone:
+                          type: string
+                          description: Contact's phone number
+                          example: 555-987-6543
+                        mobile:
+                          type: string
+                          description: Contact's mobile number
+                          example: 555-555-5555
+                        title:
+                          type: string
+                          description: Contact's job title
+                          example: Purchasing Manager
+                        is_primary:
+                          type: boolean
+                          description: Whether this is the primary contact for the company
+                          example: true
+                        address:
+                          type: object
+                          properties:
+                            street1:
+                              type: string
+                              example: 123 Main St
+                            street2:
+                              type: string
+                              example: Suite 500
+                            city:
+                              type: string
+                              example: Austin
+                            state:
+                              type: string
+                              example: TX
+                            postal_code:
+                              type: string
+                              example: '78701'
+                            country:
+                              type: string
+                              example: USA
+                        company:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: '123456'
+                            name:
+                              type: string
+                              example: Acme Corporation
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: When the contact was created
+                          example: '2023-03-15T14:30:00Z'
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: When the contact was last updated
+                          example: '2023-03-15T14:30:00Z'
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        description: The current page number
+                        example: 1
+                      from:
+                        type: integer
+                        description: The starting index of the paginated results
+                        example: 1
+                      last_page:
+                        type: integer
+                        description: The last page number
+                        example: 5
+                      per_page:
+                        type: integer
+                        description: Number of items per page
+                        example: 10
+                      to:
+                        type: integer
+                        description: The ending index of the paginated results
+                        example: 10
+                      total:
+                        type: integer
+                        description: Total number of items across all pages
+                        example: 50
+                      links:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                              nullable: true
+                              example: 'https://api.example.com/companies?page=2'
+                            label:
+                              type: string
+                              example: '2'
+                            active:
+                              type: boolean
+                              example: false
+        '401':
+          description: Authentication credentials were missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+                  message:
+                    type: string
+                    example: Authentication credentials are missing or invalid
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: You do not have permission to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Forbidden
+                  message:
+                    type: string
+                    example: You do not have permission to access this resource
+                  status_code:
+                    type: integer
+                    example: 403
+        '404':
+          description: The requested resource was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Not Found
+                  message:
+                    type: string
+                    example: The requested resource could not be found
+                  status_code:
+                    type: integer
+                    example: 404
+  '/companies/{companyId}/product-price-overrides':
+    get:
+      operationId: getCompanyProductPriceOverrides
+      tags:
+        - Companies
+        - Pricing
+      summary: Company Product Price Overrides
+      description: |
+        Get a list of price overrides for specific products associated with a company.
+
+        For detailed information about the filtering system and available operators, 
+        refer to the [Filter System Documentation](/filters).
+
+        ## Available Filters
+        ### String Filters
+        - `productCode`: Product code/SKU
+        - `product.name`: Product name
+      parameters:
+        - name: companyId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the company
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Page number for pagination (starts at 1)
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+          description: Number of items per page (max 100)
+        - name: sort
+          in: query
+          schema:
+            type: string
+            default: 'id:desc'
+          description: |
+            Sort results by field and direction. Format: `field:direction`
+
+            Examples:
+            - `name:asc` - Sort by name in ascending order
+            - `created_at:desc` - Sort by creation date in descending order
+            - `id:asc` - Sort by ID in ascending order
+
+            Default is `id:desc` 
+        - name: filter
+          in: query
+          schema:
+            type: string
+          description: |
+            Filter results based on specific criteria. Supports various operators.
+
+            For detailed information about the filtering system and available operators, 
+            refer to the [Filter System Documentation](/filters).
+
+            Common filter operators:
+            - `eq`: Equal to
+            - `neq`: Not equal to
+            - `gt`: Greater than
+            - `gte`: Greater than or equal to
+            - `lt`: Less than
+            - `lte`: Less than or equal to
+            - `contains`: Contains string (case-insensitive)
+            - `starts_with`: Starts with string
+            - `ends_with`: Ends with string
+
+            Examples:
+            - `?name[contains]=test`
+            - `?created_at[gte]=2023-01-01`
+            - `?price[gt]=100` 
+      responses:
+        '200':
+          description: A list of product price overrides for the company
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Unique identifier for the price override
+                          example: '987654'
+                        company_id:
+                          type: string
+                          description: ID of the company this price override applies to
+                          example: '123456'
+                        product_id:
+                          type: string
+                          description: ID of the product being overridden
+                          example: '567890'
+                        productCode:
+                          type: string
+                          description: SKU/Product code of the product
+                          example: WIDGET-123
+                        product_name:
+                          type: string
+                          description: Name of the product
+                          example: Deluxe Widget
+                        override_type:
+                          type: string
+                          description: Type of price override
+                          enum:
+                            - fixed
+                            - percentage
+                          example: fixed
+                        original_price:
+                          type: number
+                          format: float
+                          description: Original product price
+                          example: 49.99
+                        override_value:
+                          type: number
+                          format: float
+                          description: Amount to override by (fixed amount or percentage)
+                          example: 42.5
+                        effective_price:
+                          type: number
+                          format: float
+                          description: Calculated effective price after override
+                          example: 42.5
+                        company:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: '123456'
+                            name:
+                              type: string
+                              example: Acme Corporation
+                        product:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: '567890'
+                            name:
+                              type: string
+                              example: Deluxe Widget
+                            internal_sku:
+                              type: string
+                              example: WIDGET-123
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: When the price override was created
+                          example: '2023-03-15T14:30:00Z'
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: When the price override was last updated
+                          example: '2023-03-15T14:30:00Z'
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        description: The current page number
+                        example: 1
+                      from:
+                        type: integer
+                        description: The starting index of the paginated results
+                        example: 1
+                      last_page:
+                        type: integer
+                        description: The last page number
+                        example: 5
+                      per_page:
+                        type: integer
+                        description: Number of items per page
+                        example: 10
+                      to:
+                        type: integer
+                        description: The ending index of the paginated results
+                        example: 10
+                      total:
+                        type: integer
+                        description: Total number of items across all pages
+                        example: 50
+                      links:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                              nullable: true
+                              example: 'https://api.example.com/companies?page=2'
+                            label:
+                              type: string
+                              example: '2'
+                            active:
+                              type: boolean
+                              example: false
+        '401':
+          description: Authentication credentials were missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+                  message:
+                    type: string
+                    example: Authentication credentials are missing or invalid
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: You do not have permission to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Forbidden
+                  message:
+                    type: string
+                    example: You do not have permission to access this resource
+                  status_code:
+                    type: integer
+                    example: 403
+        '404':
+          description: The requested resource was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Not Found
+                  message:
+                    type: string
+                    example: The requested resource could not be found
+                  status_code:
+                    type: integer
+                    example: 404
+  '/companies/{companyId}/products':
+    get:
+      operationId: getCompanyProducts
+      tags:
+        - Companies
+        - Products
+      summary: Company Products
+      description: |
+        Get a paginated list of products associated with a specific company.
+
+        For detailed information about the filtering system and available operators, 
+        refer to the [Filter System Documentation](/filters).
+
+        ## Available Filters
+        ### String Filters
+        - `name`: Product name
+        - `sku`: Product SKU
+        - `upc`: Product UPC/Barcode
+        - `category.name`: Category name
+        - `q`: General search matches name OR sku OR upc
+
+        ### Integer Filters
+        - `category.id`: Filter by category ID
+      parameters:
+        - name: companyId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the company
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Page number for pagination (starts at 1)
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+          description: Number of items per page (max 100)
+        - name: sort
+          in: query
+          schema:
+            type: string
+            default: 'id:desc'
+          description: |
+            Sort results by field and direction. Format: `field:direction`
+
+            Examples:
+            - `name:asc` - Sort by name in ascending order
+            - `created_at:desc` - Sort by creation date in descending order
+            - `id:asc` - Sort by ID in ascending order
+
+            Default is `id:desc` 
+        - name: filter
+          in: query
+          schema:
+            type: string
+          description: |
+            Filter results based on specific criteria. Supports various operators.
+
+            For detailed information about the filtering system and available operators, 
+            refer to the [Filter System Documentation](/filters).
+
+            Common filter operators:
+            - `eq`: Equal to
+            - `neq`: Not equal to
+            - `gt`: Greater than
+            - `gte`: Greater than or equal to
+            - `lt`: Less than
+            - `lte`: Less than or equal to
+            - `contains`: Contains string (case-insensitive)
+            - `starts_with`: Starts with string
+            - `ends_with`: Ends with string
+
+            Examples:
+            - `?name[contains]=test`
+            - `?created_at[gte]=2023-01-01`
+            - `?price[gt]=100` 
+      responses:
+        '200':
+          description: A list of products associated with the company
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: Unique identifier for the product
+                        name:
+                          type: string
+                          description: Product name
+                        description:
+                          type: string
+                          nullable: true
+                          description: Product description
+                        retail_price:
+                          type: number
+                          format: float
+                          description: Retail price
+                        wholesale_price:
+                          type: number
+                          format: float
+                          description: Wholesale price
+                        unit_cost:
+                          type: number
+                          format: float
+                          description: Cost per unit
+                        product_weight:
+                          type: number
+                          format: float
+                          description: Weight of the product
+                        product_length:
+                          type: number
+                          format: float
+                          description: Length of the product
+                        product_width:
+                          type: number
+                          format: float
+                          description: Width of the product
+                        product_height:
+                          type: number
+                          format: float
+                          description: Height of the product
+                        sellable:
+                          type: boolean
+                          description: Whether the product can be sold
+                        discontinued:
+                          type: boolean
+                          description: Whether the product is discontinued. Discontinued products will be hidden in the Luminous UI by default.
+                        image_url:
+                          type: string
+                          nullable: true
+                          description: URL to the product's main image
+                        category:
+                          type: object
+                          nullable: true
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                          description: Product category information
+                        subcategory:
+                          type: object
+                          nullable: true
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                          description: Product subcategory information
+                        custom_fields:
+                          type: object
+                          description: Dynamic custom fields with key-value pairs
+                          additionalProperties:
+                            type: string
+                        attachments:
+                          type: array
+                          description: Product attachments
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: Unique identifier for the attachment
+                              name:
+                                type: string
+                                description: Filename of the attachment
+                              type:
+                                type: string
+                                description: MIME type of the attachment
+                              size:
+                                type: integer
+                                description: File size in bytes
+                              full_url:
+                                type: string
+                                description: Full resolution URL of the attachment
+                              thumb_url:
+                                type: string
+                                description: Thumbnail URL of the attachment (if applicable)
+                            required:
+                              - id
+                              - name
+                              - type
+                              - size
+                              - full_url
+                        variants:
+                          type: array
+                          description: Product variants
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                              description:
+                                type: string
+                                nullable: true
+                              attachments:
+                                type: array
+                                description: Variant-specific attachments
+                                items:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: integer
+                                      description: Unique identifier for the attachment
+                                    name:
+                                      type: string
+                                      description: Filename of the attachment
+                                    type:
+                                      type: string
+                                      description: MIME type of the attachment
+                                    size:
+                                      type: integer
+                                      description: File size in bytes
+                                    full_url:
+                                      type: string
+                                      description: Full resolution URL of the attachment
+                                    thumb_url:
+                                      type: string
+                                      description: Thumbnail URL of the attachment (if applicable)
+                                  required:
+                                    - id
+                                    - name
+                                    - type
+                                    - size
+                                    - full_url
+                              retail_price:
+                                type: number
+                                format: float
+                              wholesale_price:
+                                type: number
+                                format: float
+                              custom_fields:
+                                type: array
+                                items:
+                                  type: object
+                              variant_attributes:
+                                type: object
+                                additionalProperties:
+                                  type: string
+                              sku:
+                                type: string
+                              upc:
+                                type: string
+                              created_at:
+                                type: string
+                                format: date-time
+                              updated_at:
+                                type: string
+                                format: date-time
+                        variant_attributes:
+                          type: object
+                          nullable: true
+                          description: Available variant attributes
+                        sku:
+                          type: string
+                          description: Internal SKU
+                        alternate_skus:
+                          type: array
+                          description: Alternate SKUs
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              sku:
+                                type: string
+                        upc:
+                          type: string
+                          description: UPC/Barcode
+                        tags:
+                          type: array
+                          description: Tags associated with the product
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: Unique identifier for the tag
+                              name:
+                                type: string
+                                description: Name of the tag
+                              description:
+                                type: string
+                                nullable: true
+                                description: Description of the tag
+                              icon:
+                                type: string
+                                nullable: true
+                                description: Icon identifier or URL for the tag
+                              color:
+                                type: string
+                                nullable: true
+                                description: Color code for the tag
+                            required:
+                              - id
+                              - name
+                        supplier:
+                          type: object
+                          nullable: true
+                          description: Supplier information
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: Timestamp when the product was created
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: Timestamp when the product was last updated
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        description: The current page number
+                        example: 1
+                      from:
+                        type: integer
+                        description: The starting index of the paginated results
+                        example: 1
+                      last_page:
+                        type: integer
+                        description: The last page number
+                        example: 5
+                      per_page:
+                        type: integer
+                        description: Number of items per page
+                        example: 10
+                      to:
+                        type: integer
+                        description: The ending index of the paginated results
+                        example: 10
+                      total:
+                        type: integer
+                        description: Total number of items across all pages
+                        example: 50
+                      links:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                              nullable: true
+                              example: 'https://api.example.com/companies?page=2'
+                            label:
+                              type: string
+                              example: '2'
+                            active:
+                              type: boolean
+                              example: false
+        '401':
+          description: Authentication credentials were missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+                  message:
+                    type: string
+                    example: Authentication credentials are missing or invalid
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: You do not have permission to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Forbidden
+                  message:
+                    type: string
+                    example: You do not have permission to access this resource
+                  status_code:
+                    type: integer
+                    example: 403
+        '404':
+          description: The requested resource was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Not Found
+                  message:
+                    type: string
+                    example: The requested resource could not be found
+                  status_code:
+                    type: integer
+                    example: 404
+  /contacts:
+    get:
+      operationId: getContacts
+      tags:
+        - Contacts
+      summary: Contacts
+      description: |
+        Get a paginated list of all contacts with optional filtering.
+
+        For detailed information about the filtering system and available operators, 
+        refer to the [Filter System Documentation](/filters).
+
+        ## Available Filters
+        ### String Filters
+        - `first_name`: Contact first name
+        - `last_name`: Contact last name
+        - `email`: Contact email
+        - `phone`: Contact phone number
+        - `company.name`: Company name
+        - `q`: General search matches first_name OR last_name OR email
+
+        ### Integer Filters
+        - `company.id`: Filter by company ID
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Page number for pagination (starts at 1)
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+          description: Number of items per page (max 100)
+        - name: sort
+          in: query
+          schema:
+            type: string
+            default: 'id:desc'
+          description: |
+            Sort results by field and direction. Format: `field:direction`
+
+            Examples:
+            - `name:asc` - Sort by name in ascending order
+            - `created_at:desc` - Sort by creation date in descending order
+            - `id:asc` - Sort by ID in ascending order
+
+            Default is `id:desc` 
+        - name: filter
+          in: query
+          schema:
+            type: string
+          description: |
+            Filter results based on specific criteria. Supports various operators.
+
+            For detailed information about the filtering system and available operators, 
+            refer to the [Filter System Documentation](/filters).
+
+            Common filter operators:
+            - `eq`: Equal to
+            - `neq`: Not equal to
+            - `gt`: Greater than
+            - `gte`: Greater than or equal to
+            - `lt`: Less than
+            - `lte`: Less than or equal to
+            - `contains`: Contains string (case-insensitive)
+            - `starts_with`: Starts with string
+            - `ends_with`: Ends with string
+
+            Examples:
+            - `?name[contains]=test`
+            - `?created_at[gte]=2023-01-01`
+            - `?price[gt]=100` 
+      responses:
+        '200':
+          description: A list of contacts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Unique identifier for the contact
+                          example: '789123'
+                        company_id:
+                          type: string
+                          description: ID of the company this contact belongs to
+                          example: '123456'
+                        first_name:
+                          type: string
+                          description: Contact's first name
+                          example: John
+                        last_name:
+                          type: string
+                          description: Contact's last name
+                          example: Smith
+                        email:
+                          type: string
+                          format: email
+                          description: Contact's email address
+                          example: john.smith@acmecorp.com
+                        phone:
+                          type: string
+                          description: Contact's phone number
+                          example: 555-987-6543
+                        mobile:
+                          type: string
+                          description: Contact's mobile number
+                          example: 555-555-5555
+                        title:
+                          type: string
+                          description: Contact's job title
+                          example: Purchasing Manager
+                        is_primary:
+                          type: boolean
+                          description: Whether this is the primary contact for the company
+                          example: true
+                        address:
+                          type: object
+                          properties:
+                            street1:
+                              type: string
+                              example: 123 Main St
+                            street2:
+                              type: string
+                              example: Suite 500
+                            city:
+                              type: string
+                              example: Austin
+                            state:
+                              type: string
+                              example: TX
+                            postal_code:
+                              type: string
+                              example: '78701'
+                            country:
+                              type: string
+                              example: USA
+                        company:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: '123456'
+                            name:
+                              type: string
+                              example: Acme Corporation
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: When the contact was created
+                          example: '2023-03-15T14:30:00Z'
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: When the contact was last updated
+                          example: '2023-03-15T14:30:00Z'
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        description: The current page number
+                        example: 1
+                      from:
+                        type: integer
+                        description: The starting index of the paginated results
+                        example: 1
+                      last_page:
+                        type: integer
+                        description: The last page number
+                        example: 5
+                      per_page:
+                        type: integer
+                        description: Number of items per page
+                        example: 10
+                      to:
+                        type: integer
+                        description: The ending index of the paginated results
+                        example: 10
+                      total:
+                        type: integer
+                        description: Total number of items across all pages
+                        example: 50
+                      links:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                              nullable: true
+                              example: 'https://api.example.com/companies?page=2'
+                            label:
+                              type: string
+                              example: '2'
+                            active:
+                              type: boolean
+                              example: false
+        '401':
+          description: Authentication credentials were missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+                  message:
+                    type: string
+                    example: Authentication credentials are missing or invalid
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: You do not have permission to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Forbidden
+                  message:
+                    type: string
+                    example: You do not have permission to access this resource
+                  status_code:
+                    type: integer
+                    example: 403
+  /price-schedules:
+    get:
+      operationId: getPriceSchedules
+      tags:
+        - Pricing
+      summary: Price Schedules
+      description: |
+        Get a paginated list of price schedules with optional filtering.
+
+        For detailed information about the filtering system and available operators, 
+        refer to the [Filter System Documentation](/filters).
+
+        ## Available Filters
+        ### String Filters
+        - `name`: Schedule name
+        - `status`: Schedule status (active/inactive)
+        - `q`: General search matches name
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Page number for pagination (starts at 1)
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+          description: Number of items per page (max 100)
+        - name: sort
+          in: query
+          schema:
+            type: string
+            default: 'id:desc'
+          description: |
+            Sort results by field and direction. Format: `field:direction`
+
+            Examples:
+            - `name:asc` - Sort by name in ascending order
+            - `created_at:desc` - Sort by creation date in descending order
+            - `id:asc` - Sort by ID in ascending order
+
+            Default is `id:desc` 
+        - name: filter
+          in: query
+          schema:
+            type: string
+          description: |
+            Filter results based on specific criteria. Supports various operators.
+
+            For detailed information about the filtering system and available operators, 
+            refer to the [Filter System Documentation](/filters).
+
+            Common filter operators:
+            - `eq`: Equal to
+            - `neq`: Not equal to
+            - `gt`: Greater than
+            - `gte`: Greater than or equal to
+            - `lt`: Less than
+            - `lte`: Less than or equal to
+            - `contains`: Contains string (case-insensitive)
+            - `starts_with`: Starts with string
+            - `ends_with`: Ends with string
+
+            Examples:
+            - `?name[contains]=test`
+            - `?created_at[gte]=2023-01-01`
+            - `?price[gt]=100` 
+      responses:
+        '200':
+          description: A list of price schedules
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Unique identifier for the price schedule
+                          example: '456789'
+                        name:
+                          type: string
+                          description: Name of the price schedule
+                          example: Holiday Sale 2023
+                        description:
+                          type: string
+                          description: Detailed description of the price schedule
+                          example: Special pricing for holiday season
+                        status:
+                          type: string
+                          description: Status of the price schedule
+                          enum:
+                            - active
+                            - inactive
+                          example: active
+                        start_date:
+                          type: string
+                          format: date
+                          description: When the price schedule becomes active
+                          example: '2023-11-01'
+                        end_date:
+                          type: string
+                          format: date
+                          description: When the price schedule expires
+                          example: '2023-12-31'
+                        priority:
+                          type: integer
+                          description: Priority of this price schedule (higher numbers take precedence)
+                          example: 100
+                        price_levels:
+                          type: array
+                          description: List of price levels this schedule applies to
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                                example: '789'
+                              name:
+                                type: string
+                                example: Wholesale
+                        companies:
+                          type: array
+                          description: List of companies this schedule applies to (if specific to companies)
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                                example: '123456'
+                              name:
+                                type: string
+                                example: Acme Corporation
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: When the price schedule was created
+                          example: '2023-03-15T14:30:00Z'
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: When the price schedule was last updated
+                          example: '2023-03-15T14:30:00Z'
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        description: The current page number
+                        example: 1
+                      from:
+                        type: integer
+                        description: The starting index of the paginated results
+                        example: 1
+                      last_page:
+                        type: integer
+                        description: The last page number
+                        example: 5
+                      per_page:
+                        type: integer
+                        description: Number of items per page
+                        example: 10
+                      to:
+                        type: integer
+                        description: The ending index of the paginated results
+                        example: 10
+                      total:
+                        type: integer
+                        description: Total number of items across all pages
+                        example: 50
+                      links:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                              nullable: true
+                              example: 'https://api.example.com/companies?page=2'
+                            label:
+                              type: string
+                              example: '2'
+                            active:
+                              type: boolean
+                              example: false
+        '401':
+          description: Authentication credentials were missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+                  message:
+                    type: string
+                    example: Authentication credentials are missing or invalid
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: You do not have permission to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Forbidden
+                  message:
+                    type: string
+                    example: You do not have permission to access this resource
+                  status_code:
+                    type: integer
+                    example: 403
+  '/price-schedules/{scheduleId}':
+    get:
+      operationId: getPriceSchedule
+      tags:
+        - Pricing
+      summary: Price Schedule
+      description: Get detailed information for a specific price schedule
+      parameters:
+        - name: scheduleId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the price schedule
+      responses:
+        '200':
+          description: Price schedule details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique identifier for the price schedule
+                    example: '456789'
+                  name:
+                    type: string
+                    description: Name of the price schedule
+                    example: Holiday Sale 2023
+                  description:
+                    type: string
+                    description: Detailed description of the price schedule
+                    example: Special pricing for holiday season
+                  status:
+                    type: string
+                    description: Status of the price schedule
+                    enum:
+                      - active
+                      - inactive
+                    example: active
+                  start_date:
+                    type: string
+                    format: date
+                    description: When the price schedule becomes active
+                    example: '2023-11-01'
+                  end_date:
+                    type: string
+                    format: date
+                    description: When the price schedule expires
+                    example: '2023-12-31'
+                  priority:
+                    type: integer
+                    description: Priority of this price schedule (higher numbers take precedence)
+                    example: 100
+                  price_levels:
+                    type: array
+                    description: List of price levels this schedule applies to
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: '789'
+                        name:
+                          type: string
+                          example: Wholesale
+                  companies:
+                    type: array
+                    description: List of companies this schedule applies to (if specific to companies)
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: '123456'
+                        name:
+                          type: string
+                          example: Acme Corporation
+                  created_at:
+                    type: string
+                    format: date-time
+                    description: When the price schedule was created
+                    example: '2023-03-15T14:30:00Z'
+                  updated_at:
+                    type: string
+                    format: date-time
+                    description: When the price schedule was last updated
+                    example: '2023-03-15T14:30:00Z'
+        '401':
+          description: Authentication credentials were missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+                  message:
+                    type: string
+                    example: Authentication credentials are missing or invalid
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: You do not have permission to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Forbidden
+                  message:
+                    type: string
+                    example: You do not have permission to access this resource
+                  status_code:
+                    type: integer
+                    example: 403
+        '404':
+          description: The requested resource was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Not Found
+                  message:
+                    type: string
+                    example: The requested resource could not be found
+                  status_code:
+                    type: integer
+                    example: 404
+  /price-levels:
+    get:
+      operationId: getPriceLevels
+      tags:
+        - Pricing
+      summary: Price Levels
+      description: |
+        Get a paginated list of price levels with optional filtering.
+
+        For detailed information about the filtering system and available operators, 
+        refer to the [Filter System Documentation](/filters).
+
+        ## Available Filters
+        ### String Filters
+        - `name`: Level name
+        - `status`: Level status (active/inactive)
+        - `q`: General search matches name
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Page number for pagination (starts at 1)
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+          description: Number of items per page (max 100)
+        - name: sort
+          in: query
+          schema:
+            type: string
+            default: 'id:desc'
+          description: |
+            Sort results by field and direction. Format: `field:direction`
+
+            Examples:
+            - `name:asc` - Sort by name in ascending order
+            - `created_at:desc` - Sort by creation date in descending order
+            - `id:asc` - Sort by ID in ascending order
+
+            Default is `id:desc` 
+        - name: filter
+          in: query
+          schema:
+            type: string
+          description: |
+            Filter results based on specific criteria. Supports various operators.
+
+            For detailed information about the filtering system and available operators, 
+            refer to the [Filter System Documentation](/filters).
+
+            Common filter operators:
+            - `eq`: Equal to
+            - `neq`: Not equal to
+            - `gt`: Greater than
+            - `gte`: Greater than or equal to
+            - `lt`: Less than
+            - `lte`: Less than or equal to
+            - `contains`: Contains string (case-insensitive)
+            - `starts_with`: Starts with string
+            - `ends_with`: Ends with string
+
+            Examples:
+            - `?name[contains]=test`
+            - `?created_at[gte]=2023-01-01`
+            - `?price[gt]=100` 
+      responses:
+        '200':
+          description: A list of price levels
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Unique identifier for the price level
+                          example: '789'
+                        name:
+                          type: string
+                          description: Name of the price level
+                          example: Wholesale
+                        description:
+                          type: string
+                          description: Detailed description of the price level
+                          example: 'For wholesale customers with annual purchases over $100,000'
+                        discount_percent:
+                          type: number
+                          format: float
+                          description: Default discount percentage for this price level
+                          example: 15.5
+                        status:
+                          type: string
+                          description: Status of the price level
+                          enum:
+                            - active
+                            - inactive
+                          example: active
+                        company_count:
+                          type: integer
+                          description: Number of companies assigned to this price level
+                          example: 42
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: When the price level was created
+                          example: '2023-03-15T14:30:00Z'
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: When the price level was last updated
+                          example: '2023-03-15T14:30:00Z'
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        description: The current page number
+                        example: 1
+                      from:
+                        type: integer
+                        description: The starting index of the paginated results
+                        example: 1
+                      last_page:
+                        type: integer
+                        description: The last page number
+                        example: 5
+                      per_page:
+                        type: integer
+                        description: Number of items per page
+                        example: 10
+                      to:
+                        type: integer
+                        description: The ending index of the paginated results
+                        example: 10
+                      total:
+                        type: integer
+                        description: Total number of items across all pages
+                        example: 50
+                      links:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                              nullable: true
+                              example: 'https://api.example.com/companies?page=2'
+                            label:
+                              type: string
+                              example: '2'
+                            active:
+                              type: boolean
+                              example: false
+        '401':
+          description: Authentication credentials were missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+                  message:
+                    type: string
+                    example: Authentication credentials are missing or invalid
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: You do not have permission to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Forbidden
+                  message:
+                    type: string
+                    example: You do not have permission to access this resource
+                  status_code:
+                    type: integer
+                    example: 403
+  '/price-levels/{levelId}':
+    get:
+      operationId: getPriceLevel
+      tags:
+        - Pricing
+      summary: Price Level
+      description: Get detailed information for a specific price level
+      parameters:
+        - name: levelId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the price level
+      responses:
+        '200':
+          description: Price level details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique identifier for the price level
+                    example: '789'
+                  name:
+                    type: string
+                    description: Name of the price level
+                    example: Wholesale
+                  description:
+                    type: string
+                    description: Detailed description of the price level
+                    example: 'For wholesale customers with annual purchases over $100,000'
+                  discount_percent:
+                    type: number
+                    format: float
+                    description: Default discount percentage for this price level
+                    example: 15.5
+                  status:
+                    type: string
+                    description: Status of the price level
+                    enum:
+                      - active
+                      - inactive
+                    example: active
+                  company_count:
+                    type: integer
+                    description: Number of companies assigned to this price level
+                    example: 42
+                  created_at:
+                    type: string
+                    format: date-time
+                    description: When the price level was created
+                    example: '2023-03-15T14:30:00Z'
+                  updated_at:
+                    type: string
+                    format: date-time
+                    description: When the price level was last updated
+                    example: '2023-03-15T14:30:00Z'
+        '401':
+          description: Authentication credentials were missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+                  message:
+                    type: string
+                    example: Authentication credentials are missing or invalid
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: You do not have permission to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Forbidden
+                  message:
+                    type: string
+                    example: You do not have permission to access this resource
+                  status_code:
+                    type: integer
+                    example: 403
+        '404':
+          description: The requested resource was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Not Found
+                  message:
+                    type: string
+                    example: The requested resource could not be found
+                  status_code:
+                    type: integer
+                    example: 404
 tags:
   - name: Locations
     description: Manage warehouses and locations
@@ -8651,3 +11116,9 @@ tags:
     description: Add/remove tags across various resources
   - name: Custom Fields
     description: Get and set custom fields across various resources
+  - name: Companies
+    description: Manage business accounts and their associated data
+  - name: Contacts
+    description: Manage contact information for individuals
+  - name: Pricing
+    description: 'Manage price schedules, levels, and customizations'

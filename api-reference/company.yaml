@@ -23,39 +23,4 @@ get:
     '403':
       $ref: './components/responses/forbidden.yaml'
     '404':
-      $ref: './components/responses/not-found.yaml'
-
-put:
-  operationId: updateCompany
-  tags:
-    - Companies
-  summary: Update Company
-  description: Update a specific company's information
-  parameters:
-    - name: companyId
-      in: path
-      required: true
-      schema:
-        type: string
-      description: The unique identifier of the company
-  requestBody:
-    required: true
-    content:
-      application/json:
-        schema:
-          $ref: './components/schemas/company-update.yaml'
-  responses:
-    '200':
-      description: Company updated successfully
-      content:
-        application/json:
-          schema:
-            $ref: './components/schemas/company.yaml'
-    '400':
-      $ref: './components/responses/bad-request.yaml'
-    '401':
-      $ref: './components/responses/unauthorized.yaml'
-    '403':
-      $ref: './components/responses/forbidden.yaml'
-    '404':
       $ref: './components/responses/not-found.yaml' 

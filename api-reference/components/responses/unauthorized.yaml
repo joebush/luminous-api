@@ -1,0 +1,15 @@
+description: Authentication credentials were missing or invalid
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Unauthorized
+        message:
+          type: string
+          example: Authentication credentials are missing or invalid
+        status_code:
+          type: integer
+          example: 401 

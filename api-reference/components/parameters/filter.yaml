@@ -1,0 +1,25 @@
+name: filter
+in: query
+schema:
+  type: string
+description: |
+  Filter results based on specific criteria. Supports various operators.
+  
+  For detailed information about the filtering system and available operators, 
+  refer to the [Filter System Documentation](/filters).
+  
+  Common filter operators:
+  - `eq`: Equal to
+  - `neq`: Not equal to
+  - `gt`: Greater than
+  - `gte`: Greater than or equal to
+  - `lt`: Less than
+  - `lte`: Less than or equal to
+  - `contains`: Contains string (case-insensitive)
+  - `starts_with`: Starts with string
+  - `ends_with`: Ends with string
+  
+  Examples:
+  - `?name[contains]=test`
+  - `?created_at[gte]=2023-01-01`
+  - `?price[gt]=100` 

@@ -1,0 +1,41 @@
+type: object
+properties:
+  current_page:
+    type: integer
+    description: The current page number
+    example: 1
+  from:
+    type: integer
+    description: The starting index of the paginated results
+    example: 1
+  last_page:
+    type: integer
+    description: The last page number
+    example: 5
+  per_page:
+    type: integer
+    description: Number of items per page
+    example: 10
+  to:
+    type: integer
+    description: The ending index of the paginated results
+    example: 10
+  total:
+    type: integer
+    description: Total number of items across all pages
+    example: 50
+  links:
+    type: array
+    items:
+      type: object
+      properties:
+        url:
+          type: string
+          nullable: true
+          example: "https://api.example.com/companies?page=2"
+        label:
+          type: string
+          example: "2"
+        active:
+          type: boolean
+          example: false 

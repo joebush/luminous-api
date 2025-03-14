@@ -1,0 +1,84 @@
+type: object
+properties:
+  name:
+    type: string
+    description: Company name
+    example: "Acme Corporation"
+  external_id:
+    type: string
+    description: External identifier for the company
+    example: "ACME-123"
+  status:
+    type: string
+    description: Company status
+    enum: [active, inactive]
+    example: "active"
+  email:
+    type: string
+    format: email
+    description: Primary email address for the company
+    example: "info@acmecorp.com"
+  phone:
+    type: string
+    description: Primary phone number for the company
+    example: "555-123-4567"
+  fax:
+    type: string
+    description: Fax number for the company
+    example: "555-123-9876"
+  website:
+    type: string
+    description: Company website
+    example: "https://www.acmecorp.com"
+  billing_address:
+    type: object
+    properties:
+      street1:
+        type: string
+        example: "123 Main St"
+      street2:
+        type: string
+        example: "Suite 500"
+      city:
+        type: string
+        example: "Austin"
+      state:
+        type: string
+        example: "TX"
+      postal_code:
+        type: string
+        example: "78701"
+      country:
+        type: string
+        example: "USA"
+  shipping_address:
+    type: object
+    properties:
+      street1:
+        type: string
+        example: "456 Warehouse Blvd"
+      street2:
+        type: string
+        example: "Building 2"
+      city:
+        type: string
+        example: "Austin"
+      state:
+        type: string
+        example: "TX"
+      postal_code:
+        type: string
+        example: "78745"
+      country:
+        type: string
+        example: "USA"
+  price_level_id:
+    type: string
+    description: ID of the price level to assign to this company
+    example: "789"
+  tags:
+    type: array
+    description: List of tags to associate with the company
+    items:
+      type: string
+    example: ["wholesale", "preferred"] 

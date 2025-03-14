@@ -1,0 +1,10 @@
+type: object
+properties:
+  id:
+    type: string
+    description: Unique identifier for the tag
+    example: "tag-123"
+  name:
+    type: string
+    description: Tag name
+    example: "wholesale" 
