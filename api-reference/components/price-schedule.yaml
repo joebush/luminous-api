@@ -1,0 +1,67 @@
+type: object
+properties:
+  id:
+    type: string
+    description: Unique identifier for the price schedule
+    example: "456789"
+  name:
+    type: string
+    description: Name of the price schedule
+    example: "Holiday Sale 2023"
+  description:
+    type: string
+    description: Detailed description of the price schedule
+    example: "Special pricing for holiday season"
+  status:
+    type: string
+    description: Status of the price schedule
+    enum: [active, inactive]
+    example: "active"
+  start_date:
+    type: string
+    format: date
+    description: When the price schedule becomes active
+    example: "2023-11-01"
+  end_date:
+    type: string
+    format: date
+    description: When the price schedule expires
+    example: "2023-12-31"
+  priority:
+    type: integer
+    description: Priority of this price schedule (higher numbers take precedence)
+    example: 100
+  price_levels:
+    type: array
+    description: List of price levels this schedule applies to
+    items:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "789"
+        name:
+          type: string
+          example: "Wholesale"
+  companies:
+    type: array
+    description: List of companies this schedule applies to (if specific to companies)
+    items:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "123456"
+        name:
+          type: string
+          example: "Acme Corporation"
+  created_at:
+    type: string
+    format: date-time
+    description: When the price schedule was created
+    example: "2023-03-15T14:30:00Z"
+  updated_at:
+    type: string
+    format: date-time
+    description: When the price schedule was last updated
+    example: "2023-03-15T14:30:00Z" 

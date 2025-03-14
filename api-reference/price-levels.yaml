@@ -1,0 +1,41 @@
+get:
+  operationId: getPriceLevels
+  tags:
+    - Pricing
+  summary: Price Levels
+  description: |
+    Get a paginated list of price levels with optional filtering.
+    
+    For detailed information about the filtering system and available operators, 
+    refer to the [Filter System Documentation](/filters).
+
+    ## Available Filters
+    ### String Filters
+    - `name`: Level name
+    - `status`: Level status (active/inactive)
+    - `q`: General search matches name
+    
+  parameters:
+    - $ref: './components/parameters/page.yaml'
+    - $ref: './components/parameters/limit.yaml'
+    - $ref: './components/parameters/sort.yaml'
+    - $ref: './components/parameters/filter.yaml'
+    
+  responses:
+    '200':
+      description: A list of price levels
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/schemas/price-level.yaml'
+              meta:
+                $ref: './components/schemas/pagination.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml' 
