@@ -23,6 +23,8 @@ paths:
     $ref: './products.yaml'
   /products/{id}:
     $ref: './product.yaml'
+  /products/{productId}/pricing:
+    $ref: './product-pricing.yaml'
   /purchase-orders:
     $ref: './purchase-orders.yaml'
   /purchase-orders/{id}:
@@ -63,6 +65,26 @@ paths:
     $ref: './locations.yaml'
   /locations/{locationId}:
     $ref: './location.yaml'
+  /companies:
+    $ref: './companies.yaml'
+  /companies/{companyId}:
+    $ref: './company.yaml'
+  /companies/{companyId}/contacts:
+    $ref: './company-contacts.yaml'
+  /companies/{companyId}/product-price-overrides:
+    $ref: './company-product-price-overrides.yaml'
+  /companies/{companyId}/products:
+    $ref: './company-products.yaml'
+  /contacts:
+    $ref: './contacts.yaml'
+  /price-schedules:
+    $ref: './price-schedules.yaml'
+  /price-schedules/{scheduleId}:
+    $ref: './price-schedule.yaml'
+  /price-levels:
+    $ref: './price-levels.yaml'
+  /price-levels/{levelId}:
+    $ref: './price-level.yaml'
 
 tags:
   - name: Locations
@@ -85,3 +107,9 @@ tags:
     description: Add/remove tags across various resources
   - name: Custom Fields
     description: Get and set custom fields across various resources
+  - name: Companies
+    description: Manage business accounts and their associated data
+  - name: Contacts
+    description: Manage contact information for individuals
+  - name: Pricing
+    description: Manage price schedules, levels, and customizations

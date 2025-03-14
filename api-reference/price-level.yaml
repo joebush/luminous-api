@@ -1,0 +1,26 @@
+get:
+  operationId: getPriceLevel
+  tags:
+    - Pricing
+  summary: Price Level
+  description: Get detailed information for a specific price level
+  parameters:
+    - name: levelId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The unique identifier of the price level
+  responses:
+    '200':
+      description: Price level details
+      content:
+        application/json:
+          schema:
+            $ref: './components/schemas/price-level.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml'
+    '404':
+      $ref: './components/responses/not-found.yaml' 

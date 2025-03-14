@@ -1,0 +1,26 @@
+get:
+  operationId: getPriceSchedule
+  tags:
+    - Pricing
+  summary: Price Schedule
+  description: Get detailed information for a specific price schedule
+  parameters:
+    - name: scheduleId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The unique identifier of the price schedule
+  responses:
+    '200':
+      description: Price schedule details
+      content:
+        application/json:
+          schema:
+            $ref: './components/schemas/price-schedule.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml'
+    '404':
+      $ref: './components/responses/not-found.yaml' 

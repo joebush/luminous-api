@@ -1,0 +1,69 @@
+{
+  "project": {
+    "name": "Luminous API Documentation",
+    "description": "Documentation for the Luminous API built with Mintlify"
+  },
+  "organization": {
+    "root": {
+      "description": "Root directory of the Luminous API documentation",
+      "key_files": {
+        "mint.json": "Main configuration file for the Mintlify documentation",
+        "README.md": "Project overview and development instructions",
+        "quickstart.mdx": "Getting started guide for API users",
+        "introduction.mdx": "Introduction to the Luminous API",
+        "filters.mdx": "Documentation on filtering API results",
+        "development.mdx": "Development guide for contributors"
+      }
+    },
+    "directories": {
+      "api-reference": {
+        "description": "OpenAPI specification files for the Luminous API endpoints",
+        "file_patterns": {
+          "*.yaml": "API endpoint definitions in OpenAPI format",
+          "build.yaml": "Combined OpenAPI specification for all endpoints",
+          "components": "Reusable OpenAPI components"
+        }
+      },
+      "mdx-api-reference": {
+        "description": "MDX-based API reference documentation organized by resource type",
+        "subdirectories": [
+          "products", "sales-orders", "purchase-orders", "invoices", 
+          "inventory", "locations", "tags", "transfer-orders", 
+          "receiving-reports", "custom-fields"
+        ]
+      },
+      "essentials": {
+        "description": "Core documentation about using the documentation system",
+        "key_files": {
+          "navigation.mdx": "How to configure navigation",
+          "markdown.mdx": "Markdown usage guide",
+          "code.mdx": "Code formatting guidelines",
+          "images.mdx": "Image usage guidelines",
+          "settings.mdx": "Documentation settings configuration",
+          "reusable-snippets.mdx": "How to create reusable content snippets"
+        }
+      },
+      "snippets": {
+        "description": "Reusable content snippets for the documentation"
+      },
+      "logo": {
+        "description": "Logo files for the documentation",
+        "file_patterns": {
+          "*.svg": "Vector logo files for light and dark themes"
+        }
+      },
+      "images": {
+        "description": "Image assets used throughout the documentation"
+      }
+    },
+    "conventions": {
+      "api_endpoints": "API endpoints are defined in separate YAML files in the api-reference directory",
+      "documentation": "Documentation pages are written in MDX format",
+      "configuration": "Project configuration is centralized in mint.json"
+    }
+  },
+  "workflow": {
+    "development": "Use 'mintlify dev' to preview documentation changes locally",
+    "publishing": "Changes are automatically deployed when pushed to the default branch"
+  }
+} 

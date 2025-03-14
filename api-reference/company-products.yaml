@@ -1,0 +1,55 @@
+get:
+  operationId: getCompanyProducts
+  tags:
+    - Companies
+    - Products
+  summary: Company Products
+  description: |
+    Get a paginated list of products associated with a specific company.
+    
+    For detailed information about the filtering system and available operators, 
+    refer to the [Filter System Documentation](/filters).
+
+    ## Available Filters
+    ### String Filters
+    - `name`: Product name
+    - `sku`: Product SKU
+    - `upc`: Product UPC/Barcode
+    - `category.name`: Category name
+    - `q`: General search matches name OR sku OR upc
+    
+    ### Integer Filters
+    - `category.id`: Filter by category ID
+    
+  parameters:
+    - name: companyId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The unique identifier of the company
+    - $ref: './components/parameters/page.yaml'
+    - $ref: './components/parameters/limit.yaml'
+    - $ref: './components/parameters/sort.yaml'
+    - $ref: './components/parameters/filter.yaml'
+    
+  responses:
+    '200':
+      description: A list of products associated with the company
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/schemas/product.yaml'
+              meta:
+                $ref: './components/schemas/pagination.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml'
+    '404':
+      $ref: './components/responses/not-found.yaml' 

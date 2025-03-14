@@ -1,0 +1,47 @@
+get:
+  operationId: getContacts
+  tags:
+    - Contacts
+  summary: Contacts
+  description: |
+    Get a paginated list of all contacts with optional filtering.
+    
+    For detailed information about the filtering system and available operators, 
+    refer to the [Filter System Documentation](/filters).
+
+    ## Available Filters
+    ### String Filters
+    - `first_name`: Contact first name
+    - `last_name`: Contact last name
+    - `email`: Contact email
+    - `phone`: Contact phone number
+    - `company.name`: Company name
+    - `q`: General search matches first_name OR last_name OR email
+    
+    ### Integer Filters
+    - `company.id`: Filter by company ID
+    
+  parameters:
+    - $ref: './components/parameters/page.yaml'
+    - $ref: './components/parameters/limit.yaml'
+    - $ref: './components/parameters/sort.yaml'
+    - $ref: './components/parameters/filter.yaml'
+    
+  responses:
+    '200':
+      description: A list of contacts
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/schemas/contact.yaml'
+              meta:
+                $ref: './components/schemas/pagination.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml' 

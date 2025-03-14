@@ -1,0 +1,70 @@
+get:
+  operationId: getCompanies
+  tags:
+    - Companies
+  summary: Companies
+  description: |
+    Get a paginated list of companies (business accounts) with optional filtering.
+    
+    For detailed information about the filtering system and available operators, 
+    refer to the [Filter System Documentation](/filters).
+
+    ## Available Filters
+    ### String Filters
+    - `name`: Company name
+    - `external_id`: Company external ID
+    - `email`: Company email
+    - `phone`: Company phone number
+    - `tag`: Company tags
+    - `q`: General search matches name OR external_id
+    
+  parameters:
+    - $ref: './components/parameters/page.yaml'
+    - $ref: './components/parameters/limit.yaml'
+    - $ref: './components/parameters/sort.yaml'
+    - $ref: './components/parameters/filter.yaml'
+    
+  responses:
+    '200':
+      description: A list of companies
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/schemas/company.yaml'
+              meta:
+                $ref: './components/schemas/pagination.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml'
+
+post:
+  operationId: createCompany
+  tags:
+    - Companies
+  summary: Create Company
+  description: Create a new company (business account)
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: './components/schemas/company-create.yaml'
+  responses:
+    '201':
+      description: Company created successfully
+      content:
+        application/json:
+          schema:
+            $ref: './components/schemas/company.yaml'
+    '400':
+      $ref: './components/responses/bad-request.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml' 
