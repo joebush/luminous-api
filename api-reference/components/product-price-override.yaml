@@ -12,9 +12,9 @@ properties:
     type: string
     description: ID of the product being overridden
     example: "567890"
-  sku:
+  productCode:
     type: string
-    description: SKU of the product
+    description: SKU/Product code of the product
     example: "WIDGET-123"
   product_name:
     type: string
@@ -58,7 +58,7 @@ properties:
       name:
         type: string
         example: "Deluxe Widget"
-      sku:
+      internal_sku:
         type: string
         example: "WIDGET-123"
   created_at:

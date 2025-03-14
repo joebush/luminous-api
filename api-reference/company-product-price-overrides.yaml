@@ -1,18 +1,18 @@
 get:
-  operationId: getCompanySkuPriceOverrides
+  operationId: getCompanyProductPriceOverrides
   tags:
     - Companies
     - Pricing
-  summary: Company SKU Price Overrides
+  summary: Company Product Price Overrides
   description: |
-    Get a list of price overrides for specific SKUs associated with a company.
+    Get a list of price overrides for specific products associated with a company.
     
     For detailed information about the filtering system and available operators, 
     refer to the [Filter System Documentation](/filters).
 
     ## Available Filters
     ### String Filters
-    - `sku`: Product SKU
+    - `productCode`: Product code/SKU
     - `product.name`: Product name
     
   parameters:
@@ -29,7 +29,7 @@ get:
     
   responses:
     '200':
-      description: A list of SKU price overrides for the company
+      description: A list of product price overrides for the company
       content:
         application/json:
           schema:
@@ -38,7 +38,7 @@ get:
               data:
                 type: array
                 items:
-                  $ref: './components/schemas/sku-price-override.yaml'
+                  $ref: './components/schemas/product-price-override.yaml'
               meta:
                 $ref: './components/schemas/pagination.yaml'
     '401':

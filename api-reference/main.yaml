@@ -71,8 +71,8 @@ paths:
     $ref: './company.yaml'
   /companies/{companyId}/contacts:
     $ref: './company-contacts.yaml'
-  /companies/{companyId}/sku-price-overrides:
-    $ref: './company-sku-price-overrides.yaml'
+  /companies/{companyId}/product-price-overrides:
+    $ref: './company-product-price-overrides.yaml'
   /companies/{companyId}/products:
     $ref: './company-products.yaml'
   /contacts:
