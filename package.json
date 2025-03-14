@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "swagger-cli": "^4.0.4"
+  },
+  "scripts": {
+    "build": "npx swagger-cli bundle ./api-reference/main.yaml --dereference --outfile ./api-reference/build.yaml --type yaml",
+    "build-mint": "mintlify-scrape openapi-file ./api-reference/build.yaml -o ./mdx-api-reference"
+  }
+}
