@@ -135,7 +135,7 @@ get:
               data:
                 type: array
                 items:
-                  $ref: './components/schemas/product.yaml'
+                  $ref: './components/product.yaml'
               meta:
                 $ref: './components/schemas/pagination.yaml'
     '401':
