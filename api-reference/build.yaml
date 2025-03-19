@@ -9636,9 +9636,12 @@ paths:
                           example: 42.5
                         product:
                           type: object
+                          nullable: true
+                          description: Product information (included when the product relation is loaded)
                           properties:
                             id:
                               type: string
+                              description: Unique identifier for the product
                               example: '567890'
                             internal_sku:
                               type: string
@@ -9658,10 +9661,23 @@ paths:
                               format: float
                               description: Standard wholesale price of the product
                               example: 49.99
+                            variant_parent_id:
+                              type: integer
+                              nullable: true
+                              description: ID of the parent product if this is a variant
+                              example: null
                             is_variant:
                               type: boolean
                               description: Whether this product is a variant of another product
                               example: false
+                      required:
+                        - id
+                        - created_at
+                        - updated_at
+                        - status
+                        - company_id
+                        - product_id
+                        - price
                   meta:
                     type: object
                     properties:
