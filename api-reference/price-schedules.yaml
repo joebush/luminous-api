@@ -18,7 +18,6 @@ get:
   parameters:
     - $ref: './components/parameters/page.yaml'
     - $ref: './components/parameters/limit.yaml'
-    - $ref: './components/parameters/sort.yaml'
     - $ref: './components/parameters/filter.yaml'
     
   responses:

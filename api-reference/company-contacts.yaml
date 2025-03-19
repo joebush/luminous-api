@@ -27,8 +27,6 @@ get:
       description: The unique identifier of the company
     - $ref: './components/parameters/page.yaml'
     - $ref: './components/parameters/limit.yaml'
-    - $ref: './components/parameters/sort.yaml'
-    - $ref: './components/parameters/filter.yaml'
     
   responses:
     '200':
