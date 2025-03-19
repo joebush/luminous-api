@@ -8821,19 +8821,54 @@ paths:
         - Companies
       summary: Companies
       description: |
-        Get a paginated list of companies (business accounts) with optional filtering.
+        Get a paginated list of companies with optional filtering.
 
         For detailed information about the filtering system and available operators, 
         refer to the [Filter System Documentation](/filters).
 
         ## Available Filters
         ### String Filters
-        - `name`: Company name
-        - `external_id`: Company external ID
-        - `email`: Company email
-        - `phone`: Company phone number
-        - `tag`: Company tags
-        - `q`: General search matches name OR external_id
+        - `business_name`: Company name
+        - `business_type`: Type of business
+        - `business_city`: City
+        - `business_state`: State
+        - `business_country`: Country
+        - `business_zip`: ZIP/Postal code
+        - `phone`: Phone number
+        - `q`: General search matches business_name
+        - `fein`: Federal Employer Identification Number
+
+        ### Boolean Filters
+        - `tax_exempt`: Whether the company is tax exempt
+
+        ### Float Filters
+        - `tax_rate`: Company's tax rate
+
+        ### Integer Filters
+        - `business_type_id`: Business type ID
+        - `default_price_level_id`: Default price level ID
+
+        ### DateTime Filters
+        - `created_at`: When the company was created
+        - `updated_at`: When the company was last updated
+
+        ## Examples
+        ```
+        # Find companies by name
+        ?business_name[eq]=Acme Corp
+
+        # Find companies in a specific state
+        ?business_state[eq]=CA
+
+        # Search companies by name
+        ?q=Acme
+
+        # Find tax exempt companies
+        ?tax_exempt[eq]=true
+
+        # Find companies by business type
+        ?business_type[eq]=Manufacturer
+        ```
       parameters:
         - name: page
           in: query
@@ -8850,45 +8885,84 @@ paths:
             minimum: 1
             maximum: 100
           description: Number of items per page (max 100)
-        - name: sort
-          in: query
+        - in: query
+          name: q
           schema:
             type: string
-            default: 'id:desc'
-          description: |
-            Sort results by field and direction. Format: `field:direction`
-
-            Examples:
-            - `name:asc` - Sort by name in ascending order
-            - `created_at:desc` - Sort by creation date in descending order
-            - `id:asc` - Sort by ID in ascending order
-
-            Default is `id:desc` 
-        - name: filter
-          in: query
+          description: Filter by business name
+        - in: query
+          name: business_name
           schema:
             type: string
-          description: |
-            Filter results based on specific criteria. Supports various operators.
-
-            For detailed information about the filtering system and available operators, 
-            refer to the [Filter System Documentation](/filters).
-
-            Common filter operators:
-            - `eq`: Equal to
-            - `neq`: Not equal to
-            - `gt`: Greater than
-            - `gte`: Greater than or equal to
-            - `lt`: Less than
-            - `lte`: Less than or equal to
-            - `contains`: Contains string (case-insensitive)
-            - `starts_with`: Starts with string
-            - `ends_with`: Ends with string
-
-            Examples:
-            - `?name[contains]=test`
-            - `?created_at[gte]=2023-01-01`
-            - `?price[gt]=100` 
+          description: Filter by company name
+        - in: query
+          name: business_type
+          schema:
+            type: string
+          description: Filter by business type
+        - in: query
+          name: business_type_id
+          schema:
+            type: integer
+          description: Filter by business type ID
+        - in: query
+          name: business_city
+          schema:
+            type: string
+          description: Filter by city
+        - in: query
+          name: business_state
+          schema:
+            type: string
+          description: Filter by state
+        - in: query
+          name: business_country
+          schema:
+            type: string
+          description: Filter by country
+        - in: query
+          name: business_zip
+          schema:
+            type: string
+          description: Filter by ZIP/Postal code
+        - in: query
+          name: phone
+          schema:
+            type: string
+          description: Filter by phone number
+        - in: query
+          name: fein
+          schema:
+            type: string
+          description: Filter by FEIN
+        - in: query
+          name: tax_exempt
+          schema:
+            type: boolean
+          description: Filter by tax exempt status
+        - in: query
+          name: tax_rate
+          schema:
+            type: number
+            format: float
+          description: Filter by tax rate
+        - in: query
+          name: default_price_level_id
+          schema:
+            type: integer
+          description: Filter by default price level ID
+        - in: query
+          name: created_at
+          schema:
+            type: string
+            format: date-time
+          description: Filter by creation date
+        - in: query
+          name: updated_at
+          schema:
+            type: string
+            format: date-time
+          description: Filter by last update date
       responses:
         '200':
           description: A list of companies
@@ -9298,45 +9372,6 @@ paths:
             minimum: 1
             maximum: 100
           description: Number of items per page (max 100)
-        - name: sort
-          in: query
-          schema:
-            type: string
-            default: 'id:desc'
-          description: |
-            Sort results by field and direction. Format: `field:direction`
-
-            Examples:
-            - `name:asc` - Sort by name in ascending order
-            - `created_at:desc` - Sort by creation date in descending order
-            - `id:asc` - Sort by ID in ascending order
-
-            Default is `id:desc` 
-        - name: filter
-          in: query
-          schema:
-            type: string
-          description: |
-            Filter results based on specific criteria. Supports various operators.
-
-            For detailed information about the filtering system and available operators, 
-            refer to the [Filter System Documentation](/filters).
-
-            Common filter operators:
-            - `eq`: Equal to
-            - `neq`: Not equal to
-            - `gt`: Greater than
-            - `gte`: Greater than or equal to
-            - `lt`: Less than
-            - `lte`: Less than or equal to
-            - `contains`: Contains string (case-insensitive)
-            - `starts_with`: Starts with string
-            - `ends_with`: Ends with string
-
-            Examples:
-            - `?name[contains]=test`
-            - `?created_at[gte]=2023-01-01`
-            - `?price[gt]=100` 
       responses:
         '200':
           description: A list of company contacts
@@ -9525,15 +9560,10 @@ paths:
         - Pricing
       summary: Company Product Price Overrides
       description: |
-        Get a list of price overrides for specific products associated with a company.
+        Get a list of product-specific price overrides for a particular company.
 
-        For detailed information about the filtering system and available operators, 
-        refer to the [Filter System Documentation](/filters).
-
-        ## Available Filters
-        ### String Filters
-        - `productCode`: Product code/SKU
-        - `product.name`: Product name
+        These price overrides allow specific products to have custom pricing when sold to a particular company,
+        overriding the standard pricing or any applicable price schedule.
       parameters:
         - name: companyId
           in: path
@@ -9556,45 +9586,6 @@ paths:
             minimum: 1
             maximum: 100
           description: Number of items per page (max 100)
-        - name: sort
-          in: query
-          schema:
-            type: string
-            default: 'id:desc'
-          description: |
-            Sort results by field and direction. Format: `field:direction`
-
-            Examples:
-            - `name:asc` - Sort by name in ascending order
-            - `created_at:desc` - Sort by creation date in descending order
-            - `id:asc` - Sort by ID in ascending order
-
-            Default is `id:desc` 
-        - name: filter
-          in: query
-          schema:
-            type: string
-          description: |
-            Filter results based on specific criteria. Supports various operators.
-
-            For detailed information about the filtering system and available operators, 
-            refer to the [Filter System Documentation](/filters).
-
-            Common filter operators:
-            - `eq`: Equal to
-            - `neq`: Not equal to
-            - `gt`: Greater than
-            - `gte`: Greater than or equal to
-            - `lt`: Less than
-            - `lte`: Less than or equal to
-            - `contains`: Contains string (case-insensitive)
-            - `starts_with`: Starts with string
-            - `ends_with`: Ends with string
-
-            Examples:
-            - `?name[contains]=test`
-            - `?created_at[gte]=2023-01-01`
-            - `?price[gt]=100` 
       responses:
         '200':
           description: A list of product price overrides for the company
@@ -9612,65 +9603,6 @@ paths:
                           type: string
                           description: Unique identifier for the price override
                           example: '987654'
-                        company_id:
-                          type: string
-                          description: ID of the company this price override applies to
-                          example: '123456'
-                        product_id:
-                          type: string
-                          description: ID of the product being overridden
-                          example: '567890'
-                        productCode:
-                          type: string
-                          description: SKU/Product code of the product
-                          example: WIDGET-123
-                        product_name:
-                          type: string
-                          description: Name of the product
-                          example: Deluxe Widget
-                        override_type:
-                          type: string
-                          description: Type of price override
-                          enum:
-                            - fixed
-                            - percentage
-                          example: fixed
-                        original_price:
-                          type: number
-                          format: float
-                          description: Original product price
-                          example: 49.99
-                        override_value:
-                          type: number
-                          format: float
-                          description: Amount to override by (fixed amount or percentage)
-                          example: 42.5
-                        effective_price:
-                          type: number
-                          format: float
-                          description: Calculated effective price after override
-                          example: 42.5
-                        company:
-                          type: object
-                          properties:
-                            id:
-                              type: string
-                              example: '123456'
-                            name:
-                              type: string
-                              example: Acme Corporation
-                        product:
-                          type: object
-                          properties:
-                            id:
-                              type: string
-                              example: '567890'
-                            name:
-                              type: string
-                              example: Deluxe Widget
-                            internal_sku:
-                              type: string
-                              example: WIDGET-123
                         created_at:
                           type: string
                           format: date-time
@@ -9681,6 +9613,55 @@ paths:
                           format: date-time
                           description: When the price override was last updated
                           example: '2023-03-15T14:30:00Z'
+                        status:
+                          type: string
+                          description: Status of the price override record
+                          enum:
+                            - active
+                            - inactive
+                            - deleted
+                          example: active
+                        company_id:
+                          type: string
+                          description: ID of the company this price override applies to
+                          example: '123456'
+                        product_id:
+                          type: string
+                          description: ID of the product being overridden
+                          example: '567890'
+                        price:
+                          type: number
+                          format: float
+                          description: The override price for this product when sold to this company
+                          example: 42.5
+                        product:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: '567890'
+                            internal_sku:
+                              type: string
+                              description: Internal SKU/code of the product
+                              example: WIDGET-123
+                            name:
+                              type: string
+                              description: Name of the product
+                              example: Deluxe Widget
+                            retail_price:
+                              type: number
+                              format: float
+                              description: Standard retail price of the product
+                              example: 59.99
+                            wholesale_price:
+                              type: number
+                              format: float
+                              description: Standard wholesale price of the product
+                              example: 49.99
+                            is_variant:
+                              type: boolean
+                              description: Whether this product is a variant of another product
+                              example: false
                   meta:
                     type: object
                     properties:
@@ -9794,6 +9775,36 @@ paths:
 
         ### Integer Filters
         - `category.id`: Filter by category ID
+
+        ### Float Filters
+        - `retail_price`: Product retail price
+        - `wholesale_price`: Product wholesale price
+
+        ### Boolean Filters
+        - `sellable`: If the product is sellable
+        - `discontinued`: If the product is discontinued
+
+        ### DateTime Filters
+        - `created_at`: When the product was created
+        - `updated_at`: When the product was last updated
+
+        ## Examples
+        ```
+        # Find products by SKU
+        ?sku[eq]=SKU-001
+
+        # Find products with specific price range
+        ?retail_price[gte]=50.00&retail_price[lte]=100.00
+
+        # Search products by name
+        ?name[contains]=Test Product
+
+        # Find products by category
+        ?category.name[eq]=Electronics
+
+        # Find only sellable products
+        ?sellable[eq]=true
+        ```
       parameters:
         - name: companyId
           in: path
@@ -9816,45 +9827,70 @@ paths:
             minimum: 1
             maximum: 100
           description: Number of items per page (max 100)
-        - name: sort
-          in: query
+        - in: query
+          name: q
           schema:
             type: string
-            default: 'id:desc'
-          description: |
-            Sort results by field and direction. Format: `field:direction`
-
-            Examples:
-            - `name:asc` - Sort by name in ascending order
-            - `created_at:desc` - Sort by creation date in descending order
-            - `id:asc` - Sort by ID in ascending order
-
-            Default is `id:desc` 
-        - name: filter
-          in: query
+          description: Filter by name OR sku OR upc
+        - in: query
+          name: name
           schema:
             type: string
-          description: |
-            Filter results based on specific criteria. Supports various operators.
-
-            For detailed information about the filtering system and available operators, 
-            refer to the [Filter System Documentation](/filters).
-
-            Common filter operators:
-            - `eq`: Equal to
-            - `neq`: Not equal to
-            - `gt`: Greater than
-            - `gte`: Greater than or equal to
-            - `lt`: Less than
-            - `lte`: Less than or equal to
-            - `contains`: Contains string (case-insensitive)
-            - `starts_with`: Starts with string
-            - `ends_with`: Ends with string
-
-            Examples:
-            - `?name[contains]=test`
-            - `?created_at[gte]=2023-01-01`
-            - `?price[gt]=100` 
+          description: Filter by product name
+        - in: query
+          name: sku
+          schema:
+            type: string
+          description: Filter by SKU
+        - in: query
+          name: upc
+          schema:
+            type: string
+          description: Filter by UPC/Barcode
+        - in: query
+          name: category.name
+          schema:
+            type: string
+          description: Filter by category name
+        - in: query
+          name: category.id
+          schema:
+            type: integer
+          description: Filter by category ID
+        - in: query
+          name: retail_price
+          schema:
+            type: number
+            format: float
+          description: Filter by retail price
+        - in: query
+          name: wholesale_price
+          schema:
+            type: number
+            format: float
+          description: Filter by wholesale price
+        - in: query
+          name: sellable
+          schema:
+            type: boolean
+          description: Filter by sellable status
+        - in: query
+          name: discontinued
+          schema:
+            type: boolean
+          description: Filter by discontinued status
+        - in: query
+          name: created_at
+          schema:
+            type: string
+            format: date-time
+          description: Filter by creation date
+        - in: query
+          name: updated_at
+          schema:
+            type: string
+            format: date-time
+          description: Filter by last update date
       responses:
         '200':
           description: A list of products associated with the company
@@ -10208,6 +10244,28 @@ paths:
 
         ### Integer Filters
         - `company.id`: Filter by company ID
+
+        ### DateTime Filters
+        - `created_at`: When the contact was created
+        - `updated_at`: When the contact was last updated
+
+        ## Examples
+        ```
+        # Find contacts by email domain
+        ?email[like]=@example.com
+
+        # Find contacts by company
+        ?company.name[eq]=Acme Corp
+
+        # Search contacts by name
+        ?q=John
+
+        # Find contacts from specific company
+        ?company.id[eq]=123
+
+        # Find recently added contacts
+        ?created_at[gte]=2024-01-01
+        ```
       parameters:
         - name: page
           in: query
@@ -10224,45 +10282,53 @@ paths:
             minimum: 1
             maximum: 100
           description: Number of items per page (max 100)
-        - name: sort
-          in: query
+        - in: query
+          name: q
           schema:
             type: string
-            default: 'id:desc'
-          description: |
-            Sort results by field and direction. Format: `field:direction`
-
-            Examples:
-            - `name:asc` - Sort by name in ascending order
-            - `created_at:desc` - Sort by creation date in descending order
-            - `id:asc` - Sort by ID in ascending order
-
-            Default is `id:desc` 
-        - name: filter
-          in: query
+          description: 'Filter by first name, last name, or email'
+        - in: query
+          name: first_name
           schema:
             type: string
-          description: |
-            Filter results based on specific criteria. Supports various operators.
-
-            For detailed information about the filtering system and available operators, 
-            refer to the [Filter System Documentation](/filters).
-
-            Common filter operators:
-            - `eq`: Equal to
-            - `neq`: Not equal to
-            - `gt`: Greater than
-            - `gte`: Greater than or equal to
-            - `lt`: Less than
-            - `lte`: Less than or equal to
-            - `contains`: Contains string (case-insensitive)
-            - `starts_with`: Starts with string
-            - `ends_with`: Ends with string
-
-            Examples:
-            - `?name[contains]=test`
-            - `?created_at[gte]=2023-01-01`
-            - `?price[gt]=100` 
+          description: Filter by first name
+        - in: query
+          name: last_name
+          schema:
+            type: string
+          description: Filter by last name
+        - in: query
+          name: email
+          schema:
+            type: string
+          description: Filter by email address
+        - in: query
+          name: phone
+          schema:
+            type: string
+          description: Filter by phone number
+        - in: query
+          name: company.name
+          schema:
+            type: string
+          description: Filter by company name
+        - in: query
+          name: company.id
+          schema:
+            type: integer
+          description: Filter by company ID
+        - in: query
+          name: created_at
+          schema:
+            type: string
+            format: date-time
+          description: Filter by creation date
+        - in: query
+          name: updated_at
+          schema:
+            type: string
+            format: date-time
+          description: Filter by last update date
       responses:
         '200':
           description: A list of contacts
@@ -10442,8 +10508,20 @@ paths:
         ## Available Filters
         ### String Filters
         - `name`: Schedule name
-        - `status`: Schedule status (active/inactive)
-        - `q`: General search matches name
+        - `counting_algorithm`: Type of counting algorithm used
+        - `modification_type`: Type of price modification
+
+        ## Examples
+        ```
+        # Find schedules by name
+        ?name[eq]=Bulk Discount
+
+        # Find schedules by counting algorithm
+        ?counting_algorithm[eq]=individual
+
+        # Find schedules by modification type
+        ?modification_type[eq]=percentage
+        ```
       parameters:
         - name: page
           in: query
@@ -10460,45 +10538,21 @@ paths:
             minimum: 1
             maximum: 100
           description: Number of items per page (max 100)
-        - name: sort
-          in: query
+        - in: query
+          name: name
           schema:
             type: string
-            default: 'id:desc'
-          description: |
-            Sort results by field and direction. Format: `field:direction`
-
-            Examples:
-            - `name:asc` - Sort by name in ascending order
-            - `created_at:desc` - Sort by creation date in descending order
-            - `id:asc` - Sort by ID in ascending order
-
-            Default is `id:desc` 
-        - name: filter
-          in: query
+          description: Filter by schedule name
+        - in: query
+          name: counting_algorithm
           schema:
             type: string
-          description: |
-            Filter results based on specific criteria. Supports various operators.
-
-            For detailed information about the filtering system and available operators, 
-            refer to the [Filter System Documentation](/filters).
-
-            Common filter operators:
-            - `eq`: Equal to
-            - `neq`: Not equal to
-            - `gt`: Greater than
-            - `gte`: Greater than or equal to
-            - `lt`: Less than
-            - `lte`: Less than or equal to
-            - `contains`: Contains string (case-insensitive)
-            - `starts_with`: Starts with string
-            - `ends_with`: Ends with string
-
-            Examples:
-            - `?name[contains]=test`
-            - `?created_at[gte]=2023-01-01`
-            - `?price[gt]=100` 
+          description: Filter by counting algorithm
+        - in: query
+          name: modification_type
+          schema:
+            type: string
+          description: Filter by modification type
       responses:
         '200':
           description: A list of price schedules
@@ -10805,8 +10859,22 @@ paths:
         ## Available Filters
         ### String Filters
         - `name`: Level name
-        - `status`: Level status (active/inactive)
-        - `q`: General search matches name
+        - `type`: Level type
+
+        ### Float Filters
+        - `percent_increase`: Percentage increase for the price level
+
+        ## Examples
+        ```
+        # Find levels by name
+        ?name[eq]=Retail
+
+        # Find levels by type
+        ?type[eq]=percentage
+
+        # Find levels with specific percentage increase
+        ?percent_increase[gte]=10
+        ```
       parameters:
         - name: page
           in: query
@@ -10837,31 +10905,22 @@ paths:
             - `id:asc` - Sort by ID in ascending order
 
             Default is `id:desc` 
-        - name: filter
-          in: query
+        - in: query
+          name: name
           schema:
             type: string
-          description: |
-            Filter results based on specific criteria. Supports various operators.
-
-            For detailed information about the filtering system and available operators, 
-            refer to the [Filter System Documentation](/filters).
-
-            Common filter operators:
-            - `eq`: Equal to
-            - `neq`: Not equal to
-            - `gt`: Greater than
-            - `gte`: Greater than or equal to
-            - `lt`: Less than
-            - `lte`: Less than or equal to
-            - `contains`: Contains string (case-insensitive)
-            - `starts_with`: Starts with string
-            - `ends_with`: Ends with string
-
-            Examples:
-            - `?name[contains]=test`
-            - `?created_at[gte]=2023-01-01`
-            - `?price[gt]=100` 
+          description: Filter by level name
+        - in: query
+          name: type
+          schema:
+            type: string
+          description: Filter by level type
+        - in: query
+          name: percent_increase
+          schema:
+            type: number
+            format: float
+          description: Filter by percentage increase
       responses:
         '200':
           description: A list of price levels
