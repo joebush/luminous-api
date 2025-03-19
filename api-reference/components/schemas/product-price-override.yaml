@@ -33,4 +33,46 @@ properties:
     description: The override price for this product when sold to this company
     example: 42.50
   product:
-    $ref: './price-override-product.yaml' 
+    type: object
+    nullable: true
+    description: Product information (included when the product relation is loaded)
+    properties:
+      id:
+        type: string
+        description: Unique identifier for the product
+        example: "567890"
+      internal_sku:
+        type: string
+        description: Internal SKU/code of the product
+        example: "WIDGET-123"
+      name:
+        type: string
+        description: Name of the product
+        example: "Deluxe Widget"
+      retail_price:
+        type: number
+        format: float
+        description: Standard retail price of the product
+        example: 59.99
+      wholesale_price:
+        type: number
+        format: float
+        description: Standard wholesale price of the product
+        example: 49.99
+      variant_parent_id:
+        type: integer
+        nullable: true
+        description: ID of the parent product if this is a variant
+        example: null
+      is_variant:
+        type: boolean
+        description: Whether this product is a variant of another product
+        example: false
+required:
+  - id
+  - created_at
+  - updated_at
+  - status
+  - company_id
+  - product_id
+  - price 
