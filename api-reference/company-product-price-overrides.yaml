@@ -5,14 +5,17 @@ get:
     - Pricing
   summary: Company Product Price Overrides
   description: |
-    Get a list of price overrides for specific products associated with a company.
+    Get a list of product-specific price overrides for a particular company.
+    
+    These price overrides allow specific products to have custom pricing when sold to a particular company,
+    overriding the standard pricing or any applicable price schedule.
     
     For detailed information about the filtering system and available operators, 
     refer to the [Filter System Documentation](/filters).
 
     ## Available Filters
     ### String Filters
-    - `productCode`: Product code/SKU
+    - `product.internal_sku`: Product internal SKU
     - `product.name`: Product name
     
   parameters:

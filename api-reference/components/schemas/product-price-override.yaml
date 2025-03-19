@@ -4,63 +4,6 @@ properties:
     type: string
     description: Unique identifier for the price override
     example: "987654"
-  company_id:
-    type: string
-    description: ID of the company this price override applies to
-    example: "123456"
-  product_id:
-    type: string
-    description: ID of the product being overridden
-    example: "567890"
-  productCode:
-    type: string
-    description: SKU/Product code of the product
-    example: "WIDGET-123"
-  product_name:
-    type: string
-    description: Name of the product
-    example: "Deluxe Widget"
-  override_type:
-    type: string
-    description: Type of price override
-    enum: [fixed, percentage]
-    example: "fixed"
-  original_price:
-    type: number
-    format: float
-    description: Original product price
-    example: 49.99
-  override_value:
-    type: number
-    format: float
-    description: Amount to override by (fixed amount or percentage)
-    example: 42.50
-  effective_price:
-    type: number
-    format: float
-    description: Calculated effective price after override
-    example: 42.50
-  company:
-    type: object
-    properties:
-      id:
-        type: string
-        example: "123456"
-      name:
-        type: string
-        example: "Acme Corporation"
-  product:
-    type: object
-    properties:
-      id:
-        type: string
-        example: "567890"
-      name:
-        type: string
-        example: "Deluxe Widget"
-      internal_sku:
-        type: string
-        example: "WIDGET-123"
   created_at:
     type: string
     format: date-time
@@ -70,4 +13,24 @@ properties:
     type: string
     format: date-time
     description: When the price override was last updated
-    example: "2023-03-15T14:30:00Z" 
+    example: "2023-03-15T14:30:00Z"
+  status:
+    type: string
+    description: Status of the price override record
+    enum: [active, inactive, deleted]
+    example: "active"
+  company_id:
+    type: string
+    description: ID of the company this price override applies to
+    example: "123456"
+  product_id:
+    type: string
+    description: ID of the product being overridden
+    example: "567890"
+  price:
+    type: number
+    format: float
+    description: The override price for this product when sold to this company
+    example: 42.50
+  product:
+    $ref: './price-override-product.yaml' 

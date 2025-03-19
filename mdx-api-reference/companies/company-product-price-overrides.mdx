@@ -1,3 +1,31 @@
 ---
+title: "Company Product Price Overrides"
 openapi: get /companies/{companyId}/product-price-overrides
 ---
+
+## Understanding Company Product Price Overrides
+
+Company product price overrides allow you to set custom pricing for specific products when sold to a particular company.
+These overrides take precedence over standard pricing rules and price schedules.
+
+### Use Cases
+
+- Setting special pricing for VIP customers
+- Offering contract pricing for specific products to certain customers
+- Applying customer-specific discounts on selected items
+- Maintaining long-term fixed pricing agreements regardless of market changes
+
+### Example Request
+
+```bash
+curl -X GET "https://your-company.api.joinluminous.com/external/api/v1/companies/123456/product-price-overrides" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+### Response Structure
+
+The response includes:
+
+- Details of all price overrides for the specified company
+- Product information including SKU and standard prices
+- Override price for each product
