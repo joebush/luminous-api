@@ -21,10 +21,77 @@ get:
     ### Integer Filters
     - `company.id`: Filter by company ID
     
+    ### DateTime Filters
+    - `created_at`: When the contact was created
+    - `updated_at`: When the contact was last updated
+    
+    ## Examples
+    ```
+    # Find contacts by email domain
+    ?email[like]=@example.com
+
+    # Find contacts by company
+    ?company.name[eq]=Acme Corp
+
+    # Search contacts by name
+    ?q=John
+
+    # Find contacts from specific company
+    ?company.id[eq]=123
+
+    # Find recently added contacts
+    ?created_at[gte]=2024-01-01
+    ```
   parameters:
     - $ref: './components/parameters/page.yaml'
     - $ref: './components/parameters/limit.yaml'
-    - $ref: './components/parameters/filter.yaml'
+    - in: query
+      name: q
+      schema:
+        type: string
+      description: Filter by first name, last name, or email
+    - in: query
+      name: first_name
+      schema:
+        type: string
+      description: Filter by first name
+    - in: query
+      name: last_name
+      schema:
+        type: string
+      description: Filter by last name
+    - in: query
+      name: email
+      schema:
+        type: string
+      description: Filter by email address
+    - in: query
+      name: phone
+      schema:
+        type: string
+      description: Filter by phone number
+    - in: query
+      name: company.name
+      schema:
+        type: string
+      description: Filter by company name
+    - in: query
+      name: company.id
+      schema:
+        type: integer
+      description: Filter by company ID
+    - in: query
+      name: created_at
+      schema:
+        type: string
+        format: date-time
+      description: Filter by creation date
+    - in: query
+      name: updated_at
+      schema:
+        type: string
+        format: date-time
+      description: Filter by last update date
     
   responses:
     '200':

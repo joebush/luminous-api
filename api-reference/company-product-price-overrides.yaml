@@ -10,14 +10,6 @@ get:
     These price overrides allow specific products to have custom pricing when sold to a particular company,
     overriding the standard pricing or any applicable price schedule.
     
-    For detailed information about the filtering system and available operators, 
-    refer to the [Filter System Documentation](/filters).
-
-    ## Available Filters
-    ### String Filters
-    - `product.internal_sku`: Product internal SKU
-    - `product.name`: Product name
-    
   parameters:
     - name: companyId
       in: path
@@ -27,7 +19,6 @@ get:
       description: The unique identifier of the company
     - $ref: './components/parameters/page.yaml'
     - $ref: './components/parameters/limit.yaml'
-    - $ref: './components/parameters/filter.yaml'
     
   responses:
     '200':

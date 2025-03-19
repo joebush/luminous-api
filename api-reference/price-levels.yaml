@@ -12,14 +12,42 @@ get:
     ## Available Filters
     ### String Filters
     - `name`: Level name
-    - `status`: Level status (active/inactive)
-    - `q`: General search matches name
+    - `type`: Level type
     
+    ### Float Filters
+    - `percent_increase`: Percentage increase for the price level
+    
+    ## Examples
+    ```
+    # Find levels by name
+    ?name[eq]=Retail
+
+    # Find levels by type
+    ?type[eq]=percentage
+
+    # Find levels with specific percentage increase
+    ?percent_increase[gte]=10
+    ```
   parameters:
     - $ref: './components/parameters/page.yaml'
     - $ref: './components/parameters/limit.yaml'
     - $ref: './components/parameters/sort.yaml'
-    - $ref: './components/parameters/filter.yaml'
+    - in: query
+      name: name
+      schema:
+        type: string
+      description: Filter by level name
+    - in: query
+      name: type
+      schema:
+        type: string
+      description: Filter by level type
+    - in: query
+      name: percent_increase
+      schema:
+        type: number
+        format: float
+      description: Filter by percentage increase
     
   responses:
     '200':

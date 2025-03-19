@@ -12,13 +12,38 @@ get:
     ## Available Filters
     ### String Filters
     - `name`: Schedule name
-    - `status`: Schedule status (active/inactive)
-    - `q`: General search matches name
+    - `counting_algorithm`: Type of counting algorithm used
+    - `modification_type`: Type of price modification
     
+    ## Examples
+    ```
+    # Find schedules by name
+    ?name[eq]=Bulk Discount
+
+    # Find schedules by counting algorithm
+    ?counting_algorithm[eq]=individual
+
+    # Find schedules by modification type
+    ?modification_type[eq]=percentage
+    ```
   parameters:
     - $ref: './components/parameters/page.yaml'
     - $ref: './components/parameters/limit.yaml'
-    - $ref: './components/parameters/filter.yaml'
+    - in: query
+      name: name
+      schema:
+        type: string
+      description: Filter by schedule name
+    - in: query
+      name: counting_algorithm
+      schema:
+        type: string
+      description: Filter by counting algorithm
+    - in: query
+      name: modification_type
+      schema:
+        type: string
+      description: Filter by modification type
     
   responses:
     '200':
