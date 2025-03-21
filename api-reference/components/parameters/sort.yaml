@@ -1,0 +1,14 @@
+name: sort
+in: query
+schema:
+  type: string
+  default: id:desc
+description: |
+  Sort results by field and direction. Format: `field:direction`
+  
+  Examples:
+  - `name:asc` - Sort by name in ascending order
+  - `created_at:desc` - Sort by creation date in descending order
+  - `id:asc` - Sort by ID in ascending order
+  
+  Default is `id:desc` 

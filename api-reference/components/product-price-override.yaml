@@ -1,0 +1,70 @@
+type: object
+properties:
+  id:
+    type: number
+    description: Unique identifier for the price override
+    example: 123
+  created_at:
+    type: string
+    format: date-time
+    description: When the price override was created
+    example: "2023-03-15T14:30:00Z"
+  updated_at:
+    type: string
+    format: date-time
+    description: When the price override was last updated
+    example: "2023-03-15T14:30:00Z"
+  status:
+    type: string
+    description: Status of the price override record
+    enum: [active, inactive, deleted]
+    example: "active"
+  company_id:
+    type: number
+    description: ID of the company this price override applies to
+    example: 5567
+  product_id:
+    type: number
+    description: ID of the product being overridden
+    example: 567890
+  price:
+    type: number
+    format: float
+    description: The override price for this product when sold to this company
+    example: 42.50
+  product:
+    type: object
+    nullable: true
+    description: Product information (included when the product relation is loaded)
+    properties:
+      id:
+        type: number
+        description: Unique identifier for the product
+        example: 567890
+      sku:
+        type: string
+        description: Internal SKU/code of the product
+        example: "WIDGET-123"
+      name:
+        type: string
+        description: Name of the product
+        example: "Deluxe Widget"
+      retail_price:
+        type: number
+        format: float
+        description: Standard retail price of the product
+        example: 59.99
+      wholesale_price:
+        type: number
+        format: float
+        description: Standard wholesale price of the product
+        example: 49.99
+      variant_parent_id:
+        type: integer
+        nullable: true
+        description: ID of the parent product if this is a variant
+        example: null
+      is_variant:
+        type: boolean
+        description: Whether this product is a variant of another product
+        example: false 

@@ -1,0 +1,34 @@
+type: object
+properties:
+  id:
+    type: number
+    description: Unique identifier for the price level
+    example: 123
+  created_at:
+    type: string
+    format: date-time
+    description: When the price level was created
+    example: "2023-03-15T14:30:00Z"
+  updated_at:
+    type: string
+    format: date-time
+    description: When the price level was last updated
+    example: "2023-03-15T14:30:00Z"
+  status:
+    type: string
+    description: Status of the price level
+    enum: [active, inactive]
+    example: "active"
+  name:
+    type: string
+    description: Name of the price level
+    example: "Wholesale"
+  type:
+    type: string
+    description: Type of the price level
+    example: "percentage"
+  percent_increase:
+    type: number
+    format: float
+    description: Percentage increase (or decrease) for this price level
+    example: 15.5 

@@ -1,0 +1,42 @@
+get:
+  operationId: getCompanyProductPriceOverrides
+  tags:
+    - Companies
+    - Pricing
+  summary: Company Product Price Overrides
+  description: |
+    Get a list of product-specific price overrides for a particular company.
+    
+    These price overrides allow specific products to have custom pricing when sold to a particular company,
+    overriding the standard pricing or any applicable price schedule.
+    
+  parameters:
+    - name: companyId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The unique identifier of the company
+    - $ref: './components/parameters/page.yaml'
+    - $ref: './components/parameters/limit.yaml'
+    
+  responses:
+    '200':
+      description: A list of product price overrides for the company
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/product-price-override.yaml'
+              meta:
+                $ref: './components/pagination-meta.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml'
+    '404':
+      $ref: './components/responses/not-found.yaml' 

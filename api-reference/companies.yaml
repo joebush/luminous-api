@@ -1,0 +1,129 @@
+get:
+  operationId: getCompanies
+  tags:
+    - Companies
+  summary: Companies
+  description: |
+    Get a paginated list of companies with optional filtering.
+    
+    For detailed information about the filtering system and available operators, 
+    refer to the [Filter System Documentation](/filters).
+
+    ## Available Filters
+    ### String Filters
+    - `name`: Company name
+    - `type`: Type of business
+    - `city`: City
+    - `state`: State
+    - `country`: Country
+    - `zip`: ZIP/Postal code
+    - `phone`: Phone number
+    - `payment_term`: Payment term
+    - `status`: Company status
+    - `tag`: Filter by tag name
+    
+    ### DateTime Filters
+    - `created_at`: When the company was created
+    - `updated_at`: When the company was last updated
+    
+    ## Examples
+    ```
+    # Find companies by name
+    ?name[eq]=Acme Corp
+
+    # Find companies in a specific state
+    ?state[eq]=CA
+
+    # Find companies with a specific payment term
+    ?payment_term[eq]=Net 30
+
+    # Find companies by tag
+    ?tag[eq]=VIP
+
+    # Find companies by status
+    ?status[eq]=active
+    ```
+  parameters:
+    - $ref: './components/parameters/page.yaml'
+    - $ref: './components/parameters/limit.yaml'
+    - in: query
+      name: name
+      schema:
+        type: string
+      description: Filter by company name
+    - in: query
+      name: type
+      schema:
+        type: string
+      description: Filter by business type
+    - in: query
+      name: phone
+      schema:
+        type: string
+      description: Filter by phone number
+    - in: query
+      name: city
+      schema:
+        type: string
+      description: Filter by city
+    - in: query
+      name: state
+      schema:
+        type: string
+      description: Filter by state
+    - in: query
+      name: country
+      schema:
+        type: string
+      description: Filter by country
+    - in: query
+      name: zip
+      schema:
+        type: string
+      description: Filter by ZIP/Postal code
+    - in: query
+      name: payment_term
+      schema:
+        type: string
+      description: Filter by payment term
+    - in: query
+      name: status
+      schema:
+        type: string
+      description: Filter by company status
+    - in: query
+      name: tag
+      schema:
+        type: string
+      description: Filter by tag name
+    - in: query
+      name: created_at
+      schema:
+        type: string
+        format: date-time
+      description: Filter by creation date
+    - in: query
+      name: updated_at
+      schema:
+        type: string
+        format: date-time
+      description: Filter by last update date
+    
+  responses:
+    '200':
+      description: A list of companies
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/company.yaml'
+              meta:
+                $ref: './components/pagination-meta.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml' 

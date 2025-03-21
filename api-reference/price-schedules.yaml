@@ -1,0 +1,65 @@
+get:
+  operationId: getPriceSchedules
+  tags:
+    - Pricing
+  summary: Price Schedules
+  description: |
+    Get a paginated list of price schedules with optional filtering.
+    
+    For detailed information about the filtering system and available operators, 
+    refer to the [Filter System Documentation](/filters).
+
+    ## Available Filters
+    ### String Filters
+    - `name`: Schedule name
+    - `counting_algorithm`: Type of counting algorithm used
+    - `modification_type`: Type of price modification
+    
+    ## Examples
+    ```
+    # Find schedules by name
+    ?name[eq]=Bulk Discount
+
+    # Find schedules by counting algorithm
+    ?counting_algorithm[eq]=individual
+
+    # Find schedules by modification type
+    ?modification_type[eq]=percentage
+    ```
+  parameters:
+    - $ref: './components/parameters/page.yaml'
+    - $ref: './components/parameters/limit.yaml'
+    - in: query
+      name: name
+      schema:
+        type: string
+      description: Filter by schedule name
+    - in: query
+      name: counting_algorithm
+      schema:
+        type: string
+      description: Filter by counting algorithm
+    - in: query
+      name: modification_type
+      schema:
+        type: string
+      description: Filter by modification type
+    
+  responses:
+    '200':
+      description: A list of price schedules
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/price-schedule.yaml'
+              meta:
+                $ref: './components/pagination-meta.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml' 

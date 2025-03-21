@@ -1,0 +1,191 @@
+get:
+  operationId: getCompanyProducts
+  tags:
+    - Companies
+    - Products
+  summary: Company Products
+  description: |
+    Get a paginated list of products associated with a specific company.
+    
+    For detailed information about the filtering system and available operators, 
+    refer to the [Filter System Documentation](/filters).
+
+    ## Available Filters
+    ### String Filters
+    - `name`: Product name
+    - `description`: Product description
+    - `sku`: Product SKU (searches both internal SKU and alternate SKUs)
+    - `upc`: Product UPC/Barcode
+    - `tag`: Product tags
+    - `q`: General search matches name OR upc OR sku
+    - `category.name`: Filter by category name
+    - `sub_category.name`: Filter by sub-category name
+    - `supplier.name`: Filter by supplier name
+    
+    ### Integer Filters
+    - `category.id`: Filter by category ID
+    - `sub_category.id`: Filter by sub-category ID
+    - `supplier.id`: Filter by supplier ID
+    
+    ### Float Filters
+    - `retail_price`: Product retail price
+    - `wholesale_price`: Product wholesale price
+    
+    ### Boolean Filters
+    - `sellable`: If the product is sellable or not
+    - `discontinued`: If the product is discontinued
+    
+    ### DateTime Filters
+    - `created_at`: When the product was created
+    - `updated_at`: When the product was last updated
+    
+    ## Examples
+    ```
+    # Find products by SKU (includes alternate SKUs)
+    ?sku[eq]=SKU-001
+
+    # Find products with specific price range
+    ?retail_price[gte]=50.00&retail_price[lte]=100.00
+
+    # Find recently updated products
+    ?updated_at[gte]=2024-01-01 00:00:00
+
+    # Search products by name
+    ?name[contains]=Test Product
+    
+    # Find products by category and sub-category
+    ?category.name[eq]=Electronics&sub_category.name[eq]=Smartphones
+    
+    # Find products by supplier
+    ?supplier.name[contains]=Acme
+    ```
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: query
+      name: page
+      schema:
+        type: integer
+        default: 1
+      description: Page number for pagination
+    - in: query
+      name: per_page
+      schema:
+        type: integer
+        default: 10
+        maximum: 100
+      description: Number of items per page (max 100)
+    - in: query
+      name: q
+      schema:
+        type: string
+      description: Filter by name OR upc OR sku
+    - in: query
+      name: name
+      schema:
+        type: string
+      description: Filter by product name
+    - in: query
+      name: description
+      schema:
+        type: string
+      description: Filter by product description
+    - in: query
+      name: sku
+      schema:
+        type: string
+      description: Filter by SKU (searches both internal and alternate SKUs)
+    - in: query
+      name: upc
+      schema:
+        type: string
+      description: Filter by UPC/Barcode
+    - in: query
+      name: sellable
+      schema:
+        type: boolean
+      description: Filter by sellable status
+    - in: query
+      name: discontinued
+      schema:
+        type: boolean
+      description: Filter by whether the product is discontinued
+    - in: query
+      name: retail_price
+      schema:
+        type: number
+        format: float
+      description: Filter by retail price
+    - in: query
+      name: wholesale_price
+      schema:
+        type: number
+        format: float
+      description: Filter by wholesale price
+    - in: query
+      name: created_at
+      schema:
+        type: string
+        format: date-time
+      description: Filter by creation date
+    - in: query
+      name: updated_at
+      schema:
+        type: string
+        format: date-time
+      description: Filter by last update date
+    - in: query
+      name: tag
+      schema:
+        type: string
+      description: Filter by product tags
+    - in: query
+      name: category.id
+      schema:
+        type: integer
+      description: Filter by category ID
+    - in: query
+      name: category.name
+      schema:
+        type: string
+      description: Filter by category name
+    - in: query
+      name: sub_category.id
+      schema:
+        type: integer
+      description: Filter by sub-category ID
+    - in: query
+      name: sub_category.name
+      schema:
+        type: string
+      description: Filter by sub-category name
+    - in: query
+      name: supplier.id
+      schema:
+        type: integer
+      description: Filter by supplier ID
+    - in: query
+      name: supplier.name
+      schema:
+        type: string
+      description: Filter by supplier name
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/product.yaml'
+              meta:
+                $ref: './components/pagination-meta.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'

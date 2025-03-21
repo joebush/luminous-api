@@ -1,0 +1,26 @@
+get:
+  operationId: getCompany
+  tags:
+    - Companies
+  summary: Company
+  description: Get detailed information for a specific company
+  parameters:
+    - name: companyId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The unique identifier of the company
+  responses:
+    '200':
+      description: Company details
+      content:
+        application/json:
+          schema:
+            $ref: './components/company.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml'
+    '404':
+      $ref: './components/responses/not-found.yaml' 

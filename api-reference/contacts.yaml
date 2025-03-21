@@ -1,0 +1,105 @@
+get:
+  operationId: getContacts
+  tags:
+    - Contacts
+  summary: Contacts
+  description: |
+    Get a paginated list of all contacts with optional filtering.
+    
+    For detailed information about the filtering system and available operators, 
+    refer to the [Filter System Documentation](/filters).
+
+    ## Available Filters
+    ### String Filters
+    - `first_name`: Contact first name
+    - `last_name`: Contact last name
+    - `email`: Contact email
+    - `phone`: Contact phone number
+    - `status`: Contact status
+    - `company.name`: Company name
+    
+    ### DateTime Filters
+    - `created_at`: When the contact was created
+    - `updated_at`: When the contact was last updated
+    
+    ## Examples
+    ```
+    # Find contacts by email domain
+    ?email[like]=@example.com
+
+    # Find contacts by company
+    ?company.name[eq]=Acme Corp
+
+    # Find contacts by status
+    ?status[eq]=active
+
+    # Find contacts by phone
+    ?phone[eq]=555-123-4567
+
+    # Find recently added contacts
+    ?created_at[gte]=2024-01-01
+    ```
+  parameters:
+    - $ref: './components/parameters/page.yaml'
+    - $ref: './components/parameters/limit.yaml'
+    - in: query
+      name: first_name
+      schema:
+        type: string
+      description: Filter by first name
+    - in: query
+      name: last_name
+      schema:
+        type: string
+      description: Filter by last name
+    - in: query
+      name: email
+      schema:
+        type: string
+      description: Filter by email address
+    - in: query
+      name: phone
+      schema:
+        type: string
+      description: Filter by phone number
+    - in: query
+      name: status
+      schema:
+        type: string
+      description: Filter by contact status
+    - in: query
+      name: company.name
+      schema:
+        type: string
+      description: Filter by company name
+    - in: query
+      name: created_at
+      schema:
+        type: string
+        format: date-time
+      description: Filter by creation date
+    - in: query
+      name: updated_at
+      schema:
+        type: string
+        format: date-time
+      description: Filter by last update date
+    
+  responses:
+    '200':
+      description: A list of contacts
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/contact.yaml'
+              meta:
+                $ref: './components/pagination-meta.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml' 

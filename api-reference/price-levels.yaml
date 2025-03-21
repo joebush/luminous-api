@@ -1,0 +1,69 @@
+get:
+  operationId: getPriceLevels
+  tags:
+    - Pricing
+  summary: Price Levels
+  description: |
+    Get a paginated list of price levels with optional filtering.
+    
+    For detailed information about the filtering system and available operators, 
+    refer to the [Filter System Documentation](/filters).
+
+    ## Available Filters
+    ### String Filters
+    - `name`: Level name
+    - `type`: Level type
+    
+    ### Float Filters
+    - `percent_increase`: Percentage increase for the price level
+    
+    ## Examples
+    ```
+    # Find levels by name
+    ?name[eq]=Retail
+
+    # Find levels by type
+    ?type[eq]=percentage
+
+    # Find levels with specific percentage increase
+    ?percent_increase[gte]=10
+    ```
+  parameters:
+    - $ref: './components/parameters/page.yaml'
+    - $ref: './components/parameters/limit.yaml'
+    - $ref: './components/parameters/sort.yaml'
+    - in: query
+      name: name
+      schema:
+        type: string
+      description: Filter by level name
+    - in: query
+      name: type
+      schema:
+        type: string
+      description: Filter by level type
+    - in: query
+      name: percent_increase
+      schema:
+        type: number
+        format: float
+      description: Filter by percentage increase
+    
+  responses:
+    '200':
+      description: A list of price levels
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/price-level.yaml'
+              meta:
+                $ref: './components/pagination-meta.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml' 
