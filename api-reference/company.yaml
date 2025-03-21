@@ -4,6 +4,8 @@ get:
     - Companies
   summary: Company
   description: Get detailed information for a specific company
+  security:
+    - BearerAuth: []
   parameters:
     - name: companyId
       in: path

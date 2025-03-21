@@ -43,6 +43,8 @@ get:
     # Find companies by status
     ?status[eq]=active
     ```
+  security:
+    - BearerAuth: []
   parameters:
     - $ref: './components/parameters/page.yaml'
     - $ref: './components/parameters/limit.yaml'

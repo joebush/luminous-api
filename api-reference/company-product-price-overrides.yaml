@@ -9,7 +9,8 @@ get:
     
     These price overrides allow specific products to have custom pricing when sold to a particular company,
     overriding the standard pricing or any applicable price schedule.
-    
+  security:
+    - BearerAuth: []
   parameters:
     - name: companyId
       in: path

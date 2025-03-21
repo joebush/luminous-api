@@ -10,7 +10,8 @@ get:
     
     This endpoint returns a more detailed pricing structure than the standard price endpoint,
     showing how different price levels and schedules affect the product's final price.
-    
+  security:
+    - BearerAuth: []
   parameters:
     - name: productId
       in: path

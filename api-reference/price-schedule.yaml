@@ -4,6 +4,8 @@ get:
     - Pricing
   summary: Price Schedule
   description: Get detailed information for a specific price schedule
+  security:
+    - BearerAuth: []
   parameters:
     - name: scheduleId
       in: path

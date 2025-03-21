@@ -4,6 +4,8 @@ get:
     - Pricing
   summary: Price Level
   description: Get detailed information for a specific price level
+  security:
+    - BearerAuth: []
   parameters:
     - name: levelId
       in: path

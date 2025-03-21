@@ -28,6 +28,8 @@ get:
     # Find levels with specific percentage increase
     ?percent_increase[gte]=10
     ```
+  security:
+    - BearerAuth: []
   parameters:
     - $ref: './components/parameters/page.yaml'
     - $ref: './components/parameters/limit.yaml'

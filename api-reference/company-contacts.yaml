@@ -23,6 +23,8 @@ get:
     - `created_at`: When the contact was created
     - `updated_at`: When the contact was last updated
     
+  security:
+    - BearerAuth: []
   parameters:
     - name: companyId
       in: path

@@ -26,6 +26,8 @@ get:
     # Find schedules by modification type
     ?modification_type[eq]=percentage
     ```
+  security:
+    - BearerAuth: []
   parameters:
     - $ref: './components/parameters/page.yaml'
     - $ref: './components/parameters/limit.yaml'

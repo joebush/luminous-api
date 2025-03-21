@@ -39,6 +39,8 @@ get:
     # Find recently added contacts
     ?created_at[gte]=2024-01-01
     ```
+  security:
+    - BearerAuth: []
   parameters:
     - $ref: './components/parameters/page.yaml'
     - $ref: './components/parameters/limit.yaml'

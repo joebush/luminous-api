@@ -2408,6 +2408,8 @@ paths:
 
         This endpoint returns a more detailed pricing structure than the standard price endpoint,
         showing how different price levels and schedules affect the product's final price.
+      security:
+        - BearerAuth: []
       parameters:
         - name: productId
           in: path
@@ -8960,6 +8962,8 @@ paths:
         # Find companies by status
         ?status[eq]=active
         ```
+      security:
+        - BearerAuth: []
       parameters:
         - name: page
           in: query
@@ -9424,6 +9428,8 @@ paths:
         - Companies
       summary: Company
       description: Get detailed information for a specific company
+      security:
+        - BearerAuth: []
       parameters:
         - name: companyId
           in: path
@@ -9819,6 +9825,8 @@ paths:
         ### DateTime Filters
         - `created_at`: When the contact was created
         - `updated_at`: When the contact was last updated
+      security:
+        - BearerAuth: []
       parameters:
         - name: companyId
           in: path
@@ -10056,6 +10064,8 @@ paths:
 
         These price overrides allow specific products to have custom pricing when sold to a particular company,
         overriding the standard pricing or any applicable price schedule.
+      security:
+        - BearerAuth: []
       parameters:
         - name: companyId
           in: path
@@ -10302,6 +10312,12 @@ paths:
       security:
         - BearerAuth: []
       parameters:
+        - name: companyId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the company
         - in: query
           name: page
           schema:
@@ -10727,6 +10743,8 @@ paths:
         # Find recently added contacts
         ?created_at[gte]=2024-01-01
         ```
+      security:
+        - BearerAuth: []
       parameters:
         - name: page
           in: query
@@ -10959,6 +10977,8 @@ paths:
         # Find schedules by modification type
         ?modification_type[eq]=percentage
         ```
+      security:
+        - BearerAuth: []
       parameters:
         - name: page
           in: query
@@ -11189,6 +11209,8 @@ paths:
         - Pricing
       summary: Price Schedule
       description: Get detailed information for a specific price schedule
+      security:
+        - BearerAuth: []
       parameters:
         - name: scheduleId
           in: path
@@ -11403,6 +11425,8 @@ paths:
         # Find levels with specific percentage increase
         ?percent_increase[gte]=10
         ```
+      security:
+        - BearerAuth: []
       parameters:
         - name: page
           in: query
@@ -11562,6 +11586,8 @@ paths:
         - Pricing
       summary: Price Level
       description: Get detailed information for a specific price level
+      security:
+        - BearerAuth: []
       parameters:
         - name: levelId
           in: path
