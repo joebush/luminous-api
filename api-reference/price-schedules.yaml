@@ -56,9 +56,9 @@ get:
               data:
                 type: array
                 items:
-                  $ref: './components/schemas/price-schedule.yaml'
+                  $ref: './components/price-schedule.yaml'
               meta:
-                $ref: './components/schemas/pagination.yaml'
+                $ref: './components/pagination-meta.yaml'
     '401':
       $ref: './components/responses/unauthorized.yaml'
     '403':

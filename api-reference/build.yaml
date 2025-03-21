@@ -432,18 +432,28 @@ paths:
                     properties:
                       current_page:
                         type: integer
+                        description: The current page number
+                        example: 1
                       from:
                         type: integer
+                        description: The starting index of the paginated results
+                        example: 1
                       last_page:
                         type: integer
-                      path:
-                        type: string
+                        description: The last page number
+                        example: 5
                       per_page:
                         type: integer
+                        description: Number of items per page
+                        example: 10
                       to:
                         type: integer
+                        description: The ending index of the paginated results
+                        example: 10
                       total:
                         type: integer
+                        description: Total number of items across all pages
+                        example: 50
         '401':
           description: Unauthorized
           content:
@@ -3015,18 +3025,28 @@ paths:
                     properties:
                       current_page:
                         type: integer
+                        description: The current page number
+                        example: 1
                       from:
                         type: integer
+                        description: The starting index of the paginated results
+                        example: 1
                       last_page:
                         type: integer
-                      path:
-                        type: string
+                        description: The last page number
+                        example: 5
                       per_page:
                         type: integer
+                        description: Number of items per page
+                        example: 10
                       to:
                         type: integer
+                        description: The ending index of the paginated results
+                        example: 10
                       total:
                         type: integer
+                        description: Total number of items across all pages
+                        example: 50
         '401':
           description: Unauthorized
           content:
@@ -3579,18 +3599,28 @@ paths:
                     properties:
                       current_page:
                         type: integer
+                        description: The current page number
+                        example: 1
                       from:
                         type: integer
+                        description: The starting index of the paginated results
+                        example: 1
                       last_page:
                         type: integer
-                      path:
-                        type: string
+                        description: The last page number
+                        example: 5
                       per_page:
                         type: integer
+                        description: Number of items per page
+                        example: 10
                       to:
                         type: integer
+                        description: The ending index of the paginated results
+                        example: 10
                       total:
                         type: integer
+                        description: Total number of items across all pages
+                        example: 50
         '401':
           description: Unauthorized
           content:
@@ -3709,18 +3739,28 @@ paths:
                     properties:
                       current_page:
                         type: integer
+                        description: The current page number
+                        example: 1
                       from:
                         type: integer
+                        description: The starting index of the paginated results
+                        example: 1
                       last_page:
                         type: integer
-                      path:
-                        type: string
+                        description: The last page number
+                        example: 5
                       per_page:
                         type: integer
+                        description: Number of items per page
+                        example: 10
                       to:
                         type: integer
+                        description: The ending index of the paginated results
+                        example: 10
                       total:
                         type: integer
+                        description: Total number of items across all pages
+                        example: 50
         '401':
           description: Unauthorized
           content:
@@ -4388,18 +4428,28 @@ paths:
                     properties:
                       current_page:
                         type: integer
+                        description: The current page number
+                        example: 1
                       from:
                         type: integer
+                        description: The starting index of the paginated results
+                        example: 1
                       last_page:
                         type: integer
-                      path:
-                        type: string
+                        description: The last page number
+                        example: 5
                       per_page:
                         type: integer
+                        description: Number of items per page
+                        example: 10
                       to:
                         type: integer
+                        description: The ending index of the paginated results
+                        example: 10
                       total:
                         type: integer
+                        description: Total number of items across all pages
+                        example: 50
         '401':
           description: Unauthorized
           content:
@@ -5665,18 +5715,28 @@ paths:
                     properties:
                       current_page:
                         type: integer
+                        description: The current page number
+                        example: 1
                       from:
                         type: integer
+                        description: The starting index of the paginated results
+                        example: 1
                       last_page:
                         type: integer
-                      path:
-                        type: string
+                        description: The last page number
+                        example: 5
                       per_page:
                         type: integer
+                        description: Number of items per page
+                        example: 10
                       to:
                         type: integer
+                        description: The ending index of the paginated results
+                        example: 10
                       total:
                         type: integer
+                        description: Total number of items across all pages
+                        example: 50
         '401':
           description: Unauthorized
           content:
@@ -6462,18 +6522,28 @@ paths:
                     properties:
                       current_page:
                         type: integer
+                        description: The current page number
+                        example: 1
                       from:
                         type: integer
+                        description: The starting index of the paginated results
+                        example: 1
                       last_page:
                         type: integer
-                      path:
-                        type: string
+                        description: The last page number
+                        example: 5
                       per_page:
                         type: integer
+                        description: Number of items per page
+                        example: 10
                       to:
                         type: integer
+                        description: The ending index of the paginated results
+                        example: 10
                       total:
                         type: integer
+                        description: Total number of items across all pages
+                        example: 50
         '401':
           description: Unauthorized
           content:
@@ -7559,18 +7629,28 @@ paths:
                     properties:
                       current_page:
                         type: integer
+                        description: The current page number
+                        example: 1
                       from:
                         type: integer
+                        description: The starting index of the paginated results
+                        example: 1
                       last_page:
                         type: integer
-                      path:
-                        type: string
+                        description: The last page number
+                        example: 5
                       per_page:
                         type: integer
+                        description: Number of items per page
+                        example: 10
                       to:
                         type: integer
+                        description: The ending index of the paginated results
+                        example: 10
                       total:
                         type: integer
+                        description: Total number of items across all pages
+                        example: 50
         '401':
           description: Unauthorized
           content:
@@ -8569,18 +8649,28 @@ paths:
                     properties:
                       current_page:
                         type: integer
+                        description: The current page number
+                        example: 1
                       from:
                         type: integer
+                        description: The starting index of the paginated results
+                        example: 1
                       last_page:
                         type: integer
-                      path:
-                        type: string
+                        description: The last page number
+                        example: 5
                       per_page:
                         type: integer
+                        description: Number of items per page
+                        example: 10
                       to:
                         type: integer
+                        description: The ending index of the paginated results
+                        example: 10
                       total:
                         type: integer
+                        description: Total number of items across all pages
+                        example: 50
         '401':
           description: Unauthorized
           content:
@@ -8736,18 +8826,28 @@ paths:
                     properties:
                       current_page:
                         type: integer
+                        description: The current page number
+                        example: 1
                       from:
                         type: integer
+                        description: The starting index of the paginated results
+                        example: 1
                       last_page:
                         type: integer
-                      path:
-                        type: string
+                        description: The last page number
+                        example: 5
                       per_page:
                         type: integer
+                        description: Number of items per page
+                        example: 10
                       to:
                         type: integer
+                        description: The ending index of the paginated results
+                        example: 10
                       total:
                         type: integer
+                        description: Total number of items across all pages
+                        example: 50
         '401':
           description: Unauthorized
           content:
@@ -8828,25 +8928,16 @@ paths:
 
         ## Available Filters
         ### String Filters
-        - `business_name`: Company name
-        - `business_type`: Type of business
-        - `business_city`: City
-        - `business_state`: State
-        - `business_country`: Country
-        - `business_zip`: ZIP/Postal code
+        - `name`: Company name
+        - `type`: Type of business
+        - `city`: City
+        - `state`: State
+        - `country`: Country
+        - `zip`: ZIP/Postal code
         - `phone`: Phone number
-        - `q`: General search matches business_name
-        - `fein`: Federal Employer Identification Number
-
-        ### Boolean Filters
-        - `tax_exempt`: Whether the company is tax exempt
-
-        ### Float Filters
-        - `tax_rate`: Company's tax rate
-
-        ### Integer Filters
-        - `business_type_id`: Business type ID
-        - `default_price_level_id`: Default price level ID
+        - `payment_term`: Payment term
+        - `status`: Company status
+        - `tag`: Filter by tag name
 
         ### DateTime Filters
         - `created_at`: When the company was created
@@ -8855,19 +8946,19 @@ paths:
         ## Examples
         ```
         # Find companies by name
-        ?business_name[eq]=Acme Corp
+        ?name[eq]=Acme Corp
 
         # Find companies in a specific state
-        ?business_state[eq]=CA
+        ?state[eq]=CA
 
-        # Search companies by name
-        ?q=Acme
+        # Find companies with a specific payment term
+        ?payment_term[eq]=Net 30
 
-        # Find tax exempt companies
-        ?tax_exempt[eq]=true
+        # Find companies by tag
+        ?tag[eq]=VIP
 
-        # Find companies by business type
-        ?business_type[eq]=Manufacturer
+        # Find companies by status
+        ?status[eq]=active
         ```
       parameters:
         - name: page
@@ -8886,71 +8977,55 @@ paths:
             maximum: 100
           description: Number of items per page (max 100)
         - in: query
-          name: q
-          schema:
-            type: string
-          description: Filter by business name
-        - in: query
-          name: business_name
+          name: name
           schema:
             type: string
           description: Filter by company name
         - in: query
-          name: business_type
+          name: type
           schema:
             type: string
           description: Filter by business type
-        - in: query
-          name: business_type_id
-          schema:
-            type: integer
-          description: Filter by business type ID
-        - in: query
-          name: business_city
-          schema:
-            type: string
-          description: Filter by city
-        - in: query
-          name: business_state
-          schema:
-            type: string
-          description: Filter by state
-        - in: query
-          name: business_country
-          schema:
-            type: string
-          description: Filter by country
-        - in: query
-          name: business_zip
-          schema:
-            type: string
-          description: Filter by ZIP/Postal code
         - in: query
           name: phone
           schema:
             type: string
           description: Filter by phone number
         - in: query
-          name: fein
+          name: city
           schema:
             type: string
-          description: Filter by FEIN
+          description: Filter by city
         - in: query
-          name: tax_exempt
+          name: state
           schema:
-            type: boolean
-          description: Filter by tax exempt status
+            type: string
+          description: Filter by state
         - in: query
-          name: tax_rate
+          name: country
           schema:
-            type: number
-            format: float
-          description: Filter by tax rate
+            type: string
+          description: Filter by country
         - in: query
-          name: default_price_level_id
+          name: zip
           schema:
-            type: integer
-          description: Filter by default price level ID
+            type: string
+          description: Filter by ZIP/Postal code
+        - in: query
+          name: payment_term
+          schema:
+            type: string
+          description: Filter by payment term
+        - in: query
+          name: status
+          schema:
+            type: string
+          description: Filter by company status
+        - in: query
+          name: tag
+          schema:
+            type: string
+          description: Filter by tag name
         - in: query
           name: created_at
           schema:
@@ -8980,66 +9055,213 @@ paths:
                           type: string
                           description: Unique identifier for the company
                           example: '123456'
-                        name:
+                        created_at:
                           type: string
-                          description: Company name
-                          example: Acme Corporation
-                        external_id:
+                          format: date-time
+                          description: When the company was created
+                          example: '2023-03-15T14:30:00Z'
+                        updated_at:
                           type: string
-                          description: External identifier for the company
-                          example: ACME-123
+                          format: date-time
+                          description: When the company was last updated
+                          example: '2023-03-15T14:30:00Z'
                         status:
                           type: string
-                          description: Company status
+                          description: Status of the company
                           enum:
                             - active
                             - inactive
                           example: active
-                        email:
+                        name:
                           type: string
-                          format: email
-                          description: Primary email address for the company
-                          example: info@acmecorp.com
+                          description: Company name
+                          example: Acme Corporation
+                        type:
+                          type: string
+                          description: Type of business
+                          example: Retail
                         phone:
                           type: string
                           description: Primary phone number for the company
                           example: 555-123-4567
-                        fax:
+                        address:
                           type: string
-                          description: Fax number for the company
-                          example: 555-123-9876
-                        website:
+                          description: Street address for the company
+                          example: 123 Main St
+                        address_line_2:
                           type: string
-                          description: Company website
-                          example: 'https://www.acmecorp.com'
-                        billing_address:
-                          type: object
-                          properties:
-                            street1:
-                              type: string
-                              example: 123 Main St
-                            street2:
-                              type: string
-                              example: Suite 500
-                            city:
-                              type: string
-                              example: Austin
-                            state:
-                              type: string
-                              example: TX
-                            postal_code:
-                              type: string
-                              example: '78701'
-                            country:
-                              type: string
-                              example: USA
+                          description: Additional address information
+                          example: Suite 500
+                        city:
+                          type: string
+                          description: City
+                          example: Austin
+                        state:
+                          type: string
+                          description: State/province
+                          example: TX
+                        postal_code:
+                          type: string
+                          description: Postal/ZIP code
+                          example: '78701'
+                        country:
+                          type: string
+                          description: Country
+                          example: USA
+                        full_address:
+                          type: string
+                          description: Complete formatted address
+                          example: '123 Main St, Suite 500, Austin, TX 78701, USA'
+                        shipping_first_name:
+                          type: string
+                          description: First name for shipping contact
+                          example: John
+                        shipping_last_name:
+                          type: string
+                          description: Last name for shipping contact
+                          example: Doe
+                        shipping_email:
+                          type: string
+                          format: email
+                          description: Email for shipping contact
+                          example: shipping@acmecorp.com
+                        shipping_phone:
+                          type: string
+                          description: Phone number for shipping contact
+                          example: 555-987-6543
                         shipping_address:
+                          type: string
+                          description: Shipping street address
+                          example: 456 Warehouse Blvd
+                        shipping_city:
+                          type: string
+                          description: Shipping city
+                          example: Austin
+                        shipping_state:
+                          type: string
+                          description: Shipping state/province
+                          example: TX
+                        shipping_postal_code:
+                          type: string
+                          description: Shipping postal/ZIP code
+                          example: '78745'
+                        shipping_country:
+                          type: string
+                          description: Shipping country
+                          example: USA
+                        shipping_full_address:
+                          type: string
+                          description: Complete formatted shipping address
+                          example: '456 Warehouse Blvd, Austin, TX 78745, USA'
+                        payment_term:
+                          type: string
+                          description: Payment terms for the company
+                          example: Net 30
+                        tax_exempt:
+                          type: boolean
+                          description: Whether the company is exempt from taxes
+                          example: false
+                        tax_rate:
+                          type: number
+                          format: float
+                          description: Tax rate applied to the company's orders
+                          example: 8.25
+                        due_date_days:
+                          type: integer
+                          description: Number of days until payment is due
+                          example: 30
+                        price_level:
+                          description: Price level associated with this company
                           type: object
                           properties:
-                            street1:
+                            id:
+                              type: number
+                              description: Unique identifier for the price level
+                              example: 123
+                            created_at:
+                              type: string
+                              format: date-time
+                              description: When the price level was created
+                              example: '2023-03-15T14:30:00Z'
+                            updated_at:
+                              type: string
+                              format: date-time
+                              description: When the price level was last updated
+                              example: '2023-03-15T14:30:00Z'
+                            status:
+                              type: string
+                              description: Status of the price level
+                              enum:
+                                - active
+                                - inactive
+                              example: active
+                            name:
+                              type: string
+                              description: Name of the price level
+                              example: Wholesale
+                            type:
+                              type: string
+                              description: Type of the price level
+                              example: percentage
+                            percent_increase:
+                              type: number
+                              format: float
+                              description: Percentage increase (or decrease) for this price level
+                              example: 15.5
+                        notes:
+                          type: string
+                          description: Additional notes about the company
+                          example: 'Key account, requires special handling'
+                        fein:
+                          type: string
+                          description: Federal Employer Identification Number
+                          example: 12-3456789
+                        tags:
+                          type: array
+                          description: List of tags associated with the company
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: Unique identifier for the tag
+                              name:
+                                type: string
+                                description: Name of the tag
+                              description:
+                                type: string
+                                nullable: true
+                                description: Description of the tag
+                              icon:
+                                type: string
+                                nullable: true
+                                description: Icon identifier or URL for the tag
+                              color:
+                                type: string
+                                nullable: true
+                                description: Color code for the tag
+                            required:
+                              - id
+                              - name
+                        default_shipping:
+                          type: object
+                          description: Default shipping information
+                          properties:
+                            id:
+                              type: string
+                              example: '789'
+                            created_at:
+                              type: string
+                              format: date-time
+                              example: '2023-03-15T14:30:00Z'
+                            updated_at:
+                              type: string
+                              format: date-time
+                              example: '2023-03-15T14:30:00Z'
+                            address:
                               type: string
                               example: 456 Warehouse Blvd
-                            street2:
+                            address_line_2:
                               type: string
                               example: Building 2
                             city:
@@ -9054,33 +9276,88 @@ paths:
                             country:
                               type: string
                               example: USA
-                        price_level:
+                            full_name:
+                              type: string
+                              example: John Doe
+                            first_name:
+                              type: string
+                              example: John
+                            last_name:
+                              type: string
+                              example: Doe
+                            phone:
+                              type: string
+                              example: 555-987-6543
+                            email:
+                              type: string
+                              format: email
+                              example: shipping@acmecorp.com
+                            is_default:
+                              type: boolean
+                              example: true
+                        billing_info:
                           type: object
+                          description: Billing information
                           properties:
                             id:
                               type: string
-                              example: '789'
+                              example: '456'
+                            created_at:
+                              type: string
+                              format: date-time
+                              example: '2023-03-15T14:30:00Z'
+                            updated_at:
+                              type: string
+                              format: date-time
+                              example: '2023-03-15T14:30:00Z'
+                            first_name:
+                              type: string
+                              example: Jane
+                            last_name:
+                              type: string
+                              example: Smith
+                            email:
+                              type: string
+                              format: email
+                              example: accounting@acmecorp.com
+                            receiving_bank_name:
+                              type: string
+                              example: First National Bank
+                            receiving_bank_address:
+                              type: string
+                              example: '789 Finance Street, Austin, TX 78701'
+                        client_type:
+                          type: object
+                          description: Type of client
+                          properties:
+                            id:
+                              type: string
+                              example: '123'
+                            created_at:
+                              type: string
+                              format: date-time
+                              example: '2023-03-15T14:30:00Z'
+                            updated_at:
+                              type: string
+                              format: date-time
+                              example: '2023-03-15T14:30:00Z'
                             name:
                               type: string
-                              example: Wholesale
-                        created_at:
-                          type: string
-                          format: date-time
-                          description: When the company was created
-                          example: '2023-03-15T14:30:00Z'
-                        updated_at:
-                          type: string
-                          format: date-time
-                          description: When the company was last updated
-                          example: '2023-03-15T14:30:00Z'
-                        tags:
-                          type: array
-                          description: List of tags associated with the company
-                          items:
-                            type: string
+                              example: Retail
+                            description:
+                              type: string
+                              example: Retail business client
+                        custom_fields:
+                          type: object
+                          description: Custom fields for the company
                           example:
-                            - wholesale
-                            - preferred
+                            Industry: Manufacturing
+                            Region: Southwest
+                            Annual Revenue: $5M-$10M
+                      required:
+                        - id
+                        - name
+                        - status
                   meta:
                     type: object
                     properties:
@@ -9108,21 +9385,6 @@ paths:
                         type: integer
                         description: Total number of items across all pages
                         example: 50
-                      links:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            url:
-                              type: string
-                              nullable: true
-                              example: 'https://api.example.com/companies?page=2'
-                            label:
-                              type: string
-                              example: '2'
-                            active:
-                              type: boolean
-                              example: false
         '401':
           description: Authentication credentials were missing or invalid
           content:
@@ -9181,66 +9443,213 @@ paths:
                     type: string
                     description: Unique identifier for the company
                     example: '123456'
-                  name:
+                  created_at:
                     type: string
-                    description: Company name
-                    example: Acme Corporation
-                  external_id:
+                    format: date-time
+                    description: When the company was created
+                    example: '2023-03-15T14:30:00Z'
+                  updated_at:
                     type: string
-                    description: External identifier for the company
-                    example: ACME-123
+                    format: date-time
+                    description: When the company was last updated
+                    example: '2023-03-15T14:30:00Z'
                   status:
                     type: string
-                    description: Company status
+                    description: Status of the company
                     enum:
                       - active
                       - inactive
                     example: active
-                  email:
+                  name:
                     type: string
-                    format: email
-                    description: Primary email address for the company
-                    example: info@acmecorp.com
+                    description: Company name
+                    example: Acme Corporation
+                  type:
+                    type: string
+                    description: Type of business
+                    example: Retail
                   phone:
                     type: string
                     description: Primary phone number for the company
                     example: 555-123-4567
-                  fax:
+                  address:
                     type: string
-                    description: Fax number for the company
-                    example: 555-123-9876
-                  website:
+                    description: Street address for the company
+                    example: 123 Main St
+                  address_line_2:
                     type: string
-                    description: Company website
-                    example: 'https://www.acmecorp.com'
-                  billing_address:
-                    type: object
-                    properties:
-                      street1:
-                        type: string
-                        example: 123 Main St
-                      street2:
-                        type: string
-                        example: Suite 500
-                      city:
-                        type: string
-                        example: Austin
-                      state:
-                        type: string
-                        example: TX
-                      postal_code:
-                        type: string
-                        example: '78701'
-                      country:
-                        type: string
-                        example: USA
+                    description: Additional address information
+                    example: Suite 500
+                  city:
+                    type: string
+                    description: City
+                    example: Austin
+                  state:
+                    type: string
+                    description: State/province
+                    example: TX
+                  postal_code:
+                    type: string
+                    description: Postal/ZIP code
+                    example: '78701'
+                  country:
+                    type: string
+                    description: Country
+                    example: USA
+                  full_address:
+                    type: string
+                    description: Complete formatted address
+                    example: '123 Main St, Suite 500, Austin, TX 78701, USA'
+                  shipping_first_name:
+                    type: string
+                    description: First name for shipping contact
+                    example: John
+                  shipping_last_name:
+                    type: string
+                    description: Last name for shipping contact
+                    example: Doe
+                  shipping_email:
+                    type: string
+                    format: email
+                    description: Email for shipping contact
+                    example: shipping@acmecorp.com
+                  shipping_phone:
+                    type: string
+                    description: Phone number for shipping contact
+                    example: 555-987-6543
                   shipping_address:
+                    type: string
+                    description: Shipping street address
+                    example: 456 Warehouse Blvd
+                  shipping_city:
+                    type: string
+                    description: Shipping city
+                    example: Austin
+                  shipping_state:
+                    type: string
+                    description: Shipping state/province
+                    example: TX
+                  shipping_postal_code:
+                    type: string
+                    description: Shipping postal/ZIP code
+                    example: '78745'
+                  shipping_country:
+                    type: string
+                    description: Shipping country
+                    example: USA
+                  shipping_full_address:
+                    type: string
+                    description: Complete formatted shipping address
+                    example: '456 Warehouse Blvd, Austin, TX 78745, USA'
+                  payment_term:
+                    type: string
+                    description: Payment terms for the company
+                    example: Net 30
+                  tax_exempt:
+                    type: boolean
+                    description: Whether the company is exempt from taxes
+                    example: false
+                  tax_rate:
+                    type: number
+                    format: float
+                    description: Tax rate applied to the company's orders
+                    example: 8.25
+                  due_date_days:
+                    type: integer
+                    description: Number of days until payment is due
+                    example: 30
+                  price_level:
+                    description: Price level associated with this company
                     type: object
                     properties:
-                      street1:
+                      id:
+                        type: number
+                        description: Unique identifier for the price level
+                        example: 123
+                      created_at:
+                        type: string
+                        format: date-time
+                        description: When the price level was created
+                        example: '2023-03-15T14:30:00Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        description: When the price level was last updated
+                        example: '2023-03-15T14:30:00Z'
+                      status:
+                        type: string
+                        description: Status of the price level
+                        enum:
+                          - active
+                          - inactive
+                        example: active
+                      name:
+                        type: string
+                        description: Name of the price level
+                        example: Wholesale
+                      type:
+                        type: string
+                        description: Type of the price level
+                        example: percentage
+                      percent_increase:
+                        type: number
+                        format: float
+                        description: Percentage increase (or decrease) for this price level
+                        example: 15.5
+                  notes:
+                    type: string
+                    description: Additional notes about the company
+                    example: 'Key account, requires special handling'
+                  fein:
+                    type: string
+                    description: Federal Employer Identification Number
+                    example: 12-3456789
+                  tags:
+                    type: array
+                    description: List of tags associated with the company
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: Unique identifier for the tag
+                        name:
+                          type: string
+                          description: Name of the tag
+                        description:
+                          type: string
+                          nullable: true
+                          description: Description of the tag
+                        icon:
+                          type: string
+                          nullable: true
+                          description: Icon identifier or URL for the tag
+                        color:
+                          type: string
+                          nullable: true
+                          description: Color code for the tag
+                      required:
+                        - id
+                        - name
+                  default_shipping:
+                    type: object
+                    description: Default shipping information
+                    properties:
+                      id:
+                        type: string
+                        example: '789'
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2023-03-15T14:30:00Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: '2023-03-15T14:30:00Z'
+                      address:
                         type: string
                         example: 456 Warehouse Blvd
-                      street2:
+                      address_line_2:
                         type: string
                         example: Building 2
                       city:
@@ -9255,33 +9664,88 @@ paths:
                       country:
                         type: string
                         example: USA
-                  price_level:
+                      full_name:
+                        type: string
+                        example: John Doe
+                      first_name:
+                        type: string
+                        example: John
+                      last_name:
+                        type: string
+                        example: Doe
+                      phone:
+                        type: string
+                        example: 555-987-6543
+                      email:
+                        type: string
+                        format: email
+                        example: shipping@acmecorp.com
+                      is_default:
+                        type: boolean
+                        example: true
+                  billing_info:
                     type: object
+                    description: Billing information
                     properties:
                       id:
                         type: string
-                        example: '789'
+                        example: '456'
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2023-03-15T14:30:00Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: '2023-03-15T14:30:00Z'
+                      first_name:
+                        type: string
+                        example: Jane
+                      last_name:
+                        type: string
+                        example: Smith
+                      email:
+                        type: string
+                        format: email
+                        example: accounting@acmecorp.com
+                      receiving_bank_name:
+                        type: string
+                        example: First National Bank
+                      receiving_bank_address:
+                        type: string
+                        example: '789 Finance Street, Austin, TX 78701'
+                  client_type:
+                    type: object
+                    description: Type of client
+                    properties:
+                      id:
+                        type: string
+                        example: '123'
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2023-03-15T14:30:00Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: '2023-03-15T14:30:00Z'
                       name:
                         type: string
-                        example: Wholesale
-                  created_at:
-                    type: string
-                    format: date-time
-                    description: When the company was created
-                    example: '2023-03-15T14:30:00Z'
-                  updated_at:
-                    type: string
-                    format: date-time
-                    description: When the company was last updated
-                    example: '2023-03-15T14:30:00Z'
-                  tags:
-                    type: array
-                    description: List of tags associated with the company
-                    items:
-                      type: string
+                        example: Retail
+                      description:
+                        type: string
+                        example: Retail business client
+                  custom_fields:
+                    type: object
+                    description: Custom fields for the company
                     example:
-                      - wholesale
-                      - preferred
+                      Industry: Manufacturing
+                      Region: Southwest
+                      Annual Revenue: $5M-$10M
+                required:
+                  - id
+                  - name
+                  - status
         '401':
           description: Authentication credentials were missing or invalid
           content:
@@ -9349,7 +9813,12 @@ paths:
         - `last_name`: Contact last name
         - `email`: Contact email
         - `phone`: Contact phone number
-        - `q`: General search matches first_name OR last_name OR email
+        - `status`: Contact status
+        - `company.name`: Company name
+
+        ### DateTime Filters
+        - `created_at`: When the contact was created
+        - `updated_at`: When the contact was last updated
       parameters:
         - name: companyId
           in: path
@@ -9372,6 +9841,48 @@ paths:
             minimum: 1
             maximum: 100
           description: Number of items per page (max 100)
+        - in: query
+          name: first_name
+          schema:
+            type: string
+          description: Filter by contact first name
+        - in: query
+          name: last_name
+          schema:
+            type: string
+          description: Filter by contact last name
+        - in: query
+          name: email
+          schema:
+            type: string
+          description: Filter by contact email
+        - in: query
+          name: phone
+          schema:
+            type: string
+          description: Filter by contact phone number
+        - in: query
+          name: status
+          schema:
+            type: string
+          description: Filter by contact status
+        - in: query
+          name: company.name
+          schema:
+            type: string
+          description: Filter by company name
+        - in: query
+          name: created_at
+          schema:
+            type: string
+            format: date-time
+          description: Filter by creation date
+        - in: query
+          name: updated_at
+          schema:
+            type: string
+            format: date-time
+          description: Filter by last update date
       responses:
         '200':
           description: A list of company contacts
@@ -9389,10 +9900,20 @@ paths:
                           type: string
                           description: Unique identifier for the contact
                           example: '789123'
-                        company_id:
+                        created_at:
                           type: string
-                          description: ID of the company this contact belongs to
-                          example: '123456'
+                          format: date-time
+                          description: When the contact was created
+                          example: '2023-03-15T14:30:00Z'
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: When the contact was last updated
+                          example: '2023-03-15T14:30:00Z'
+                        status:
+                          type: string
+                          description: Current status of the contact
+                          example: active
                         first_name:
                           type: string
                           description: Contact's first name
@@ -9408,43 +9929,23 @@ paths:
                           example: john.smith@acmecorp.com
                         phone:
                           type: string
-                          description: Contact's phone number
+                          description: Contact's primary phone number
                           example: 555-987-6543
-                        mobile:
+                        phone_2:
                           type: string
-                          description: Contact's mobile number
+                          description: Contact's secondary phone number
                           example: 555-555-5555
-                        title:
+                        full_name:
                           type: string
-                          description: Contact's job title
-                          example: Purchasing Manager
-                        is_primary:
-                          type: boolean
-                          description: Whether this is the primary contact for the company
-                          example: true
-                        address:
-                          type: object
-                          properties:
-                            street1:
-                              type: string
-                              example: 123 Main St
-                            street2:
-                              type: string
-                              example: Suite 500
-                            city:
-                              type: string
-                              example: Austin
-                            state:
-                              type: string
-                              example: TX
-                            postal_code:
-                              type: string
-                              example: '78701'
-                            country:
-                              type: string
-                              example: USA
+                          description: Contact's full name
+                          example: John Smith
+                        company_id:
+                          type: string
+                          description: ID of the company this contact belongs to
+                          example: '123456'
                         company:
                           type: object
+                          description: Company information for this contact
                           properties:
                             id:
                               type: string
@@ -9452,16 +9953,22 @@ paths:
                             name:
                               type: string
                               example: Acme Corporation
-                        created_at:
-                          type: string
-                          format: date-time
-                          description: When the contact was created
-                          example: '2023-03-15T14:30:00Z'
-                        updated_at:
-                          type: string
-                          format: date-time
-                          description: When the contact was last updated
-                          example: '2023-03-15T14:30:00Z'
+                        is_primary:
+                          type: boolean
+                          description: Whether this is the primary contact for the company
+                          example: true
+                        receive_quotation_pdf:
+                          type: boolean
+                          description: Whether the contact should receive quotation PDFs
+                          example: false
+                        receive_purchase_order_pdf:
+                          type: boolean
+                          description: Whether the contact should receive purchase order PDFs
+                          example: false
+                        receive_purchase_order_invoice_pdf:
+                          type: boolean
+                          description: Whether the contact should receive purchase order invoice PDFs
+                          example: false
                   meta:
                     type: object
                     properties:
@@ -9489,21 +9996,6 @@ paths:
                         type: integer
                         description: Total number of items across all pages
                         example: 50
-                      links:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            url:
-                              type: string
-                              nullable: true
-                              example: 'https://api.example.com/companies?page=2'
-                            label:
-                              type: string
-                              example: '2'
-                            active:
-                              type: boolean
-                              example: false
         '401':
           description: Authentication credentials were missing or invalid
           content:
@@ -9600,9 +10092,9 @@ paths:
                       type: object
                       properties:
                         id:
-                          type: string
+                          type: number
                           description: Unique identifier for the price override
-                          example: '987654'
+                          example: 123
                         created_at:
                           type: string
                           format: date-time
@@ -9622,13 +10114,13 @@ paths:
                             - deleted
                           example: active
                         company_id:
-                          type: string
+                          type: number
                           description: ID of the company this price override applies to
-                          example: '123456'
+                          example: 5567
                         product_id:
-                          type: string
+                          type: number
                           description: ID of the product being overridden
-                          example: '567890'
+                          example: 567890
                         price:
                           type: number
                           format: float
@@ -9640,10 +10132,10 @@ paths:
                           description: Product information (included when the product relation is loaded)
                           properties:
                             id:
-                              type: string
+                              type: number
                               description: Unique identifier for the product
-                              example: '567890'
-                            internal_sku:
+                              example: 567890
+                            sku:
                               type: string
                               description: Internal SKU/code of the product
                               example: WIDGET-123
@@ -9670,14 +10162,6 @@ paths:
                               type: boolean
                               description: Whether this product is a variant of another product
                               example: false
-                      required:
-                        - id
-                        - created_at
-                        - updated_at
-                        - status
-                        - company_id
-                        - product_id
-                        - price
                   meta:
                     type: object
                     properties:
@@ -9705,21 +10189,6 @@ paths:
                         type: integer
                         description: Total number of items across all pages
                         example: 50
-                      links:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            url:
-                              type: string
-                              nullable: true
-                              example: 'https://api.example.com/companies?page=2'
-                            label:
-                              type: string
-                              example: '2'
-                            active:
-                              type: boolean
-                              example: false
         '401':
           description: Authentication credentials were missing or invalid
           content:
@@ -9784,20 +10253,26 @@ paths:
         ## Available Filters
         ### String Filters
         - `name`: Product name
-        - `sku`: Product SKU
+        - `description`: Product description
+        - `sku`: Product SKU (searches both internal SKU and alternate SKUs)
         - `upc`: Product UPC/Barcode
-        - `category.name`: Category name
-        - `q`: General search matches name OR sku OR upc
+        - `tag`: Product tags
+        - `q`: General search matches name OR upc OR sku
+        - `category.name`: Filter by category name
+        - `sub_category.name`: Filter by sub-category name
+        - `supplier.name`: Filter by supplier name
 
         ### Integer Filters
         - `category.id`: Filter by category ID
+        - `sub_category.id`: Filter by sub-category ID
+        - `supplier.id`: Filter by supplier ID
 
         ### Float Filters
         - `retail_price`: Product retail price
         - `wholesale_price`: Product wholesale price
 
         ### Boolean Filters
-        - `sellable`: If the product is sellable
+        - `sellable`: If the product is sellable or not
         - `discontinued`: If the product is discontinued
 
         ### DateTime Filters
@@ -9806,73 +10281,75 @@ paths:
 
         ## Examples
         ```
-        # Find products by SKU
+        # Find products by SKU (includes alternate SKUs)
         ?sku[eq]=SKU-001
 
         # Find products with specific price range
         ?retail_price[gte]=50.00&retail_price[lte]=100.00
 
+        # Find recently updated products
+        ?updated_at[gte]=2024-01-01 00:00:00
+
         # Search products by name
         ?name[contains]=Test Product
 
-        # Find products by category
-        ?category.name[eq]=Electronics
+        # Find products by category and sub-category
+        ?category.name[eq]=Electronics&sub_category.name[eq]=Smartphones
 
-        # Find only sellable products
-        ?sellable[eq]=true
+        # Find products by supplier
+        ?supplier.name[contains]=Acme
         ```
+      security:
+        - BearerAuth: []
       parameters:
-        - name: companyId
-          in: path
-          required: true
-          schema:
-            type: string
-          description: The unique identifier of the company
-        - name: page
-          in: query
+        - in: query
+          name: page
           schema:
             type: integer
             default: 1
-            minimum: 1
-          description: Page number for pagination (starts at 1)
-        - name: limit
-          in: query
+          description: Page number for pagination
+        - in: query
+          name: per_page
           schema:
             type: integer
             default: 10
-            minimum: 1
             maximum: 100
           description: Number of items per page (max 100)
         - in: query
           name: q
           schema:
             type: string
-          description: Filter by name OR sku OR upc
+          description: Filter by name OR upc OR sku
         - in: query
           name: name
           schema:
             type: string
           description: Filter by product name
         - in: query
+          name: description
+          schema:
+            type: string
+          description: Filter by product description
+        - in: query
           name: sku
           schema:
             type: string
-          description: Filter by SKU
+          description: Filter by SKU (searches both internal and alternate SKUs)
         - in: query
           name: upc
           schema:
             type: string
           description: Filter by UPC/Barcode
         - in: query
-          name: category.name
+          name: sellable
           schema:
-            type: string
-          description: Filter by category name
+            type: boolean
+          description: Filter by sellable status
         - in: query
-          name: category.id
+          name: discontinued
           schema:
-            type: integer
-          description: Filter by category ID
+            type: boolean
+          description: Filter by whether the product is discontinued
         - in: query
           name: retail_price
           schema:
@@ -9886,16 +10363,6 @@ paths:
             format: float
           description: Filter by wholesale price
         - in: query
-          name: sellable
-          schema:
-            type: boolean
-          description: Filter by sellable status
-        - in: query
-          name: discontinued
-          schema:
-            type: boolean
-          description: Filter by discontinued status
-        - in: query
           name: created_at
           schema:
             type: string
@@ -9907,9 +10374,44 @@ paths:
             type: string
             format: date-time
           description: Filter by last update date
+        - in: query
+          name: tag
+          schema:
+            type: string
+          description: Filter by product tags
+        - in: query
+          name: category.id
+          schema:
+            type: integer
+          description: Filter by category ID
+        - in: query
+          name: category.name
+          schema:
+            type: string
+          description: Filter by category name
+        - in: query
+          name: sub_category.id
+          schema:
+            type: integer
+          description: Filter by sub-category ID
+        - in: query
+          name: sub_category.name
+          schema:
+            type: string
+          description: Filter by sub-category name
+        - in: query
+          name: supplier.id
+          schema:
+            type: integer
+          description: Filter by supplier ID
+        - in: query
+          name: supplier.name
+          schema:
+            type: string
+          description: Filter by supplier name
       responses:
         '200':
-          description: A list of products associated with the company
+          description: Successful response
           content:
             application/json:
               schema:
@@ -10174,69 +10676,15 @@ paths:
                         type: integer
                         description: Total number of items across all pages
                         example: 50
-                      links:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            url:
-                              type: string
-                              nullable: true
-                              example: 'https://api.example.com/companies?page=2'
-                            label:
-                              type: string
-                              example: '2'
-                            active:
-                              type: boolean
-                              example: false
         '401':
-          description: Authentication credentials were missing or invalid
+          description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  error:
-                    type: string
-                    example: Unauthorized
                   message:
                     type: string
-                    example: Authentication credentials are missing or invalid
-                  status_code:
-                    type: integer
-                    example: 401
-        '403':
-          description: You do not have permission to perform this action
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Forbidden
-                  message:
-                    type: string
-                    example: You do not have permission to access this resource
-                  status_code:
-                    type: integer
-                    example: 403
-        '404':
-          description: The requested resource was not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Not Found
-                  message:
-                    type: string
-                    example: The requested resource could not be found
-                  status_code:
-                    type: integer
-                    example: 404
   /contacts:
     get:
       operationId: getContacts
@@ -10255,11 +10703,8 @@ paths:
         - `last_name`: Contact last name
         - `email`: Contact email
         - `phone`: Contact phone number
+        - `status`: Contact status
         - `company.name`: Company name
-        - `q`: General search matches first_name OR last_name OR email
-
-        ### Integer Filters
-        - `company.id`: Filter by company ID
 
         ### DateTime Filters
         - `created_at`: When the contact was created
@@ -10273,11 +10718,11 @@ paths:
         # Find contacts by company
         ?company.name[eq]=Acme Corp
 
-        # Search contacts by name
-        ?q=John
+        # Find contacts by status
+        ?status[eq]=active
 
-        # Find contacts from specific company
-        ?company.id[eq]=123
+        # Find contacts by phone
+        ?phone[eq]=555-123-4567
 
         # Find recently added contacts
         ?created_at[gte]=2024-01-01
@@ -10299,11 +10744,6 @@ paths:
             maximum: 100
           description: Number of items per page (max 100)
         - in: query
-          name: q
-          schema:
-            type: string
-          description: 'Filter by first name, last name, or email'
-        - in: query
           name: first_name
           schema:
             type: string
@@ -10324,15 +10764,15 @@ paths:
             type: string
           description: Filter by phone number
         - in: query
+          name: status
+          schema:
+            type: string
+          description: Filter by contact status
+        - in: query
           name: company.name
           schema:
             type: string
           description: Filter by company name
-        - in: query
-          name: company.id
-          schema:
-            type: integer
-          description: Filter by company ID
         - in: query
           name: created_at
           schema:
@@ -10362,10 +10802,20 @@ paths:
                           type: string
                           description: Unique identifier for the contact
                           example: '789123'
-                        company_id:
+                        created_at:
                           type: string
-                          description: ID of the company this contact belongs to
-                          example: '123456'
+                          format: date-time
+                          description: When the contact was created
+                          example: '2023-03-15T14:30:00Z'
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: When the contact was last updated
+                          example: '2023-03-15T14:30:00Z'
+                        status:
+                          type: string
+                          description: Current status of the contact
+                          example: active
                         first_name:
                           type: string
                           description: Contact's first name
@@ -10381,43 +10831,23 @@ paths:
                           example: john.smith@acmecorp.com
                         phone:
                           type: string
-                          description: Contact's phone number
+                          description: Contact's primary phone number
                           example: 555-987-6543
-                        mobile:
+                        phone_2:
                           type: string
-                          description: Contact's mobile number
+                          description: Contact's secondary phone number
                           example: 555-555-5555
-                        title:
+                        full_name:
                           type: string
-                          description: Contact's job title
-                          example: Purchasing Manager
-                        is_primary:
-                          type: boolean
-                          description: Whether this is the primary contact for the company
-                          example: true
-                        address:
-                          type: object
-                          properties:
-                            street1:
-                              type: string
-                              example: 123 Main St
-                            street2:
-                              type: string
-                              example: Suite 500
-                            city:
-                              type: string
-                              example: Austin
-                            state:
-                              type: string
-                              example: TX
-                            postal_code:
-                              type: string
-                              example: '78701'
-                            country:
-                              type: string
-                              example: USA
+                          description: Contact's full name
+                          example: John Smith
+                        company_id:
+                          type: string
+                          description: ID of the company this contact belongs to
+                          example: '123456'
                         company:
                           type: object
+                          description: Company information for this contact
                           properties:
                             id:
                               type: string
@@ -10425,16 +10855,22 @@ paths:
                             name:
                               type: string
                               example: Acme Corporation
-                        created_at:
-                          type: string
-                          format: date-time
-                          description: When the contact was created
-                          example: '2023-03-15T14:30:00Z'
-                        updated_at:
-                          type: string
-                          format: date-time
-                          description: When the contact was last updated
-                          example: '2023-03-15T14:30:00Z'
+                        is_primary:
+                          type: boolean
+                          description: Whether this is the primary contact for the company
+                          example: true
+                        receive_quotation_pdf:
+                          type: boolean
+                          description: Whether the contact should receive quotation PDFs
+                          example: false
+                        receive_purchase_order_pdf:
+                          type: boolean
+                          description: Whether the contact should receive purchase order PDFs
+                          example: false
+                        receive_purchase_order_invoice_pdf:
+                          type: boolean
+                          description: Whether the contact should receive purchase order invoice PDFs
+                          example: false
                   meta:
                     type: object
                     properties:
@@ -10462,21 +10898,6 @@ paths:
                         type: integer
                         description: Total number of items across all pages
                         example: 50
-                      links:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            url:
-                              type: string
-                              nullable: true
-                              example: 'https://api.example.com/companies?page=2'
-                            label:
-                              type: string
-                              example: '2'
-                            active:
-                              type: boolean
-                              example: false
         '401':
           description: Authentication credentials were missing or invalid
           content:
@@ -10583,9 +11004,9 @@ paths:
                       type: object
                       properties:
                         id:
-                          type: string
+                          type: number
                           description: Unique identifier for the price schedule
-                          example: '456789'
+                          example: 123
                         name:
                           type: string
                           description: Name of the price schedule
@@ -10649,6 +11070,59 @@ paths:
                           format: date-time
                           description: When the price schedule was last updated
                           example: '2023-03-15T14:30:00Z'
+                        counting_algorithm:
+                          type: string
+                          description: Algorithm used for counting items for price determination
+                          example: each_item
+                        modification_type:
+                          type: string
+                          description: Type of price modification applied
+                          example: amount_off
+                        global:
+                          type: boolean
+                          description: Whether this price schedule applies globally
+                          example: true
+                        tiers:
+                          type: array
+                          description: List of price schedule tiers
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: number
+                                description: Unique identifier for the price schedule tier
+                                example: 123
+                              created_at:
+                                type: string
+                                format: date-time
+                                description: When the price schedule tier was created
+                                example: '2023-03-15T14:30:00Z'
+                              updated_at:
+                                type: string
+                                format: date-time
+                                description: When the price schedule tier was last updated
+                                example: '2023-03-15T14:30:00Z'
+                              status:
+                                type: string
+                                description: Status of the price schedule tier
+                                enum:
+                                  - active
+                                  - inactive
+                                example: active
+                              price_schedule_id:
+                                type: string
+                                description: ID of the parent price schedule
+                                example: '456789'
+                              quantity:
+                                type: number
+                                format: float
+                                description: Quantity threshold for this pricing tier
+                                example: 10
+                              discount_amount:
+                                type: number
+                                format: float
+                                description: Amount of discount applied at this tier
+                                example: 5.99
                   meta:
                     type: object
                     properties:
@@ -10676,21 +11150,6 @@ paths:
                         type: integer
                         description: Total number of items across all pages
                         example: 50
-                      links:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            url:
-                              type: string
-                              nullable: true
-                              example: 'https://api.example.com/companies?page=2'
-                            label:
-                              type: string
-                              example: '2'
-                            active:
-                              type: boolean
-                              example: false
         '401':
           description: Authentication credentials were missing or invalid
           content:
@@ -10746,9 +11205,9 @@ paths:
                 type: object
                 properties:
                   id:
-                    type: string
+                    type: number
                     description: Unique identifier for the price schedule
-                    example: '456789'
+                    example: 123
                   name:
                     type: string
                     description: Name of the price schedule
@@ -10812,6 +11271,59 @@ paths:
                     format: date-time
                     description: When the price schedule was last updated
                     example: '2023-03-15T14:30:00Z'
+                  counting_algorithm:
+                    type: string
+                    description: Algorithm used for counting items for price determination
+                    example: each_item
+                  modification_type:
+                    type: string
+                    description: Type of price modification applied
+                    example: amount_off
+                  global:
+                    type: boolean
+                    description: Whether this price schedule applies globally
+                    example: true
+                  tiers:
+                    type: array
+                    description: List of price schedule tiers
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          description: Unique identifier for the price schedule tier
+                          example: 123
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: When the price schedule tier was created
+                          example: '2023-03-15T14:30:00Z'
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: When the price schedule tier was last updated
+                          example: '2023-03-15T14:30:00Z'
+                        status:
+                          type: string
+                          description: Status of the price schedule tier
+                          enum:
+                            - active
+                            - inactive
+                          example: active
+                        price_schedule_id:
+                          type: string
+                          description: ID of the parent price schedule
+                          example: '456789'
+                        quantity:
+                          type: number
+                          format: float
+                          description: Quantity threshold for this pricing tier
+                          example: 10
+                        discount_amount:
+                          type: number
+                          format: float
+                          description: Amount of discount applied at this tier
+                          example: 5.99
         '401':
           description: Authentication credentials were missing or invalid
           content:
@@ -10951,33 +11463,9 @@ paths:
                       type: object
                       properties:
                         id:
-                          type: string
-                          description: Unique identifier for the price level
-                          example: '789'
-                        name:
-                          type: string
-                          description: Name of the price level
-                          example: Wholesale
-                        description:
-                          type: string
-                          description: Detailed description of the price level
-                          example: 'For wholesale customers with annual purchases over $100,000'
-                        discount_percent:
                           type: number
-                          format: float
-                          description: Default discount percentage for this price level
-                          example: 15.5
-                        status:
-                          type: string
-                          description: Status of the price level
-                          enum:
-                            - active
-                            - inactive
-                          example: active
-                        company_count:
-                          type: integer
-                          description: Number of companies assigned to this price level
-                          example: 42
+                          description: Unique identifier for the price level
+                          example: 123
                         created_at:
                           type: string
                           format: date-time
@@ -10988,6 +11476,26 @@ paths:
                           format: date-time
                           description: When the price level was last updated
                           example: '2023-03-15T14:30:00Z'
+                        status:
+                          type: string
+                          description: Status of the price level
+                          enum:
+                            - active
+                            - inactive
+                          example: active
+                        name:
+                          type: string
+                          description: Name of the price level
+                          example: Wholesale
+                        type:
+                          type: string
+                          description: Type of the price level
+                          example: percentage
+                        percent_increase:
+                          type: number
+                          format: float
+                          description: Percentage increase (or decrease) for this price level
+                          example: 15.5
                   meta:
                     type: object
                     properties:
@@ -11015,21 +11523,6 @@ paths:
                         type: integer
                         description: Total number of items across all pages
                         example: 50
-                      links:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            url:
-                              type: string
-                              nullable: true
-                              example: 'https://api.example.com/companies?page=2'
-                            label:
-                              type: string
-                              example: '2'
-                            active:
-                              type: boolean
-                              example: false
         '401':
           description: Authentication credentials were missing or invalid
           content:
@@ -11085,33 +11578,9 @@ paths:
                 type: object
                 properties:
                   id:
-                    type: string
-                    description: Unique identifier for the price level
-                    example: '789'
-                  name:
-                    type: string
-                    description: Name of the price level
-                    example: Wholesale
-                  description:
-                    type: string
-                    description: Detailed description of the price level
-                    example: 'For wholesale customers with annual purchases over $100,000'
-                  discount_percent:
                     type: number
-                    format: float
-                    description: Default discount percentage for this price level
-                    example: 15.5
-                  status:
-                    type: string
-                    description: Status of the price level
-                    enum:
-                      - active
-                      - inactive
-                    example: active
-                  company_count:
-                    type: integer
-                    description: Number of companies assigned to this price level
-                    example: 42
+                    description: Unique identifier for the price level
+                    example: 123
                   created_at:
                     type: string
                     format: date-time
@@ -11122,6 +11591,26 @@ paths:
                     format: date-time
                     description: When the price level was last updated
                     example: '2023-03-15T14:30:00Z'
+                  status:
+                    type: string
+                    description: Status of the price level
+                    enum:
+                      - active
+                      - inactive
+                    example: active
+                  name:
+                    type: string
+                    description: Name of the price level
+                    example: Wholesale
+                  type:
+                    type: string
+                    description: Type of the price level
+                    example: percentage
+                  percent_increase:
+                    type: number
+                    format: float
+                    description: Percentage increase (or decrease) for this price level
+                    example: 15.5
         '401':
           description: Authentication credentials were missing or invalid
           content:

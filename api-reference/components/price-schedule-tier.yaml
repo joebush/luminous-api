@@ -1,0 +1,35 @@
+type: object
+properties:
+  id:
+    type: number
+    description: Unique identifier for the price schedule tier
+    example: 123
+  created_at:
+    type: string
+    format: date-time
+    description: When the price schedule tier was created
+    example: "2023-03-15T14:30:00Z"
+  updated_at:
+    type: string
+    format: date-time
+    description: When the price schedule tier was last updated
+    example: "2023-03-15T14:30:00Z"
+  status:
+    type: string
+    description: Status of the price schedule tier
+    enum: [active, inactive]
+    example: "active"
+  price_schedule_id:
+    type: string
+    description: ID of the parent price schedule
+    example: "456789"
+  quantity:
+    type: number
+    format: float
+    description: Quantity threshold for this pricing tier
+    example: 10.0
+  discount_amount:
+    type: number
+    format: float
+    description: Amount of discount applied at this tier
+    example: 5.99 

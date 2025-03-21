@@ -1,9 +1,9 @@
 type: object
 properties:
   id:
-    type: string
+    type: number
     description: Unique identifier for the price override
-    example: "987654"
+    example: 123
   created_at:
     type: string
     format: date-time
@@ -20,13 +20,13 @@ properties:
     enum: [active, inactive, deleted]
     example: "active"
   company_id:
-    type: string
+    type: number
     description: ID of the company this price override applies to
-    example: "123456"
+    example: 5567
   product_id:
-    type: string
+    type: number
     description: ID of the product being overridden
-    example: "567890"
+    example: 567890
   price:
     type: number
     format: float
@@ -38,10 +38,10 @@ properties:
     description: Product information (included when the product relation is loaded)
     properties:
       id:
-        type: string
+        type: number
         description: Unique identifier for the product
-        example: "567890"
-      internal_sku:
+        example: 567890
+      sku:
         type: string
         description: Internal SKU/code of the product
         example: "WIDGET-123"
@@ -67,12 +67,4 @@ properties:
       is_variant:
         type: boolean
         description: Whether this product is a variant of another product
-        example: false
-required:
-  - id
-  - created_at
-  - updated_at
-  - status
-  - company_id
-  - product_id
-  - price 
+        example: false 

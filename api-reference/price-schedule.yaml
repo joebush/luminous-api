@@ -17,7 +17,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: './components/schemas/price-schedule.yaml'
+            $ref: './components/price-schedule.yaml'
     '401':
       $ref: './components/responses/unauthorized.yaml'
     '403':

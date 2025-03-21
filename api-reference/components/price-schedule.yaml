@@ -1,9 +1,9 @@
 type: object
 properties:
   id:
-    type: string
+    type: number
     description: Unique identifier for the price schedule
-    example: "456789"
+    example: 123
   name:
     type: string
     description: Name of the price schedule
@@ -64,4 +64,21 @@ properties:
     type: string
     format: date-time
     description: When the price schedule was last updated
-    example: "2023-03-15T14:30:00Z" 
+    example: "2023-03-15T14:30:00Z"
+  counting_algorithm:
+    type: string
+    description: Algorithm used for counting items for price determination
+    example: "each_item"
+  modification_type:
+    type: string
+    description: Type of price modification applied
+    example: "amount_off"
+  global:
+    type: boolean
+    description: Whether this price schedule applies globally
+    example: true
+  tiers:
+    type: array
+    description: List of price schedule tiers
+    items:
+      $ref: './price-schedule-tier.yaml'

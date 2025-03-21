@@ -4,64 +4,166 @@ properties:
     type: string
     description: Unique identifier for the company
     example: "123456"
+  created_at:
+    type: string
+    format: date-time
+    description: When the company was created
+    example: "2023-03-15T14:30:00Z"
+  updated_at:
+    type: string
+    format: date-time
+    description: When the company was last updated
+    example: "2023-03-15T14:30:00Z"
+  status:
+    type: string
+    description: Status of the company
+    enum: [active, inactive]
+    example: "active"
+  
+  # Business information
   name:
     type: string
     description: Company name
     example: "Acme Corporation"
-  external_id:
+  type:
     type: string
-    description: External identifier for the company
-    example: "ACME-123"
-  status:
-    type: string
-    description: Company status
-    enum: [active, inactive]
-    example: "active"
-  email:
-    type: string
-    format: email
-    description: Primary email address for the company
-    example: "info@acmecorp.com"
+    description: Type of business
+    example: "Retail"
   phone:
     type: string
     description: Primary phone number for the company
     example: "555-123-4567"
-  fax:
+  
+  # Address information
+  address:
     type: string
-    description: Fax number for the company
-    example: "555-123-9876"
-  website:
+    description: Street address for the company
+    example: "123 Main St"
+  address_line_2:
     type: string
-    description: Company website
-    example: "https://www.acmecorp.com"
-  billing_address:
-    type: object
-    properties:
-      street1:
-        type: string
-        example: "123 Main St"
-      street2:
-        type: string
-        example: "Suite 500"
-      city:
-        type: string
-        example: "Austin"
-      state:
-        type: string
-        example: "TX"
-      postal_code:
-        type: string
-        example: "78701"
-      country:
-        type: string
-        example: "USA"
+    description: Additional address information
+    example: "Suite 500"
+  city:
+    type: string
+    description: City
+    example: "Austin"
+  state:
+    type: string
+    description: State/province
+    example: "TX"
+  postal_code:
+    type: string
+    description: Postal/ZIP code
+    example: "78701"
+  country:
+    type: string
+    description: Country
+    example: "USA"
+  full_address:
+    type: string
+    description: Complete formatted address
+    example: "123 Main St, Suite 500, Austin, TX 78701, USA"
+  
+  # Shipping information
+  shipping_first_name:
+    type: string
+    description: First name for shipping contact
+    example: "John"
+  shipping_last_name:
+    type: string 
+    description: Last name for shipping contact
+    example: "Doe"
+  shipping_email:
+    type: string
+    format: email
+    description: Email for shipping contact
+    example: "shipping@acmecorp.com"
+  shipping_phone:
+    type: string
+    description: Phone number for shipping contact
+    example: "555-987-6543"
   shipping_address:
+    type: string
+    description: Shipping street address
+    example: "456 Warehouse Blvd"
+  shipping_city:
+    type: string
+    description: Shipping city
+    example: "Austin"
+  shipping_state:
+    type: string
+    description: Shipping state/province
+    example: "TX"
+  shipping_postal_code:
+    type: string
+    description: Shipping postal/ZIP code
+    example: "78745"
+  shipping_country:
+    type: string
+    description: Shipping country
+    example: "USA"
+  shipping_full_address:
+    type: string
+    description: Complete formatted shipping address
+    example: "456 Warehouse Blvd, Austin, TX 78745, USA"
+  
+  # Financial information
+  payment_term:
+    type: string
+    description: Payment terms for the company
+    example: "Net 30"
+  tax_exempt:
+    type: boolean
+    description: Whether the company is exempt from taxes
+    example: false
+  tax_rate:
+    type: number
+    format: float
+    description: Tax rate applied to the company's orders
+    example: 8.25
+  due_date_days:
+    type: integer
+    description: Number of days until payment is due
+    example: 30
+  price_level:
+    $ref: './price-level.yaml'
+    description: Price level associated with this company
+  
+  # Additional information
+  notes:
+    type: string
+    description: Additional notes about the company
+    example: "Key account, requires special handling"
+  fein:
+    type: string
+    description: Federal Employer Identification Number
+    example: "12-3456789"
+  
+  # Related resources
+  tags:
+    type: array
+    description: List of tags associated with the company
+    items:
+      $ref: './tag.yaml'
+  default_shipping:
     type: object
+    description: Default shipping information
     properties:
-      street1:
+      id:
+        type: string
+        example: "789"
+      created_at:
+        type: string
+        format: date-time
+        example: "2023-03-15T14:30:00Z"
+      updated_at:
+        type: string
+        format: date-time
+        example: "2023-03-15T14:30:00Z"
+      address:
         type: string
         example: "456 Warehouse Blvd"
-      street2:
+      address_line_2:
         type: string
         example: "Building 2"
       city:
@@ -76,28 +178,82 @@ properties:
       country:
         type: string
         example: "USA"
-  price_level:
+      full_name:
+        type: string
+        example: "John Doe"
+      first_name:
+        type: string
+        example: "John"
+      last_name:
+        type: string
+        example: "Doe"
+      phone:
+        type: string
+        example: "555-987-6543"
+      email:
+        type: string
+        format: email
+        example: "shipping@acmecorp.com"
+      is_default:
+        type: boolean
+        example: true
+  billing_info:
     type: object
+    description: Billing information
     properties:
       id:
         type: string
-        example: "789"
+        example: "456"
+      created_at:
+        type: string
+        format: date-time
+        example: "2023-03-15T14:30:00Z"
+      updated_at:
+        type: string
+        format: date-time
+        example: "2023-03-15T14:30:00Z"
+      first_name:
+        type: string
+        example: "Jane"
+      last_name:
+        type: string
+        example: "Smith"
+      email:
+        type: string
+        format: email
+        example: "accounting@acmecorp.com"
+      receiving_bank_name:
+        type: string
+        example: "First National Bank"
+      receiving_bank_address:
+        type: string
+        example: "789 Finance Street, Austin, TX 78701"
+  client_type:
+    type: object
+    description: Type of client
+    properties:
+      id:
+        type: string
+        example: "123"
+      created_at:
+        type: string
+        format: date-time
+        example: "2023-03-15T14:30:00Z"
+      updated_at:
+        type: string
+        format: date-time
+        example: "2023-03-15T14:30:00Z"
       name:
         type: string
-        example: "Wholesale"
-  created_at:
-    type: string
-    format: date-time
-    description: When the company was created
-    example: "2023-03-15T14:30:00Z"
-  updated_at:
-    type: string
-    format: date-time
-    description: When the company was last updated
-    example: "2023-03-15T14:30:00Z"
-  tags:
-    type: array
-    description: List of tags associated with the company
-    items:
-      type: string
-    example: ["wholesale", "preferred"] 
+        example: "Retail"
+      description:
+        type: string
+        example: "Retail business client"
+  custom_fields:
+    type: object
+    description: Custom fields for the company
+    example: {"Industry": "Manufacturing", "Region": "Southwest", "Annual Revenue": "$5M-$10M"}
+required:
+  - id
+  - name
+  - status 

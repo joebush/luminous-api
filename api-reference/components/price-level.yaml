@@ -1,31 +1,9 @@
 type: object
 properties:
   id:
-    type: string
-    description: Unique identifier for the price level
-    example: "789"
-  name:
-    type: string
-    description: Name of the price level
-    example: "Wholesale"
-  description:
-    type: string
-    description: Detailed description of the price level
-    example: "For wholesale customers with annual purchases over $100,000"
-  discount_percent:
     type: number
-    format: float
-    description: Default discount percentage for this price level
-    example: 15.5
-  status:
-    type: string
-    description: Status of the price level
-    enum: [active, inactive]
-    example: "active"
-  company_count:
-    type: integer
-    description: Number of companies assigned to this price level
-    example: 42
+    description: Unique identifier for the price level
+    example: 123
   created_at:
     type: string
     format: date-time
@@ -35,4 +13,22 @@ properties:
     type: string
     format: date-time
     description: When the price level was last updated
-    example: "2023-03-15T14:30:00Z" 
+    example: "2023-03-15T14:30:00Z"
+  status:
+    type: string
+    description: Status of the price level
+    enum: [active, inactive]
+    example: "active"
+  name:
+    type: string
+    description: Name of the price level
+    example: "Wholesale"
+  type:
+    type: string
+    description: Type of the price level
+    example: "percentage"
+  percent_increase:
+    type: number
+    format: float
+    description: Percentage increase (or decrease) for this price level
+    example: 15.5 

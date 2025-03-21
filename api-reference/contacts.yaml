@@ -15,11 +15,8 @@ get:
     - `last_name`: Contact last name
     - `email`: Contact email
     - `phone`: Contact phone number
+    - `status`: Contact status
     - `company.name`: Company name
-    - `q`: General search matches first_name OR last_name OR email
-    
-    ### Integer Filters
-    - `company.id`: Filter by company ID
     
     ### DateTime Filters
     - `created_at`: When the contact was created
@@ -33,11 +30,11 @@ get:
     # Find contacts by company
     ?company.name[eq]=Acme Corp
 
-    # Search contacts by name
-    ?q=John
+    # Find contacts by status
+    ?status[eq]=active
 
-    # Find contacts from specific company
-    ?company.id[eq]=123
+    # Find contacts by phone
+    ?phone[eq]=555-123-4567
 
     # Find recently added contacts
     ?created_at[gte]=2024-01-01
@@ -45,11 +42,6 @@ get:
   parameters:
     - $ref: './components/parameters/page.yaml'
     - $ref: './components/parameters/limit.yaml'
-    - in: query
-      name: q
-      schema:
-        type: string
-      description: Filter by first name, last name, or email
     - in: query
       name: first_name
       schema:
@@ -71,15 +63,15 @@ get:
         type: string
       description: Filter by phone number
     - in: query
+      name: status
+      schema:
+        type: string
+      description: Filter by contact status
+    - in: query
       name: company.name
       schema:
         type: string
       description: Filter by company name
-    - in: query
-      name: company.id
-      schema:
-        type: integer
-      description: Filter by company ID
     - in: query
       name: created_at
       schema:
@@ -104,9 +96,9 @@ get:
               data:
                 type: array
                 items:
-                  $ref: './components/schemas/contact.yaml'
+                  $ref: './components/contact.yaml'
               meta:
-                $ref: './components/schemas/pagination.yaml'
+                $ref: './components/pagination-meta.yaml'
     '401':
       $ref: './components/responses/unauthorized.yaml'
     '403':

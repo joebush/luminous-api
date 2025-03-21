@@ -4,10 +4,20 @@ properties:
     type: string
     description: Unique identifier for the contact
     example: "789123"
-  company_id:
+  created_at:
     type: string
-    description: ID of the company this contact belongs to
-    example: "123456"
+    format: date-time
+    description: When the contact was created
+    example: "2023-03-15T14:30:00Z"
+  updated_at:
+    type: string
+    format: date-time
+    description: When the contact was last updated
+    example: "2023-03-15T14:30:00Z"
+  status:
+    type: string
+    description: Current status of the contact
+    example: "active"
   first_name:
     type: string
     description: Contact's first name
@@ -23,43 +33,23 @@ properties:
     example: "john.smith@acmecorp.com"
   phone:
     type: string
-    description: Contact's phone number
+    description: Contact's primary phone number
     example: "555-987-6543"
-  mobile:
+  phone_2:
     type: string
-    description: Contact's mobile number
+    description: Contact's secondary phone number
     example: "555-555-5555"
-  title:
+  full_name:
     type: string
-    description: Contact's job title
-    example: "Purchasing Manager"
-  is_primary:
-    type: boolean
-    description: Whether this is the primary contact for the company
-    example: true
-  address:
-    type: object
-    properties:
-      street1:
-        type: string
-        example: "123 Main St"
-      street2:
-        type: string
-        example: "Suite 500"
-      city:
-        type: string
-        example: "Austin"
-      state:
-        type: string
-        example: "TX"
-      postal_code:
-        type: string
-        example: "78701"
-      country:
-        type: string
-        example: "USA"
+    description: Contact's full name
+    example: "John Smith"
+  company_id:
+    type: string
+    description: ID of the company this contact belongs to
+    example: "123456"
   company:
     type: object
+    description: Company information for this contact
     properties:
       id:
         type: string
@@ -67,13 +57,19 @@ properties:
       name:
         type: string
         example: "Acme Corporation"
-  created_at:
-    type: string
-    format: date-time
-    description: When the contact was created
-    example: "2023-03-15T14:30:00Z"
-  updated_at:
-    type: string
-    format: date-time
-    description: When the contact was last updated
-    example: "2023-03-15T14:30:00Z" 
+  is_primary:
+    type: boolean
+    description: Whether this is the primary contact for the company
+    example: true
+  receive_quotation_pdf:
+    type: boolean
+    description: Whether the contact should receive quotation PDFs
+    example: false
+  receive_purchase_order_pdf:
+    type: boolean
+    description: Whether the contact should receive purchase order PDFs
+    example: false
+  receive_purchase_order_invoice_pdf:
+    type: boolean
+    description: Whether the contact should receive purchase order invoice PDFs
+    example: false 

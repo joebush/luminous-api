@@ -60,9 +60,9 @@ get:
               data:
                 type: array
                 items:
-                  $ref: './components/schemas/price-level.yaml'
+                  $ref: './components/price-level.yaml'
               meta:
-                $ref: './components/schemas/pagination.yaml'
+                $ref: './components/pagination-meta.yaml'
     '401':
       $ref: './components/responses/unauthorized.yaml'
     '403':
