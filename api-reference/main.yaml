@@ -23,6 +23,8 @@ paths:
     $ref: './products.yaml'
   /products/{id}:
     $ref: './product.yaml'
+  /products/pricing:
+    $ref: './products-pricing.yaml'
   /products/{productId}/pricing:
     $ref: './product-pricing.yaml'
   /purchase-orders:

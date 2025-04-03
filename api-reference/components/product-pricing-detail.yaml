@@ -1,0 +1,108 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Product ID
+    example: 1
+  name:
+    type: string
+    description: Product name
+    example: "Basic Product"
+  sku:
+    type: string
+    description: Product SKU
+    example: "BASIC-001"
+  is_active:
+    type: boolean
+    description: Whether the product is active
+    example: true
+  wholesale_price:
+    type: number
+    format: float
+    description: The wholesale price of the product
+    example: 100
+  retail_price:
+    type: number
+    format: float
+    description: The retail price of the product
+    example: 150
+  pricing_schedule:
+    type: object
+    description: Pricing schedule configuration for the product
+    properties:
+      id:
+        type: integer
+        description: Pricing schedule ID
+        example: 1
+      name:
+        type: string
+        description: Pricing schedule name
+        example: "Standard Volume Discount"
+      modification_type:
+        type: string
+        enum:
+          - PERCENTAGE
+          - FIXED
+        description: Type of price modification
+        example: "PERCENTAGE"
+      price_levels:
+        type: array
+        description: Different price levels available
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: Price level ID
+              example: 1
+            name:
+              type: string
+              description: Price level name
+              example: "Standard"
+            amount:
+              type: number
+              format: float
+              description: Discount amount (percentage or fixed)
+              example: 0
+            tiers:
+              type: array
+              description: Quantity-based pricing tiers
+              items:
+                type: object
+                properties:
+                  min_quantity:
+                    type: integer
+                    description: Minimum quantity for this tier
+                    example: 0
+                  price:
+                    type: number
+                    format: float
+                    description: Price at this quantity tier
+                    example: 100
+                  is_overridden:
+                    type: boolean
+                    description: Whether this tier price has been manually overridden to a specific value or not
+                    example: false
+  company_pricing:
+    type: array
+    nullable: true
+    description: Company-specific pricing overrides (if applicable)
+    items:
+      type: object
+      properties:
+        company:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: Company ID
+              example: 1
+            name:
+              type: string
+              description: Company name
+              example: "Test Business 1"
+        price:
+          type: number
+          format: float
+          description: Company-specific price
+          example: 140 

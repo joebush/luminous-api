@@ -1,15 +1,15 @@
 get:
-  operationId: getProductPricing
+  operationId: getSingleProductPricing
   tags:
     - Products
     - Pricing
-  summary: Product Pricing
+  summary: Single product pricing
   description: |
     Retrieve comprehensive pricing information for a specific product, including base price, 
-    price levels, price schedules, and any specific overrides that might be applied.
+    pricing tiers, price levels, and any company-specific pricing overrides.
     
-    This endpoint returns a more detailed pricing structure than the standard price endpoint,
-    showing how different price levels and schedules affect the product's final price.
+    This endpoint returns detailed pricing information that shows volume-based pricing tiers
+    across different price levels as configured in the product's pricing schedule.
   security:
     - BearerAuth: []
   parameters:
@@ -25,110 +25,7 @@ get:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              base_price:
-                type: number
-                format: float
-                description: The base/retail price of the product
-                example: 49.99
-              price_levels:
-                type: array
-                description: Pricing at different price levels
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      description: Price level ID
-                      example: "789"
-                    name:
-                      type: string
-                      description: Price level name
-                      example: "Wholesale"
-                    calculation_type:
-                      type: string
-                      enum: [percentage, fixed]
-                      description: How the price is calculated
-                      example: "percentage"
-                    value:
-                      type: number
-                      format: float
-                      description: Discount percentage or fixed price value
-                      example: 15.5
-                    effective_price:
-                      type: number
-                      format: float
-                      description: Final calculated price at this level
-                      example: 42.24
-              price_schedules:
-                type: array
-                description: Pricing affected by active price schedules
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      description: Price schedule ID
-                      example: "456789"
-                    name:
-                      type: string
-                      description: Price schedule name
-                      example: "Holiday Sale 2023"
-                    calculation_type:
-                      type: string
-                      enum: [percentage, fixed]
-                      description: How the price is calculated
-                      example: "percentage"
-                    value:
-                      type: number
-                      format: float
-                      description: Discount percentage or fixed price value
-                      example: 10.0
-                    effective_price:
-                      type: number
-                      format: float
-                      description: Final calculated price with this schedule
-                      example: 44.99
-                    start_date:
-                      type: string
-                      format: date
-                      description: When the schedule starts
-                      example: "2023-11-01"
-                    end_date:
-                      type: string
-                      format: date
-                      description: When the schedule ends
-                      example: "2023-12-31"
-              company_specific_prices:
-                type: array
-                description: Company-specific price overrides
-                items:
-                  type: object
-                  properties:
-                    company_id:
-                      type: string
-                      description: Company ID
-                      example: "123456"
-                    company_name:
-                      type: string
-                      description: Company name
-                      example: "Acme Corporation"
-                    override_type:
-                      type: string
-                      enum: [percentage, fixed]
-                      description: Type of price override
-                      example: "fixed"
-                    value:
-                      type: number
-                      format: float
-                      description: Override value (either percentage or fixed price)
-                      example: 39.99
-                    effective_price:
-                      type: number
-                      format: float
-                      description: Final calculated price for this company
-                      example: 39.99
+            $ref: './components/product-pricing-detail.yaml'
     '401':
       $ref: './components/responses/unauthorized.yaml'
     '403':
