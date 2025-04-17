@@ -1,0 +1,110 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the product
+  name:
+    type: string
+    description: Product name
+  description:
+    type: string
+    nullable: true
+    description: Product description
+  retail_price:
+    type: number
+    format: float
+    description: Retail price
+  wholesale_price:
+    type: number
+    format: float
+    description: Wholesale price
+  unit_cost:
+    type: number
+    format: float
+    description: Cost per unit
+  product_weight:
+    type: number
+    format: float
+    description: Weight of the product
+  product_length:
+    type: number
+    format: float
+    description: Length of the product
+  product_width:
+    type: number
+    format: float
+    description: Width of the product
+  product_height:
+    type: number
+    format: float
+    description: Height of the product
+  sellable:
+    type: boolean
+    description: Whether the product can be sold
+  discontinued:
+    type: boolean
+    description: Whether the product is discontinued. Discontinued products will be hidden in the Luminous UI by default.
+  image_url:
+    type: string
+    nullable: true
+    description: URL to the product's main image
+  category:
+    type: object
+    nullable: true
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    description: Product category information
+  subcategory:
+    type: object
+    nullable: true
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    description: Product subcategory information
+  custom_fields:
+    type: object
+    description: Dynamic custom fields with key-value pairs
+    additionalProperties:
+      type: string
+  variant_attributes:
+    type: object
+    nullable: true
+    description: Available variant attributes
+  sku:
+    type: string
+    description: Internal SKU
+  alternate_skus:
+    type: array
+    description: Alternate SKUs
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        sku:
+          type: string
+  upc:
+    type: string
+    description: UPC/Barcode
+  tags:
+    type: array
+    description: Tags associated with the product
+    items:
+      $ref: './tag.yaml'
+  supplier:
+    type: object
+    nullable: true
+    description: Supplier information
+  created_at:
+    type: string
+    format: date-time
+    description: Timestamp when the product was created
+  updated_at:
+    type: string
+    format: date-time
+    description: Timestamp when the product was last updated
