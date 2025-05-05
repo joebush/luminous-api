@@ -5905,6 +5905,9 @@ paths:
                               id:
                                 type: integer
                                 description: Unique identifier for the order item
+                              line_number:
+                                type: integer
+                                description: 'Sequential line number for this item on the sales order, only unique within the order, starts at 1'
                               created_at:
                                 type: string
                                 format: date-time
@@ -6427,6 +6430,9 @@ paths:
                             id:
                               type: integer
                               description: Unique identifier for the order item
+                            line_number:
+                              type: integer
+                              description: 'Sequential line number for this item on the sales order, only unique within the order, starts at 1'
                             created_at:
                               type: string
                               format: date-time
