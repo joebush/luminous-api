@@ -3760,7 +3760,85 @@ paths:
       tags:
         - Inventory
       summary: Inventory stock
-      description: Get a paginated list of inventory stock levels with various filter options
+      description: |
+        Get a paginated list of inventory stock levels with various filter options.
+
+        For detailed information about the filtering system and available operators, 
+        refer to the [Filter System Documentation](/filters).
+
+        ## Available Filters
+        ### Inventory Filters
+        - `location`: Filter by location ID
+        - `warehouse_ids`: Filter by warehouse ID(s), comma-separated
+        - `warehouse_group_ids`: Filter by warehouse group ID(s), comma-separated
+
+        ### Product String Filters
+        - `product.name`: Product name
+        - `product.description`: Product description
+        - `product.sku`: Product SKU (searches both internal SKU and alternate SKUs)
+        - `product.upc`: Product UPC/Barcode
+        - `product.tag`: Product tags
+        - `product.q`: General search matches name OR upc OR sku
+        - `product.category.name`: Filter by category name
+        - `product.sub_category.name`: Filter by sub-category name
+        - `product.supplier.name`: Filter by supplier name
+
+        ### Product Integer Filters
+        - `product.id`: Filter by product ID
+        - `product.category.id`: Filter by category ID
+        - `product.sub_category.id`: Filter by sub-category ID
+        - `product.supplier.id`: Filter by supplier ID
+
+        ### Product Float Filters
+        - `product.retail_price`: Product retail price
+        - `product.wholesale_price`: Product wholesale price
+
+        ### Product Boolean Filters
+        - `product.sellable`: If the product is sellable or not
+        - `product.discontinued`: If the product is discontinued
+
+        ### Product DateTime Filters
+        - `product.created_at`: When the product was created
+        - `product.updated_at`: When the product was last updated
+
+        ## Examples
+        ```
+        # Find stock for products by SKU
+        ?product.sku[eq]=SKU-001
+
+        # Find stock for products by multiple SKUs
+        ?product.sku[in]=SKU-001,SKU-002,SKU-003
+
+        # Find stock for specific product by ID
+        ?product.id[eq]=12345
+
+        # Find stock for multiple products by ID
+        ?product.id[in]=12345,67890,11111
+
+        # Find stock for products in specific price range
+        ?product.retail_price[gte]=50.00&product.retail_price[lte]=100.00
+
+        # Find stock for recently updated products
+        ?product.updated_at[gte]=2024-01-01 00:00:00
+
+        # Find stock for products where name contains "Partial text"
+        ?product.name[contains]=Partial text
+
+        # Find stock for products in specific category and location
+        ?product.category.name[eq]=Electronics&location=123
+
+        # Find stock for products from specific supplier in certain warehouses
+        ?product.supplier.name[contains]=Acme&warehouse_ids=1,2,3
+
+        # Find stock for sellable products only
+        ?product.sellable=1
+
+        # Find stock for discontinued products
+        ?product.discontinued=1
+
+        # Search across multiple product fields
+        ?product.q[contains]=laptop
+        ```
       security:
         - BearerAuth: []
       parameters:
@@ -3777,35 +3855,10 @@ paths:
             default: 100
           description: Number of items per page
         - in: query
-          name: discontinued
-          schema:
-            type: integer
-          description: 'Filter by discontinued status (0 for active, 1 for discontinued)'
-        - in: query
-          name: sku
-          schema:
-            type: string
-          description: 'Filter by SKU, product name, or UPC'
-        - in: query
-          name: product_name
-          schema:
-            type: string
-          description: Filter by product name
-        - in: query
           name: location
           schema:
             type: integer
           description: Filter by location ID
-        - in: query
-          name: category_id
-          schema:
-            type: string
-          description: 'Filter by category ID(s), comma-separated'
-        - in: query
-          name: subcategory_ids
-          schema:
-            type: string
-          description: 'Filter by subcategory ID(s), comma-separated'
         - in: query
           name: warehouse_ids
           schema:
@@ -3817,20 +3870,104 @@ paths:
             type: string
           description: 'Filter by warehouse group ID(s), comma-separated'
         - in: query
-          name: product_type
+          name: product.q
           schema:
             type: string
-          description: Filter by product type
+          description: Filter by name OR upc OR sku
         - in: query
-          name: product_type_id
+          name: product.id
           schema:
             type: integer
-          description: Filter by product type ID
+          description: Filter by product ID
         - in: query
-          name: no_stock_skus
+          name: product.name
+          schema:
+            type: string
+          description: Filter by product name
+        - in: query
+          name: product.description
+          schema:
+            type: string
+          description: Filter by product description
+        - in: query
+          name: product.sku
+          schema:
+            type: string
+          description: Filter by SKU (searches both internal and alternate SKUs)
+        - in: query
+          name: product.upc
+          schema:
+            type: string
+          description: Filter by UPC/Barcode
+        - in: query
+          name: product.sellable
           schema:
             type: boolean
-          description: Filter for SKUs with no stock
+          description: Filter by sellable status
+        - in: query
+          name: product.discontinued
+          schema:
+            type: boolean
+          description: Filter by whether the product is discontinued
+        - in: query
+          name: product.retail_price
+          schema:
+            type: number
+            format: float
+          description: Filter by retail price
+        - in: query
+          name: product.wholesale_price
+          schema:
+            type: number
+            format: float
+          description: Filter by wholesale price
+        - in: query
+          name: product.created_at
+          schema:
+            type: string
+            format: date-time
+          description: Filter by creation date
+        - in: query
+          name: product.updated_at
+          schema:
+            type: string
+            format: date-time
+          description: Filter by last update date
+        - in: query
+          name: product.tag
+          schema:
+            type: string
+          description: Filter by product tags
+        - in: query
+          name: product.category.id
+          schema:
+            type: integer
+          description: Filter by category ID
+        - in: query
+          name: product.category.name
+          schema:
+            type: string
+          description: Filter by category name
+        - in: query
+          name: product.sub_category.id
+          schema:
+            type: integer
+          description: Filter by sub-category ID
+        - in: query
+          name: product.sub_category.name
+          schema:
+            type: string
+          description: Filter by sub-category name
+        - in: query
+          name: product.supplier.id
+          schema:
+            type: integer
+          description: Filter by supplier ID
+        - in: query
+          name: product.supplier.name
+          schema:
+            type: string
+          description: Filter by supplier name
       responses:
         '200':
           description: Successful response
