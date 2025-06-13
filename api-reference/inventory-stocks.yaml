@@ -14,6 +14,10 @@ get:
     - `location`: Filter by location ID
     - `warehouse_ids`: Filter by warehouse ID(s), comma-separated
     - `warehouse_group_ids`: Filter by warehouse group ID(s), comma-separated
+    - `qty_onhand`: Filter by quantity on hand
+    - `qty_pending`: Filter by pending quantity
+    - `qty_available`: Filter by available quantity
+    - `qty_incoming`: Filter by incoming quantity
     
     ### Product String Filters
     - `product.name`: Product name
@@ -73,6 +77,18 @@ get:
     # Find stock for products from specific supplier in certain warehouses
     ?product.supplier.name[contains]=Acme&warehouse_ids=1,2,3
     
+    # Find stock with specific quantity levels
+    ?qty_onhand[gte]=100&qty_available[gt]=0
+    
+    # Find stock with low inventory
+    ?qty_onhand[lte]=10
+    
+    # Find stock with pending quantities
+    ?qty_pending[gt]=0
+    
+    # Find stock with incoming inventory
+    ?qty_incoming[gte]=50
+    
     # Find stock for sellable products only
     ?product.sellable=1
     
@@ -112,6 +128,26 @@ get:
       schema:
         type: string
       description: Filter by warehouse group ID(s), comma-separated
+    - in: query
+      name: qty_onhand
+      schema:
+        type: integer
+      description: Filter by quantity on hand
+    - in: query
+      name: qty_pending
+      schema:
+        type: integer
+      description: Filter by pending quantity
+    - in: query
+      name: qty_available
+      schema:
+        type: integer
+      description: Filter by available quantity
+    - in: query
+      name: qty_incoming
+      schema:
+        type: integer
+      description: Filter by incoming quantity
     
     # Filter product level filters
     - in: query
