@@ -1,0 +1,70 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the package item
+    example: 1
+  package_id:
+    type: integer
+    description: ID of the package containing this item
+    example: 1
+  order_item_id:
+    type: integer
+    description: ID of the sales order line item being packaged
+    example: 1001
+  line_item_key:
+    type: string
+    description: Unique key for the line item within the package
+    example: "line-1"
+  sku:
+    type: string
+    description: Product SKU
+    example: "WIDGET-001"
+  internal_sku:
+    type: string
+    description: Internal product SKU
+    example: "WIDGET-001"
+  upc:
+    type: string
+    description: Universal Product Code
+    example: "123456789012"
+  quantity:
+    type: integer
+    description: Quantity of the item being packaged
+    example: 5
+  description:
+    type: string
+    description: Description of the item
+    example: "Premium Widget"
+  lot_number:
+    type: string
+    nullable: true
+    description: Lot number for tracking and traceability
+    example: "LOT-2024-001"
+  serial_number:
+    type: string
+    nullable: true
+    description: Serial number for individual item tracking
+    example: "SN-001"
+  expiration_date:
+    type: string
+    format: date
+    nullable: true
+    description: Expiration date in YYYY-MM-DD format
+    example: "2024-12-31"
+  weight_lb:
+    type: number
+    format: float
+    nullable: true
+    description: Total weight of the items in pounds
+    example: 2.5
+  created_at:
+    type: string
+    format: date-time
+    description: Timestamp when the item was created
+    example: "2024-01-15T10:30:00Z"
+  updated_at:
+    type: string
+    format: date-time
+    description: Timestamp when the item was last updated
+    example: "2024-01-15T10:30:00Z" 

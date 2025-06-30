@@ -1,0 +1,336 @@
+post:
+  operationId: createSalesOrderShipmentPackages
+  tags:
+    - Sales Orders
+  summary: Create shipment packages
+  description: |
+    Create detailed package and item tracking for a sales order shipment.
+    
+    This endpoint allows you to create hierarchical package structures with:
+    - Multiple packages per shipment
+    - Child packages (packages within packages)  
+    - Detailed item tracking within each package
+    - Package dimensions, weights, and tracking information
+    - Item-level details including lot numbers, serial numbers, and expiration dates
+    
+    ## Use Cases
+    - Track individual packages within a shipment
+    - Manage nested packaging (e.g., items in boxes, boxes in pallets)
+    - Record detailed inventory information for compliance
+    - Provide granular tracking for complex shipments
+    
+    ## Package Hierarchy
+    Packages can contain:
+    - **Items**: Individual products with quantities and details
+    - **Child Packages**: Nested packages that can themselves contain items or more child packages
+    
+    This allows for complex packaging scenarios like:
+    - Individual items packed in small boxes, then grouped in larger shipping boxes
+    - Palletized shipments with multiple layers of packaging
+    - Mixed shipments with different packaging types
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: salesOrderId
+      required: true
+      schema:
+        type: integer
+      description: ID of the sales order
+    - in: path
+      name: shipmentId
+      required: true
+      schema:
+        type: integer
+      description: ID of the shipment to add packages to
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: './components/sales-order-shipment-packages-create.yaml'
+        examples:
+          simple_package:
+            summary: Simple package with items
+            description: A basic package containing multiple items
+            value:
+              packages:
+                - sscc: "00123456789012345678"
+                  tracking: "PKG-001"
+                  package_quantity: 1
+                  package_type: "box"
+                  packing_type: "standard"
+                  length_in: 12.0
+                  width_in: 8.0
+                  height_in: 6.0
+                  weight_lb: 5.0
+                  contained_items:
+                    - order_item_id: 1001
+                      line_item_key: "line-1"
+                      sku: "WIDGET-001"
+                      internal_sku: "WIDGET-001"
+                      upc: "123456789012"
+                      quantity: 5
+                      description: "Premium Widget"
+                      lot_number: "LOT-2024-001"
+                      serial_number: "SN-001"
+                      expiration_date: "2024-12-31"
+                      weight_lb: 1.0
+                    - order_item_id: 1002
+                      line_item_key: "line-2"
+                      sku: "GADGET-002"
+                      internal_sku: "GADGET-002"
+                      quantity: 3
+                      description: "Electronic Gadget"
+                      weight_lb: 0.5
+          nested_packages:
+            summary: Nested packages with multiple levels
+            description: Complex package structure with child packages and items at multiple levels
+            value:
+              packages:
+                - sscc: "00123456789012345678"
+                  tracking: "PALLET-001"
+                  package_quantity: 1
+                  package_type: "pallet"
+                  packing_type: "standard"
+                  length_in: 48.0
+                  width_in: 40.0
+                  height_in: 60.0
+                  weight_lb: 150.0
+                  contained_items:
+                    - order_item_id: 1001
+                      line_item_key: "pallet-item-1"
+                      sku: "BULK-ITEM-001"
+                      internal_sku: "BULK-ITEM-001"
+                      quantity: 100
+                      description: "Bulk packaged items"
+                      weight_lb: 50.0
+                  child_packages:
+                    - sscc: "00123456789012345679"
+                      tracking: "BOX-001"
+                      package_quantity: 2
+                      package_type: "box"
+                      packing_type: "standard"
+                      length_in: 18.0
+                      width_in: 12.0
+                      height_in: 10.0
+                      weight_lb: 25.0
+                      contained_items:
+                        - order_item_id: 1002
+                          line_item_key: "box-item-1"
+                          sku: "WIDGET-SMALL"
+                          internal_sku: "WIDGET-SMALL"
+                          upc: "987654321098"
+                          quantity: 10
+                          description: "Small Widgets"
+                          lot_number: "LOT-2024-002"
+                          weight_lb: 2.0
+                      child_packages:
+                        - sscc: "00123456789012345680"
+                          tracking: "INNER-001"
+                          package_quantity: 5
+                          package_type: "inner_box"
+                          packing_type: "protective"
+                          length_in: 6.0
+                          width_in: 4.0
+                          height_in: 3.0
+                          weight_lb: 2.5
+                          contained_items:
+                            - order_item_id: 1003
+                              line_item_key: "inner-item-1"
+                              sku: "FRAGILE-001"
+                              internal_sku: "FRAGILE-001"
+                              quantity: 2
+                              description: "Fragile Electronic Component"
+                              serial_number: "FRAG-001-002"
+                              expiration_date: "2026-06-30"
+                              weight_lb: 0.1
+          multiple_packages:
+            summary: Multiple independent packages
+            description: Multiple separate packages in the same shipment
+            value:
+              packages:
+                - sscc: "00123456789012345678"
+                  tracking: "PKG-A001"
+                  package_quantity: 1
+                  package_type: "box"
+                  packing_type: "standard"
+                  length_in: 10.0
+                  width_in: 8.0
+                  height_in: 6.0
+                  weight_lb: 3.0
+                  contained_items:
+                    - order_item_id: 1001
+                      sku: "ITEM-A"
+                      quantity: 5
+                      description: "Product A"
+                - sscc: "00123456789012345679"
+                  tracking: "PKG-B001"
+                  package_quantity: 1
+                  package_type: "envelope"
+                  packing_type: "standard"
+                  length_in: 12.0
+                  width_in: 9.0
+                  height_in: 1.0
+                  weight_lb: 0.5
+                  contained_items:
+                    - order_item_id: 1002
+                      sku: "ITEM-B"
+                      quantity: 1
+                      description: "Product B - Documents"
+  responses:
+    '201':
+      description: Packages created successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/sales-order-shipment-package.yaml'
+          examples:
+            simple_response:
+              summary: Simple package response
+              value:
+                data:
+                  - id: 1
+                    sscc: "00123456789012345678"
+                    tracking: "PKG-001"
+                    package_quantity: 1
+                    package_type: "box"
+                    packing_type: "standard"
+                    length_in: 12.0
+                    width_in: 8.0
+                    height_in: 6.0
+                    weight_lb: 5.0
+                    parent_package_id: null
+                    shipment_id: 123
+                    created_at: "2024-01-15T10:30:00Z"
+                    updated_at: "2024-01-15T10:30:00Z"
+                    items:
+                      - id: 1
+                        order_item_id: 1001
+                        line_item_key: "line-1"
+                        sku: "WIDGET-001"
+                        internal_sku: "WIDGET-001"
+                        upc: "123456789012"
+                        quantity: 5
+                        description: "Premium Widget"
+                        lot_number: "LOT-2024-001"
+                        serial_number: "SN-001"
+                        expiration_date: "2024-12-31"
+                        weight_lb: 1.0
+                        created_at: "2024-01-15T10:30:00Z"
+                        updated_at: "2024-01-15T10:30:00Z"
+                    child_packages: []
+            nested_response:
+              summary: Nested packages response
+              value:
+                data:
+                  - id: 1
+                    sscc: "00123456789012345678"
+                    tracking: "PALLET-001"
+                    package_quantity: 1
+                    package_type: "pallet"
+                    packing_type: "standard"
+                    length_in: 48.0
+                    width_in: 40.0
+                    height_in: 60.0
+                    weight_lb: 150.0
+                    parent_package_id: null
+                    shipment_id: 123
+                    created_at: "2024-01-15T10:30:00Z"
+                    updated_at: "2024-01-15T10:30:00Z"
+                    items:
+                      - id: 1
+                        order_item_id: 1001
+                        sku: "BULK-ITEM-001"
+                        quantity: 100
+                        description: "Bulk packaged items"
+                        weight_lb: 50.0
+                    child_packages:
+                      - id: 2
+                        sscc: "00123456789012345679"
+                        tracking: "BOX-001"
+                        package_quantity: 2
+                        package_type: "box"
+                        parent_package_id: 1
+                        items:
+                          - id: 2
+                            order_item_id: 1002
+                            sku: "WIDGET-SMALL"
+                            quantity: 10
+                            description: "Small Widgets"
+                        child_packages:
+                          - id: 3
+                            sscc: "00123456789012345680"
+                            tracking: "INNER-001"
+                            package_type: "inner_box"
+                            parent_package_id: 2
+                            items:
+                              - id: 3
+                                order_item_id: 1003
+                                sku: "FRAGILE-001"
+                                quantity: 2
+                                description: "Fragile Electronic Component"
+    '400':
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+          examples:
+            invalid_shipment:
+              summary: Invalid shipment ID
+              value:
+                message: "Shipment not found or does not belong to this sales order"
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+    '404':
+      description: Sales order or shipment not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+    '422':
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              errors:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    type: string
+          examples:
+            validation_errors:
+              summary: Validation error examples
+              value:
+                message: "The given data was invalid."
+                errors:
+                  "packages.0.sscc": ["The sscc field must be a string."]
+                  "packages.0.package_quantity": ["The package quantity must be at least 1."]
+                  "packages.0.length_in": ["The length in must be at least 0."]
+                  "packages.0.contained_items.0.quantity": ["The quantity must be at least 1."]
+                  "packages.0.contained_items.0.order_item_id": ["The selected order item id is invalid."]
+                  "packages.0.contained_items.0.expiration_date": ["The expiration date does not match the format Y-m-d."] 

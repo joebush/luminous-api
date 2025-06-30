@@ -49,6 +49,8 @@ paths:
     $ref: './sales-order.yaml'
   /sales-orders/{salesOrderId}/shipments:
     $ref: './sales-order-shipments.yaml'
+  /sales-orders/{salesOrderId}/shipments/{shipmentId}/packages:
+    $ref: './sales-order-shipment-packages.yaml'
   /invoices:
     $ref: './invoices.yaml'
   /invoices/{id}:

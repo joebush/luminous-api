@@ -1,0 +1,135 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the package
+    example: 1
+  sscc:
+    type: string
+    description: Serial Shipping Container Code - unique identifier for the package
+    example: "00123456789012345678"
+  tracking:
+    type: string
+    description: Tracking number for the package
+    example: "PKG-001"
+  package_quantity:
+    type: integer
+    description: Number of identical packages
+    example: 1
+  package_type:
+    type: string
+    description: Type of package (e.g., box, pallet, envelope, inner_box)
+    example: "box"
+  packing_type:
+    type: string
+    description: Packing method used (e.g., standard, protective, fragile)
+    example: "standard"
+  length_in:
+    type: number
+    format: float
+    description: Package length in inches
+    example: 12.0
+  width_in:
+    type: number
+    format: float
+    description: Package width in inches
+    example: 8.0
+  height_in:
+    type: number
+    format: float
+    description: Package height in inches
+    example: 6.0
+  weight_lb:
+    type: number
+    format: float
+    description: Package weight in pounds
+    example: 5.0
+  parent_package_id:
+    type: integer
+    nullable: true
+    description: ID of the parent package if this is a child package
+    example: null
+  shipment_id:
+    type: integer
+    description: ID of the shipment this package belongs to
+    example: 123
+  created_at:
+    type: string
+    format: date-time
+    description: Timestamp when the package was created
+    example: "2024-01-15T10:30:00Z"
+  updated_at:
+    type: string
+    format: date-time
+    description: Timestamp when the package was last updated
+    example: "2024-01-15T10:30:00Z"
+  items:
+    type: array
+    items:
+      $ref: './sales-order-shipment-package-item.yaml'
+    description: Items contained directly in this package
+  child_packages:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the package
+        sscc:
+          type: string
+          description: Serial Shipping Container Code - unique identifier for the package
+        tracking:
+          type: string
+          description: Tracking number for the package
+        package_quantity:
+          type: integer
+          description: Number of identical packages
+        package_type:
+          type: string
+          description: Type of package (e.g., box, pallet, envelope, inner_box)
+        packing_type:
+          type: string
+          description: Packing method used (e.g., standard, protective, fragile)
+        length_in:
+          type: number
+          format: float
+          description: Package length in inches
+        width_in:
+          type: number
+          format: float
+          description: Package width in inches
+        height_in:
+          type: number
+          format: float
+          description: Package height in inches
+        weight_lb:
+          type: number
+          format: float
+          description: Package weight in pounds
+        parent_package_id:
+          type: integer
+          description: ID of the parent package
+        shipment_id:
+          type: integer
+          description: ID of the shipment this package belongs to
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the package was created
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the package was last updated
+        items:
+          type: array
+          items:
+            $ref: './sales-order-shipment-package-item.yaml'
+          description: Items contained directly in this package
+        child_packages:
+          type: array
+          items:
+            type: object
+            description: Recursively nested child packages
+          description: Child packages nested within this package
+    description: Child packages nested within this package 
