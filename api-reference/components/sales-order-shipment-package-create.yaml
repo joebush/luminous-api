@@ -52,9 +52,9 @@ properties:
     description: Items contained directly in this package
   child_packages:
     type: array
-            items:
-          type: object
-          properties:
+    items:
+      type: object
+      properties:
         sscc:
           type: string
           description: Serial Shipping Container Code - unique identifier for the package

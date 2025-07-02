@@ -415,6 +415,84 @@ paths:
                             required:
                               - id
                               - name
+                        substitutions:
+                          type: array
+                          description: 'Product substitutions, these products may be substituted if the main product is out of stock'
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: Substitution record ID
+                              priority:
+                                type: integer
+                                description: Substitution priority (lower number = higher priority)
+                              product:
+                                type: object
+                                description: The substitute product
+                                properties:
+                                  id:
+                                    type: integer
+                                    description: Unique identifier for the product
+                                  name:
+                                    type: string
+                                    description: Product name
+                                  description:
+                                    type: string
+                                    nullable: true
+                                    description: Product description
+                                  retail_price:
+                                    type: number
+                                    format: float
+                                    description: Retail price
+                                  wholesale_price:
+                                    type: number
+                                    format: float
+                                    description: Wholesale price
+                                  unit_cost:
+                                    type: number
+                                    format: float
+                                    description: Cost per unit
+                                  product_weight:
+                                    type: number
+                                    format: float
+                                    description: Weight of the product
+                                  product_length:
+                                    type: number
+                                    format: float
+                                    description: Length of the product
+                                  product_width:
+                                    type: number
+                                    format: float
+                                    description: Width of the product
+                                  product_height:
+                                    type: number
+                                    format: float
+                                    description: Height of the product
+                                  sellable:
+                                    type: boolean
+                                    description: Whether the product can be sold
+                                  discontinued:
+                                    type: boolean
+                                    description: Whether the product is discontinued
+                                  image_url:
+                                    type: string
+                                    nullable: true
+                                    description: URL to the product's main image
+                                  sku:
+                                    type: string
+                                    description: Internal SKU
+                                  upc:
+                                    type: string
+                                    description: UPC/Barcode
+                                  created_at:
+                                    type: string
+                                    format: date-time
+                                    description: Timestamp when the product was created
+                                  updated_at:
+                                    type: string
+                                    format: date-time
+                                    description: Timestamp when the product was last updated
                         supplier:
                           type: object
                           nullable: true
@@ -939,6 +1017,84 @@ paths:
                           required:
                             - id
                             - name
+                      substitutions:
+                        type: array
+                        description: 'Product substitutions, these products may be substituted if the main product is out of stock'
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Substitution record ID
+                            priority:
+                              type: integer
+                              description: Substitution priority (lower number = higher priority)
+                            product:
+                              type: object
+                              description: The substitute product
+                              properties:
+                                id:
+                                  type: integer
+                                  description: Unique identifier for the product
+                                name:
+                                  type: string
+                                  description: Product name
+                                description:
+                                  type: string
+                                  nullable: true
+                                  description: Product description
+                                retail_price:
+                                  type: number
+                                  format: float
+                                  description: Retail price
+                                wholesale_price:
+                                  type: number
+                                  format: float
+                                  description: Wholesale price
+                                unit_cost:
+                                  type: number
+                                  format: float
+                                  description: Cost per unit
+                                product_weight:
+                                  type: number
+                                  format: float
+                                  description: Weight of the product
+                                product_length:
+                                  type: number
+                                  format: float
+                                  description: Length of the product
+                                product_width:
+                                  type: number
+                                  format: float
+                                  description: Width of the product
+                                product_height:
+                                  type: number
+                                  format: float
+                                  description: Height of the product
+                                sellable:
+                                  type: boolean
+                                  description: Whether the product can be sold
+                                discontinued:
+                                  type: boolean
+                                  description: Whether the product is discontinued
+                                image_url:
+                                  type: string
+                                  nullable: true
+                                  description: URL to the product's main image
+                                sku:
+                                  type: string
+                                  description: Internal SKU
+                                upc:
+                                  type: string
+                                  description: UPC/Barcode
+                                created_at:
+                                  type: string
+                                  format: date-time
+                                  description: Timestamp when the product was created
+                                updated_at:
+                                  type: string
+                                  format: date-time
+                                  description: Timestamp when the product was last updated
                       supplier:
                         type: object
                         nullable: true
@@ -1493,6 +1649,84 @@ paths:
                           required:
                             - id
                             - name
+                      substitutions:
+                        type: array
+                        description: 'Product substitutions, these products may be substituted if the main product is out of stock'
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Substitution record ID
+                            priority:
+                              type: integer
+                              description: Substitution priority (lower number = higher priority)
+                            product:
+                              type: object
+                              description: The substitute product
+                              properties:
+                                id:
+                                  type: integer
+                                  description: Unique identifier for the product
+                                name:
+                                  type: string
+                                  description: Product name
+                                description:
+                                  type: string
+                                  nullable: true
+                                  description: Product description
+                                retail_price:
+                                  type: number
+                                  format: float
+                                  description: Retail price
+                                wholesale_price:
+                                  type: number
+                                  format: float
+                                  description: Wholesale price
+                                unit_cost:
+                                  type: number
+                                  format: float
+                                  description: Cost per unit
+                                product_weight:
+                                  type: number
+                                  format: float
+                                  description: Weight of the product
+                                product_length:
+                                  type: number
+                                  format: float
+                                  description: Length of the product
+                                product_width:
+                                  type: number
+                                  format: float
+                                  description: Width of the product
+                                product_height:
+                                  type: number
+                                  format: float
+                                  description: Height of the product
+                                sellable:
+                                  type: boolean
+                                  description: Whether the product can be sold
+                                discontinued:
+                                  type: boolean
+                                  description: Whether the product is discontinued
+                                image_url:
+                                  type: string
+                                  nullable: true
+                                  description: URL to the product's main image
+                                sku:
+                                  type: string
+                                  description: Internal SKU
+                                upc:
+                                  type: string
+                                  description: UPC/Barcode
+                                created_at:
+                                  type: string
+                                  format: date-time
+                                  description: Timestamp when the product was created
+                                updated_at:
+                                  type: string
+                                  format: date-time
+                                  description: Timestamp when the product was last updated
                       supplier:
                         type: object
                         nullable: true
@@ -1772,6 +2006,84 @@ paths:
                           required:
                             - id
                             - name
+                      substitutions:
+                        type: array
+                        description: 'Product substitutions, these products may be substituted if the main product is out of stock'
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Substitution record ID
+                            priority:
+                              type: integer
+                              description: Substitution priority (lower number = higher priority)
+                            product:
+                              type: object
+                              description: The substitute product
+                              properties:
+                                id:
+                                  type: integer
+                                  description: Unique identifier for the product
+                                name:
+                                  type: string
+                                  description: Product name
+                                description:
+                                  type: string
+                                  nullable: true
+                                  description: Product description
+                                retail_price:
+                                  type: number
+                                  format: float
+                                  description: Retail price
+                                wholesale_price:
+                                  type: number
+                                  format: float
+                                  description: Wholesale price
+                                unit_cost:
+                                  type: number
+                                  format: float
+                                  description: Cost per unit
+                                product_weight:
+                                  type: number
+                                  format: float
+                                  description: Weight of the product
+                                product_length:
+                                  type: number
+                                  format: float
+                                  description: Length of the product
+                                product_width:
+                                  type: number
+                                  format: float
+                                  description: Width of the product
+                                product_height:
+                                  type: number
+                                  format: float
+                                  description: Height of the product
+                                sellable:
+                                  type: boolean
+                                  description: Whether the product can be sold
+                                discontinued:
+                                  type: boolean
+                                  description: Whether the product is discontinued
+                                image_url:
+                                  type: string
+                                  nullable: true
+                                  description: URL to the product's main image
+                                sku:
+                                  type: string
+                                  description: Internal SKU
+                                upc:
+                                  type: string
+                                  description: UPC/Barcode
+                                created_at:
+                                  type: string
+                                  format: date-time
+                                  description: Timestamp when the product was created
+                                updated_at:
+                                  type: string
+                                  format: date-time
+                                  description: Timestamp when the product was last updated
                       supplier:
                         type: object
                         nullable: true
@@ -2297,6 +2609,84 @@ paths:
                           required:
                             - id
                             - name
+                      substitutions:
+                        type: array
+                        description: 'Product substitutions, these products may be substituted if the main product is out of stock'
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Substitution record ID
+                            priority:
+                              type: integer
+                              description: Substitution priority (lower number = higher priority)
+                            product:
+                              type: object
+                              description: The substitute product
+                              properties:
+                                id:
+                                  type: integer
+                                  description: Unique identifier for the product
+                                name:
+                                  type: string
+                                  description: Product name
+                                description:
+                                  type: string
+                                  nullable: true
+                                  description: Product description
+                                retail_price:
+                                  type: number
+                                  format: float
+                                  description: Retail price
+                                wholesale_price:
+                                  type: number
+                                  format: float
+                                  description: Wholesale price
+                                unit_cost:
+                                  type: number
+                                  format: float
+                                  description: Cost per unit
+                                product_weight:
+                                  type: number
+                                  format: float
+                                  description: Weight of the product
+                                product_length:
+                                  type: number
+                                  format: float
+                                  description: Length of the product
+                                product_width:
+                                  type: number
+                                  format: float
+                                  description: Width of the product
+                                product_height:
+                                  type: number
+                                  format: float
+                                  description: Height of the product
+                                sellable:
+                                  type: boolean
+                                  description: Whether the product can be sold
+                                discontinued:
+                                  type: boolean
+                                  description: Whether the product is discontinued
+                                image_url:
+                                  type: string
+                                  nullable: true
+                                  description: URL to the product's main image
+                                sku:
+                                  type: string
+                                  description: Internal SKU
+                                upc:
+                                  type: string
+                                  description: UPC/Barcode
+                                created_at:
+                                  type: string
+                                  format: date-time
+                                  description: Timestamp when the product was created
+                                updated_at:
+                                  type: string
+                                  format: date-time
+                                  description: Timestamp when the product was last updated
                       supplier:
                         type: object
                         nullable: true
@@ -7829,10 +8219,6 @@ paths:
                   minItems: 1
                   items:
                     type: object
-                    required:
-                      - sscc
-                      - package_quantity
-                      - package_type
                     properties:
                       sscc:
                         type: string
@@ -7940,10 +8326,6 @@ paths:
                         type: array
                         items:
                           type: object
-                          required:
-                            - sscc
-                            - package_quantity
-                            - package_type
                           properties:
                             sscc:
                               type: string
@@ -12286,6 +12668,84 @@ paths:
                             required:
                               - id
                               - name
+                        substitutions:
+                          type: array
+                          description: 'Product substitutions, these products may be substituted if the main product is out of stock'
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: Substitution record ID
+                              priority:
+                                type: integer
+                                description: Substitution priority (lower number = higher priority)
+                              product:
+                                type: object
+                                description: The substitute product
+                                properties:
+                                  id:
+                                    type: integer
+                                    description: Unique identifier for the product
+                                  name:
+                                    type: string
+                                    description: Product name
+                                  description:
+                                    type: string
+                                    nullable: true
+                                    description: Product description
+                                  retail_price:
+                                    type: number
+                                    format: float
+                                    description: Retail price
+                                  wholesale_price:
+                                    type: number
+                                    format: float
+                                    description: Wholesale price
+                                  unit_cost:
+                                    type: number
+                                    format: float
+                                    description: Cost per unit
+                                  product_weight:
+                                    type: number
+                                    format: float
+                                    description: Weight of the product
+                                  product_length:
+                                    type: number
+                                    format: float
+                                    description: Length of the product
+                                  product_width:
+                                    type: number
+                                    format: float
+                                    description: Width of the product
+                                  product_height:
+                                    type: number
+                                    format: float
+                                    description: Height of the product
+                                  sellable:
+                                    type: boolean
+                                    description: Whether the product can be sold
+                                  discontinued:
+                                    type: boolean
+                                    description: Whether the product is discontinued
+                                  image_url:
+                                    type: string
+                                    nullable: true
+                                    description: URL to the product's main image
+                                  sku:
+                                    type: string
+                                    description: Internal SKU
+                                  upc:
+                                    type: string
+                                    description: UPC/Barcode
+                                  created_at:
+                                    type: string
+                                    format: date-time
+                                    description: Timestamp when the product was created
+                                  updated_at:
+                                    type: string
+                                    format: date-time
+                                    description: Timestamp when the product was last updated
                         supplier:
                           type: object
                           nullable: true
