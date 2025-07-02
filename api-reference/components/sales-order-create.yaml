@@ -1,0 +1,312 @@
+# components/sales-order-create.yaml
+type: object
+required:
+  - channel_id
+  - order_number
+  - order_date
+  - order_status
+  - bill_to
+  - ship_to
+  - items
+properties:
+  channel_id:
+    type: integer
+    description: ID of the channel this order belongs to
+    example: 1
+  order_number:
+    type: string
+    maxLength: 255
+    description: Unique order number identifier
+    example: "ORD-2024-001"
+  order_date:
+    type: string
+    format: date
+    description: Date when the order was placed (YYYY-MM-DD)
+    example: "2024-01-15"
+  order_status:
+    type: string
+    maxLength: 255
+    description: Current status of the order
+    enum:
+      - pending
+      - shipped
+      - fulfilled
+      - cancelled
+      - awaiting_shipment
+      - partially_shipped
+      - on_hold
+      - backorder
+      - partially_refunded
+      - committed
+      - processing
+      - completed
+    example: "pending"
+  customer_email:
+    type: string
+    format: email
+    maxLength: 255
+    nullable: true
+    description: Customer's email address
+    example: "customer@example.com"
+  customer_username:
+    type: string
+    maxLength: 255
+    nullable: true
+    description: Customer's username
+    example: "customer123"
+  customer_po_number:
+    type: string
+    maxLength: 255
+    nullable: true
+    description: Customer's purchase order number
+    example: "PO-2024-5678"
+  bill_to:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+        maxLength: 255
+        description: Full name for billing
+        example: "John Doe"
+      company:
+        type: string
+        maxLength: 255
+        nullable: true
+        description: Company name for billing
+        example: "Acme Corporation"
+      street1:
+        type: string
+        maxLength: 255
+        nullable: true
+        description: Primary street address
+        example: "123 Main Street"
+      street2:
+        type: string
+        maxLength: 255
+        nullable: true
+        description: Secondary address line (apt, suite, etc.)
+        example: "Suite 100"
+      street3:
+        type: string
+        maxLength: 255
+        nullable: true
+        description: Third address line
+      city:
+        type: string
+        maxLength: 255
+        nullable: true
+        description: City name
+        example: "Anytown"
+      state:
+        type: string
+        maxLength: 255
+        nullable: true
+        description: State or province
+        example: "CA"
+      postal_code:
+        type: string
+        maxLength: 255
+        nullable: true
+        description: ZIP or postal code
+        example: "90210"
+      country:
+        type: string
+        maxLength: 255
+        nullable: true
+        description: Country code or name
+        example: "US"
+      phone:
+        type: string
+        maxLength: 255
+        nullable: true
+        description: Phone number
+        example: "555-1234"
+    description: Billing address information
+  ship_to:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+        maxLength: 255
+        description: Full name for shipping
+        example: "Jane Smith"
+      company:
+        type: string
+        maxLength: 255
+        nullable: true
+        description: Company name for shipping
+        example: "Delivery Corp"
+      street1:
+        type: string
+        maxLength: 255
+        nullable: true
+        description: Primary street address
+        example: "456 Oak Avenue"
+      street2:
+        type: string
+        maxLength: 255
+        nullable: true
+        description: Secondary address line (apt, suite, etc.)
+        example: "Apt 2B"
+      street3:
+        type: string
+        maxLength: 255
+        nullable: true
+        description: Third address line
+      city:
+        type: string
+        maxLength: 255
+        nullable: true
+        description: City name
+        example: "Somewhere"
+      state:
+        type: string
+        maxLength: 255
+        nullable: true
+        description: State or province
+        example: "NY"
+      postal_code:
+        type: string
+        maxLength: 255
+        nullable: true
+        description: ZIP or postal code
+        example: "10001"
+      country:
+        type: string
+        maxLength: 255
+        nullable: true
+        description: Country code or name
+        example: "US"
+      phone:
+        type: string
+        maxLength: 255
+        nullable: true
+        description: Phone number
+        example: "555-5678"
+    description: Shipping address information
+  ship_date:
+    type: string
+    format: date
+    nullable: true
+    description: Date when the order was or will be shipped (YYYY-MM-DD)
+    example: "2024-01-20"
+  hold_until_date:
+    type: string
+    format: date
+    nullable: true
+    description: Date to hold the order until (YYYY-MM-DD)
+    example: "2024-01-18"
+  ship_by_date:
+    type: string
+    format: date
+    nullable: true
+    description: Required ship by date (YYYY-MM-DD)
+    example: "2024-01-25"
+  total_tax:
+    type: number
+    format: float
+    minimum: 0
+    nullable: true
+    description: Total tax amount for the order
+    example: 15.75
+  total_shipping:
+    type: number
+    format: float
+    minimum: 0
+    nullable: true
+    description: Total shipping cost for the order
+    example: 12.50
+  requested_shipping_service:
+    type: string
+    maxLength: 255
+    nullable: true
+    description: Requested shipping service or carrier
+    example: "FedEx Ground"
+  customer_notes:
+    type: string
+    nullable: true
+    description: Notes from the customer
+    example: "Please handle with care - fragile items"
+  internal_notes:
+    type: string
+    nullable: true
+    description: Internal notes for order processing
+    example: "Rush order - expedite processing"
+  items:
+    type: array
+    minItems: 1
+    description: Array of line items for the order
+    items:
+      type: object
+      required:
+        - quantity
+        - unit_price
+      properties:
+        product_id:
+          type: integer
+          description: ID of the product (required if sku not provided)
+          example: 123
+        sku:
+          type: string
+          maxLength: 255
+          description: SKU of the product (required if product_id not provided)
+          example: "WIDGET-001"
+        quantity:
+          type: number
+          format: float
+          minimum: 0.001
+          description: Quantity of the item ordered
+          example: 2.5
+        unit_price:
+          type: number
+          format: float
+          description: Price per unit (can be negative for discounts/refunds)
+          example: 49.99
+        tags:
+          type: array
+          nullable: true
+          description: Tags to associate with this line item
+          items:
+            type: string
+            maxLength: 255
+            example: "fragile"
+          example: ["fragile", "priority"]
+        custom_fields:
+          type: object
+          nullable: true
+          description: Custom field values for this line item
+          additionalProperties:
+            oneOf:
+              - type: string
+              - type: number
+              - type: boolean
+          example:
+            "Lot Number": "LOT-12345"
+            "Expiry Date": "2024-12-31"
+            "Quality Check": true
+  custom_fields:
+    type: object
+    nullable: true
+    description: Custom field values for the sales order
+    additionalProperties:
+      oneOf:
+        - type: string
+        - type: number
+        - type: boolean
+    example:
+      "Customer PO": "PO-98765"
+      "Priority Level": "High"
+      "Package Count": 3
+  tags:
+    type: array
+    nullable: true
+    description: Tags to associate with the sales order
+    items:
+      type: string
+      maxLength: 255
+      example: "urgent"
+    example: ["urgent", "vip-customer", "rush-order"] 

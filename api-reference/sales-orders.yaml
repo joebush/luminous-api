@@ -291,3 +291,359 @@ get:
         application/json:
           schema:
             $ref: './components/error.yaml'
+
+post:
+  operationId: createSalesOrder
+  tags:
+    - Sales Orders
+  summary: Create a new sales order
+  description: |
+    Create a new sales order with items, addresses, and optional metadata.
+    
+    ## Key Features
+    - Create orders with multiple line items
+    - Support for both product ID and SKU lookup for items
+    - Automatic product name and details population
+    - Flexible address handling (only name required)
+    - Optional custom fields and tags at both order and order item level
+    - Automatic total calculation from line items plus tax/shipping
+    
+    ## Product Identification
+    For each line item, you must provide either:
+    - `product_id`: The internal product ID
+    - `sku`: The product SKU (supports both internal SKU and alternate SKUs)
+    
+    ## Order Status Values
+    Valid order statuses include: `pending`, `shipped`, `fulfilled`, `cancelled`, 
+    `awaiting_shipment`, `partially_shipped`, `on_hold`, `backorder`, 
+    `partially_refunded`, `committed`, `processing`, `completed`
+    
+    ## Total Calculation
+    The order total is automatically calculated as:
+    `(sum of item quantities × unit prices) + total_tax + total_shipping`
+    
+    ## Custom Fields and Tags
+    - Custom fields must be predefined in the system before use
+    - Both order-level and item-level custom fields/tags are supported
+
+  security:
+    - BearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: './components/sales-order-create.yaml'
+        examples:
+          minimal_order:
+            summary: Minimal required fields
+            description: A basic order with only required fields
+            value:
+              channel_id: 1
+              order_number: "ORD-2024-001"
+              order_date: "2024-01-15"
+              order_status: "pending"
+              bill_to:
+                name: "John Doe"
+              ship_to:
+                name: "Jane Smith"
+              items:
+                - product_id: 123
+                  quantity: 2
+                  unit_price: 49.99
+          complete_order:
+            summary: Complete order with all fields
+            description: A comprehensive order demonstrating all available fields
+            value:
+              channel_id: 1
+              order_number: "ORD-2024-002"
+              order_date: "2024-01-15"
+              order_status: "pending"
+              customer_email: "customer@example.com"
+              customer_username: "johndoe123"
+              customer_po_number: "PO-2024-5678"
+              bill_to:
+                name: "John Doe"
+                company: "Acme Corporation"
+                street1: "123 Main Street"
+                street2: "Suite 100"
+                city: "Anytown"
+                state: "CA"
+                postal_code: "90210"
+                country: "US"
+                phone: "555-1234"
+              ship_to:
+                name: "Jane Smith"
+                company: "Delivery Corp"
+                street1: "456 Oak Avenue"
+                street2: "Apt 2B"
+                city: "Somewhere"
+                state: "NY"
+                postal_code: "10001"
+                country: "US"
+                phone: "555-5678"
+              ship_date: "2024-01-20"
+              hold_until_date: "2024-01-18"
+              ship_by_date: "2024-01-25"
+              total_tax: 15.75
+              total_shipping: 12.50
+              requested_shipping_service: "FedEx Ground"
+              customer_notes: "Please handle with care - fragile items"
+              internal_notes: "Rush order - expedite processing"
+              items:
+                - product_id: 123
+                  quantity: 2
+                  unit_price: 49.99
+                - sku: "WIDGET-002"
+                  quantity: 1
+                  unit_price: 25.00
+              custom_fields:
+                "Customer PO": "PO-98765"
+                "Priority Level": "High"
+                "Package Count": 3
+              tags:
+                - "urgent"
+                - "vip-customer"
+                - "rush-order"
+          sku_based_order:
+            summary: Order using SKU lookup
+            description: An order where products are identified by SKU instead of product_id
+            value:
+              channel_id: 1
+              order_number: "ORD-2024-003"
+              order_date: "2024-01-15"
+              order_status: "pending"
+              customer_email: "customer@example.com"
+              bill_to:
+                name: "John Doe"
+                street1: "123 Main Street"
+                city: "Anytown"
+                state: "CA"
+                postal_code: "90210"
+                country: "US"
+              ship_to:
+                name: "Jane Smith"
+                street1: "456 Oak Avenue"
+                city: "Somewhere"
+                state: "NY"
+                postal_code: "10001"
+                country: "US"
+              total_tax: 8.50
+              total_shipping: 10.00
+              items:
+                - sku: "WIDGET-001"
+                  quantity: 3
+                  unit_price: 29.99
+                - sku: "GADGET-ABC"
+                  quantity: 1
+                  unit_price: 15.00
+          order_with_item_metadata:
+            summary: Order with item-level tags and custom fields
+            description: An order demonstrating item-level custom fields and tags
+            value:
+              channel_id: 1
+              order_number: "ORD-2024-004"
+              order_date: "2024-01-15"
+              order_status: "pending"
+              customer_email: "warehouse@example.com"
+              bill_to:
+                name: "Warehouse Manager"
+                company: "Distribution Co"
+              ship_to:
+                name: "Store Manager"
+                company: "Retail Store"
+                street1: "789 Commerce Blvd"
+                city: "Commerce City"
+                state: "TX"
+                postal_code: "75001"
+                country: "US"
+              items:
+                - product_id: 456
+                  quantity: 10
+                  unit_price: 12.50
+                  tags:
+                    - "bulk-item"
+                    - "fragile"
+                  custom_fields:
+                    "Lot Number": "LOT-2024-001"
+                    "Expiry Date": "2024-12-31"
+                    "Quality Check": true
+                - sku: "SPECIAL-789"
+                  quantity: 2
+                  unit_price: 75.00
+                  tags:
+                    - "priority"
+                    - "special-handling"
+                  custom_fields:
+                    "Serial Number": "SN-789-001"
+                    "Warranty Period": 24
+              tags:
+                - "bulk-order"
+                - "warehouse-transfer"
+          negative_price_order:
+            summary: Order with discount/refund items
+            description: An order containing items with negative unit prices for discounts or refunds
+            value:
+              channel_id: 1
+              order_number: "ORD-2024-005"
+              order_date: "2024-01-15"
+              order_status: "pending"
+              customer_email: "customer@example.com"
+              bill_to:
+                name: "John Doe"
+              ship_to:
+                name: "John Doe"
+                street1: "123 Main Street"
+                city: "Anytown"
+                state: "CA"
+                postal_code: "90210"
+                country: "US"
+              items:
+                - product_id: 123
+                  quantity: 1
+                  unit_price: 100.00
+                - product_id: 999  # Discount item
+                  quantity: 1
+                  unit_price: -15.00  # Discount
+  responses:
+    '201':
+      description: Sales order created successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/sales-order-full.yaml'
+          examples:
+            created_order:
+              summary: Successfully created sales order
+              value:
+                data:
+                  id: 12345
+                  created_at: "2024-01-15T10:30:00Z"
+                  updated_at: "2024-01-15T10:30:00Z"
+                  status: "Active"
+                  order_id: "12345"
+                  order_number: "ORD-2024-001"
+                  order_date: "2024-01-15"
+                  order_status: "pending"
+                  customer_email: "customer@example.com"
+                  customer_username: "johndoe123"
+                  customer_po_number: "PO-2024-5678"
+                  bill_to:
+                    name: "John Doe"
+                    company: "Acme Corporation"
+                    street1: "123 Main Street"
+                    street2: "Suite 100"
+                    city: "Anytown"
+                    state: "CA"
+                    postal_code: "90210"
+                    country: "US"
+                    phone: "555-1234"
+                  ship_to:
+                    name: "Jane Smith"
+                    company: "Delivery Corp"
+                    street1: "456 Oak Avenue"
+                    city: "Somewhere"
+                    state: "NY"
+                    postal_code: "10001"
+                    country: "US"
+                    phone: "555-5678"
+                  total: 128.23
+                  total_paid: 0.00
+                  total_tax: 15.75
+                  total_shipping: 12.50
+                  product_total: 99.98
+                  requested_shipping_service: "FedEx Ground"
+                  customer_notes: "Please handle with care - fragile items"
+                  internal_notes: "Rush order - expedite processing"
+                  ship_date: "2024-01-20"
+                  hold_until_date: "2024-01-18" 
+                  ship_by_date: "2024-01-25"
+                  externally_fulfilled: false
+                  is_posted: false
+                  source: "external_api"
+                  total_order_quantity: 3.0
+                  items:
+                    - id: 67890
+                      line_number: 1
+                      sku: "WIDGET-001"
+                      name: "Premium Widget"
+                      quantity: 2.0
+                      unit_price: 49.99
+                      upc: "123456789012"
+                      product_id: 123
+                      tags: []
+                      custom_fields: {}
+                    - id: 67891
+                      line_number: 2
+                      sku: "WIDGET-002"
+                      name: "Standard Widget"
+                      quantity: 1.0
+                      unit_price: 25.00
+                      upc: "123456789013"
+                      product_id: 124
+                      tags: []
+                      custom_fields: {}
+                  tags:
+                    - id: 1
+                      name: "urgent"
+                    - id: 2
+                      name: "vip-customer"
+                    - id: 3
+                      name: "rush-order"
+                  custom_fields:
+                    "Customer PO": "PO-98765"
+                    "Priority Level": "High"
+                    "Package Count": 3
+    '422':
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+          examples:
+            missing_required_fields:
+              summary: Missing required fields
+              value:
+                message: "The given data was invalid."
+                errors:
+                  channel_id: ["Channel ID is required."]
+                  order_number: ["Order number is required."]
+                  order_date: ["Order date is required."]
+                  order_status: ["Order status is required."]
+                  bill_to: ["Billing address is required."]
+                  ship_to: ["Shipping address is required."]
+                  items: ["At least one item is required."]
+            duplicate_order_number:
+              summary: Duplicate order number
+              value:
+                message: "The given data was invalid."
+                errors:
+                  order_number: ["Order number is already in use."]
+            invalid_order_status:
+              summary: Invalid order status
+              value:
+                message: "The given data was invalid."
+                errors:
+                  order_status: ["Order status must be one of the following valid values: pending, shipped, fulfilled, cancelled, awaiting_shipment, partially_shipped, on_hold, backorder, partially_refunded, committed, processing, completed"]
+            product_not_found:
+              summary: Product not found
+              value:
+                message: "The given data was invalid."
+                errors:
+                  "items.0.product": ["Product not found for product_id: 99999"]
+            invalid_custom_fields:
+              summary: Invalid custom field values
+              value:
+                message: "The given data was invalid."
+                errors:
+                  "custom_fields.Priority Level": ["Priority Level must be one of: Low, Medium, High"]
+                  "items.0.custom_fields.Item Weight": ["Item Weight must be a number"]
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'

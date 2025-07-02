@@ -6794,6 +6794,1349 @@ paths:
                 properties:
                   message:
                     type: string
+    post:
+      operationId: createSalesOrder
+      tags:
+        - Sales Orders
+      summary: Create a new sales order
+      description: |
+        Create a new sales order with items, addresses, and optional metadata.
+
+        ## Key Features
+        - Create orders with multiple line items
+        - Support for both product ID and SKU lookup for items
+        - Automatic product name and details population
+        - Flexible address handling (only name required)
+        - Optional custom fields and tags at both order and item level
+        - Automatic total calculation from line items plus tax/shipping
+
+        ## Product Identification
+        For each line item, you must provide either:
+        - `product_id`: The internal product ID
+        - `sku`: The product SKU (supports both internal SKU and alternate SKUs)
+
+        Product details (name, UPC, etc.) will be automatically populated from the product catalog.
+
+        ## Order Status Values
+        Valid order statuses include: `pending`, `shipped`, `fulfilled`, `cancelled`, 
+        `awaiting_shipment`, `partially_shipped`, `on_hold`, `backorder`, 
+        `partially_refunded`, `committed`, `processing`, `completed`
+
+        ## Total Calculation
+        The order total is automatically calculated as:
+        `(sum of item quantities × unit prices) + total_tax + total_shipping`
+
+        ## Custom Fields and Tags
+        - Custom fields must be predefined in the system before use
+        - Tags are created automatically if they don't exist
+        - Both order-level and item-level custom fields/tags are supported
+        - Custom field validation depends on the field type (string, number, date, dropdown)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - channel_id
+                - order_number
+                - order_date
+                - order_status
+                - bill_to
+                - ship_to
+                - items
+              properties:
+                channel_id:
+                  type: integer
+                  description: ID of the channel this order belongs to
+                  example: 1
+                order_number:
+                  type: string
+                  maxLength: 255
+                  description: Unique order number identifier
+                  example: ORD-2024-001
+                order_date:
+                  type: string
+                  format: date
+                  description: Date when the order was placed (YYYY-MM-DD)
+                  example: '2024-01-15'
+                order_status:
+                  type: string
+                  maxLength: 255
+                  description: Current status of the order
+                  enum:
+                    - pending
+                    - shipped
+                    - fulfilled
+                    - cancelled
+                    - awaiting_shipment
+                    - partially_shipped
+                    - on_hold
+                    - backorder
+                    - partially_refunded
+                    - committed
+                    - processing
+                    - completed
+                  example: pending
+                customer_email:
+                  type: string
+                  format: email
+                  maxLength: 255
+                  nullable: true
+                  description: Customer's email address
+                  example: customer@example.com
+                customer_username:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Customer's username
+                  example: customer123
+                customer_po_number:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Customer's purchase order number
+                  example: PO-2024-5678
+                bill_to:
+                  type: object
+                  required:
+                    - name
+                  properties:
+                    name:
+                      type: string
+                      maxLength: 255
+                      description: Full name for billing
+                      example: John Doe
+                    company:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: Company name for billing
+                      example: Acme Corporation
+                    street1:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: Primary street address
+                      example: 123 Main Street
+                    street2:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: 'Secondary address line (apt, suite, etc.)'
+                      example: Suite 100
+                    street3:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: Third address line
+                    city:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: City name
+                      example: Anytown
+                    state:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: State or province
+                      example: CA
+                    postal_code:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: ZIP or postal code
+                      example: '90210'
+                    country:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: Country code or name
+                      example: US
+                    phone:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: Phone number
+                      example: 555-1234
+                  description: Billing address information
+                ship_to:
+                  type: object
+                  required:
+                    - name
+                  properties:
+                    name:
+                      type: string
+                      maxLength: 255
+                      description: Full name for shipping
+                      example: Jane Smith
+                    company:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: Company name for shipping
+                      example: Delivery Corp
+                    street1:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: Primary street address
+                      example: 456 Oak Avenue
+                    street2:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: 'Secondary address line (apt, suite, etc.)'
+                      example: Apt 2B
+                    street3:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: Third address line
+                    city:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: City name
+                      example: Somewhere
+                    state:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: State or province
+                      example: NY
+                    postal_code:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: ZIP or postal code
+                      example: '10001'
+                    country:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: Country code or name
+                      example: US
+                    phone:
+                      type: string
+                      maxLength: 255
+                      nullable: true
+                      description: Phone number
+                      example: 555-5678
+                  description: Shipping address information
+                ship_date:
+                  type: string
+                  format: date
+                  nullable: true
+                  description: Date when the order was or will be shipped (YYYY-MM-DD)
+                  example: '2024-01-20'
+                hold_until_date:
+                  type: string
+                  format: date
+                  nullable: true
+                  description: Date to hold the order until (YYYY-MM-DD)
+                  example: '2024-01-18'
+                ship_by_date:
+                  type: string
+                  format: date
+                  nullable: true
+                  description: Required ship by date (YYYY-MM-DD)
+                  example: '2024-01-25'
+                total_tax:
+                  type: number
+                  format: float
+                  minimum: 0
+                  nullable: true
+                  description: Total tax amount for the order
+                  example: 15.75
+                total_shipping:
+                  type: number
+                  format: float
+                  minimum: 0
+                  nullable: true
+                  description: Total shipping cost for the order
+                  example: 12.5
+                requested_shipping_service:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Requested shipping service or carrier
+                  example: FedEx Ground
+                customer_notes:
+                  type: string
+                  nullable: true
+                  description: Notes from the customer
+                  example: Please handle with care - fragile items
+                internal_notes:
+                  type: string
+                  nullable: true
+                  description: Internal notes for order processing
+                  example: Rush order - expedite processing
+                items:
+                  type: array
+                  minItems: 1
+                  description: Array of line items for the order
+                  items:
+                    type: object
+                    required:
+                      - quantity
+                      - unit_price
+                    properties:
+                      product_id:
+                        type: integer
+                        description: ID of the product (required if sku not provided)
+                        example: 123
+                      sku:
+                        type: string
+                        maxLength: 255
+                        description: SKU of the product (required if product_id not provided)
+                        example: WIDGET-001
+                      quantity:
+                        type: number
+                        format: float
+                        minimum: 0.001
+                        description: Quantity of the item ordered
+                        example: 2.5
+                      unit_price:
+                        type: number
+                        format: float
+                        description: Price per unit (can be negative for discounts/refunds)
+                        example: 49.99
+                      tags:
+                        type: array
+                        nullable: true
+                        description: Tags to associate with this line item
+                        items:
+                          type: string
+                          maxLength: 255
+                          example: fragile
+                        example:
+                          - fragile
+                          - priority
+                      custom_fields:
+                        type: object
+                        nullable: true
+                        description: Custom field values for this line item
+                        additionalProperties:
+                          oneOf:
+                            - type: string
+                            - type: number
+                            - type: boolean
+                        example:
+                          Lot Number: LOT-12345
+                          Expiry Date: '2024-12-31'
+                          Quality Check: true
+                custom_fields:
+                  type: object
+                  nullable: true
+                  description: Custom field values for the sales order
+                  additionalProperties:
+                    oneOf:
+                      - type: string
+                      - type: number
+                      - type: boolean
+                  example:
+                    Customer PO: PO-98765
+                    Priority Level: High
+                    Package Count: 3
+                tags:
+                  type: array
+                  nullable: true
+                  description: Tags to associate with the sales order
+                  items:
+                    type: string
+                    maxLength: 255
+                    example: urgent
+                  example:
+                    - urgent
+                    - vip-customer
+                    - rush-order
+            examples:
+              minimal_order:
+                summary: Minimal required fields
+                description: A basic order with only required fields
+                value:
+                  channel_id: 1
+                  order_number: ORD-2024-001
+                  order_date: '2024-01-15'
+                  order_status: pending
+                  bill_to:
+                    name: John Doe
+                  ship_to:
+                    name: Jane Smith
+                  items:
+                    - product_id: 123
+                      quantity: 2
+                      unit_price: 49.99
+              complete_order:
+                summary: Complete order with all fields
+                description: A comprehensive order demonstrating all available fields
+                value:
+                  channel_id: 1
+                  order_number: ORD-2024-002
+                  order_date: '2024-01-15'
+                  order_status: pending
+                  customer_email: customer@example.com
+                  customer_username: johndoe123
+                  customer_po_number: PO-2024-5678
+                  bill_to:
+                    name: John Doe
+                    company: Acme Corporation
+                    street1: 123 Main Street
+                    street2: Suite 100
+                    city: Anytown
+                    state: CA
+                    postal_code: '90210'
+                    country: US
+                    phone: 555-1234
+                  ship_to:
+                    name: Jane Smith
+                    company: Delivery Corp
+                    street1: 456 Oak Avenue
+                    street2: Apt 2B
+                    city: Somewhere
+                    state: NY
+                    postal_code: '10001'
+                    country: US
+                    phone: 555-5678
+                  ship_date: '2024-01-20'
+                  hold_until_date: '2024-01-18'
+                  ship_by_date: '2024-01-25'
+                  total_tax: 15.75
+                  total_shipping: 12.5
+                  requested_shipping_service: FedEx Ground
+                  customer_notes: Please handle with care - fragile items
+                  internal_notes: Rush order - expedite processing
+                  items:
+                    - product_id: 123
+                      quantity: 2
+                      unit_price: 49.99
+                    - sku: WIDGET-002
+                      quantity: 1
+                      unit_price: 25
+                  custom_fields:
+                    Customer PO: PO-98765
+                    Priority Level: High
+                    Package Count: 3
+                  tags:
+                    - urgent
+                    - vip-customer
+                    - rush-order
+              sku_based_order:
+                summary: Order using SKU lookup
+                description: An order where products are identified by SKU instead of product_id
+                value:
+                  channel_id: 1
+                  order_number: ORD-2024-003
+                  order_date: '2024-01-15'
+                  order_status: pending
+                  customer_email: customer@example.com
+                  bill_to:
+                    name: John Doe
+                    street1: 123 Main Street
+                    city: Anytown
+                    state: CA
+                    postal_code: '90210'
+                    country: US
+                  ship_to:
+                    name: Jane Smith
+                    street1: 456 Oak Avenue
+                    city: Somewhere
+                    state: NY
+                    postal_code: '10001'
+                    country: US
+                  total_tax: 8.5
+                  total_shipping: 10
+                  items:
+                    - sku: WIDGET-001
+                      quantity: 3
+                      unit_price: 29.99
+                    - sku: GADGET-ABC
+                      quantity: 1
+                      unit_price: 15
+              order_with_item_metadata:
+                summary: Order with item-level tags and custom fields
+                description: An order demonstrating item-level custom fields and tags
+                value:
+                  channel_id: 1
+                  order_number: ORD-2024-004
+                  order_date: '2024-01-15'
+                  order_status: pending
+                  customer_email: warehouse@example.com
+                  bill_to:
+                    name: Warehouse Manager
+                    company: Distribution Co
+                  ship_to:
+                    name: Store Manager
+                    company: Retail Store
+                    street1: 789 Commerce Blvd
+                    city: Commerce City
+                    state: TX
+                    postal_code: '75001'
+                    country: US
+                  items:
+                    - product_id: 456
+                      quantity: 10
+                      unit_price: 12.5
+                      tags:
+                        - bulk-item
+                        - fragile
+                      custom_fields:
+                        Lot Number: LOT-2024-001
+                        Expiry Date: '2024-12-31'
+                        Quality Check: true
+                    - sku: SPECIAL-789
+                      quantity: 2
+                      unit_price: 75
+                      tags:
+                        - priority
+                        - special-handling
+                      custom_fields:
+                        Serial Number: SN-789-001
+                        Warranty Period: 24
+                  tags:
+                    - bulk-order
+                    - warehouse-transfer
+              negative_price_order:
+                summary: Order with discount/refund items
+                description: An order containing items with negative unit prices for discounts or refunds
+                value:
+                  channel_id: 1
+                  order_number: ORD-2024-005
+                  order_date: '2024-01-15'
+                  order_status: pending
+                  customer_email: customer@example.com
+                  bill_to:
+                    name: John Doe
+                  ship_to:
+                    name: John Doe
+                    street1: 123 Main Street
+                    city: Anytown
+                    state: CA
+                    postal_code: '90210'
+                    country: US
+                  items:
+                    - product_id: 123
+                      quantity: 1
+                      unit_price: 100
+                    - product_id: 999
+                      quantity: 1
+                      unit_price: -15
+      responses:
+        '201':
+          description: Sales order created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Unique identifier for the sales order
+                      created_at:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the order was created
+                      updated_at:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the order was last updated
+                      status:
+                        type: string
+                        description: Current status of the order
+                      order_id:
+                        type: string
+                        description: External order identifier
+                      order_number:
+                        type: string
+                        description: Order number
+                      order_date:
+                        type: string
+                        format: date
+                        description: Date when the order was placed
+                      payment_date:
+                        type: string
+                        format: date
+                        description: Date when payment was received
+                      ship_by_date:
+                        type: string
+                        format: date
+                        description: Required ship by date
+                      age:
+                        type: integer
+                        description: Age of the order in days
+                      order_status:
+                        type: string
+                        description: Status of the order
+                      customer_id:
+                        type: string
+                        description: Customer identifier
+                      customer_username:
+                        type: string
+                        description: Customer's username
+                      customer_email:
+                        type: string
+                        description: Customer's email address
+                      bill_to:
+                        type: object
+                        description: Billing information
+                      ship_to:
+                        type: object
+                        description: Shipping information
+                      requested_shipping_service:
+                        type: string
+                        nullable: true
+                        description: What shipping service to use when shipping this order
+                      total:
+                        type: number
+                        format: float
+                        description: Total order amount
+                      total_paid:
+                        type: number
+                        format: float
+                        description: Amount paid
+                      total_tax:
+                        type: number
+                        format: float
+                        description: Total tax amount
+                      total_shipping:
+                        type: number
+                        format: float
+                        description: Total shipping amount
+                      customer_notes:
+                        type: string
+                        description: Notes from the customer
+                      internal_notes:
+                        type: string
+                        description: Internal notes
+                      ship_date:
+                        type: string
+                        format: date
+                        description: Date when order was shipped
+                      hold_until_date:
+                        type: string
+                        format: date
+                        description: Hold until date
+                      user_id:
+                        type: integer
+                        description: User ID associated with the order
+                      externally_fulfilled:
+                        type: boolean
+                        description: Whether the order is fulfilled externally
+                      externally_fulfilled_by:
+                        type: string
+                        description: Entity fulfilling the order externally
+                      is_posted:
+                        type: boolean
+                        description: Whether the order is posted
+                      posted_by:
+                        type: string
+                        description: User who posted the order
+                      not_sync:
+                        type: boolean
+                        description: Sync status
+                      sales_posted:
+                        type: boolean
+                        description: Sales posting status
+                      split_order:
+                        type: boolean
+                        description: Whether the order is split
+                      skip_inventory:
+                        type: boolean
+                        description: Whether to skip inventory
+                      skip_sales_report:
+                        type: boolean
+                        description: Whether to skip sales report
+                      channel_id:
+                        type: integer
+                        description: Channel identifier
+                      total_order_cost:
+                        type: number
+                        format: float
+                        description: Total cost of order
+                      total_order_quantity:
+                        type: number
+                        format: float
+                        description: Total quantity of items
+                      order_cost_details:
+                        type: object
+                        description: Detailed order cost information
+                      source:
+                        type: string
+                        description: Order source
+                      shipstation_order_id:
+                        type: string
+                        description: ShipStation order identifier
+                      type:
+                        type: string
+                        description: Order type
+                      parent_id:
+                        type: integer
+                        description: Parent order ID if applicable
+                      shipping_revenue:
+                        type: number
+                        format: float
+                        description: Revenue from shipping
+                      product_total:
+                        type: number
+                        format: float
+                        description: Total product amount
+                      total_discount:
+                        type: number
+                        format: float
+                        description: Total discount amount
+                      picking_status:
+                        type: string
+                        description: Status of picking process
+                      starred_description:
+                        type: string
+                        description: Description for starred orders
+                      customer_po_number:
+                        type: string
+                        description: Customer PO number
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the order item
+                            line_number:
+                              type: integer
+                              description: 'Sequential line number for this item on the sales order, only unique within the order, starts at 1'
+                            created_at:
+                              type: string
+                              format: date-time
+                              description: Creation timestamp
+                            updated_at:
+                              type: string
+                              format: date-time
+                              description: Last update timestamp
+                            sku:
+                              type: string
+                              description: Stock keeping unit
+                            name:
+                              type: string
+                              description: Product name
+                            image_url:
+                              type: string
+                              description: URL of product image
+                            weight:
+                              type: object
+                              description: Weight information
+                            quantity:
+                              type: number
+                              format: float
+                              description: Ordered quantity
+                            unit_price:
+                              type: number
+                              format: float
+                              description: Price per unit
+                            tax:
+                              type: number
+                              format: float
+                              description: Tax amount
+                            shipping:
+                              type: number
+                              format: float
+                              description: Shipping amount
+                            warehouse_location:
+                              type: string
+                              description: Location in warehouse
+                            options:
+                              type: object
+                              description: Additional options
+                            fulfillment_sku:
+                              type: string
+                              description: SKU used for fulfillment
+                            adjustment:
+                              type: number
+                              format: float
+                              description: Price adjustment
+                            upc:
+                              type: string
+                              description: Universal Product Code
+                            stock_id:
+                              type: integer
+                              description: Stock identifier
+                            kit_id:
+                              type: integer
+                              description: Kit identifier if part of a kit
+                            non_physical_item:
+                              type: boolean
+                              description: Whether item is non-physical
+                            ignore_item:
+                              type: boolean
+                              description: Whether to ignore this item
+                            quantity_shipped:
+                              type: number
+                              format: float
+                              description: Quantity shipped
+                            quantity_cancelled:
+                              type: number
+                              format: float
+                              description: Quantity cancelled
+                            quantity_invoiced:
+                              type: number
+                              format: float
+                              description: Quantity invoiced
+                            quantity_ordered:
+                              type: number
+                              format: float
+                              description: Original quantity ordered
+                            base_uom_id:
+                              type: integer
+                              description: Base unit of measure ID
+                            ordered_uom_id:
+                              type: integer
+                              description: Ordered unit of measure ID
+                            product_id:
+                              type: integer
+                              description: Product identifier
+                            total_returned_base_quantity:
+                              type: number
+                              format: float
+                              description: Total quantity returned
+                            parent_id:
+                              type: integer
+                              description: Parent item ID
+                            status:
+                              type: string
+                              description: Item status
+                            discount:
+                              type: number
+                              format: float
+                              description: Discount amount
+                            estimated_ship_date:
+                              type: string
+                              format: date
+                              description: Estimated shipping date
+                            custom_fields:
+                              type: object
+                              description: Dynamic custom fields with key-value pairs
+                              additionalProperties:
+                                type: string
+                            product:
+                              type: object
+                              description: Product information
+                              properties:
+                                id:
+                                  type: integer
+                                  description: Unique identifier for the product
+                                name:
+                                  type: string
+                                  description: Product name
+                                description:
+                                  type: string
+                                  nullable: true
+                                  description: Product description
+                                retail_price:
+                                  type: number
+                                  format: float
+                                  description: Retail price
+                                wholesale_price:
+                                  type: number
+                                  format: float
+                                  description: Wholesale price
+                                unit_cost:
+                                  type: number
+                                  format: float
+                                  description: Cost per unit
+                                product_weight:
+                                  type: number
+                                  format: float
+                                  description: Weight of the product
+                                product_length:
+                                  type: number
+                                  format: float
+                                  description: Length of the product
+                                product_width:
+                                  type: number
+                                  format: float
+                                  description: Width of the product
+                                product_height:
+                                  type: number
+                                  format: float
+                                  description: Height of the product
+                                sellable:
+                                  type: boolean
+                                  description: Whether the product can be sold
+                                discontinued:
+                                  type: boolean
+                                  description: Whether the product is discontinued. Discontinued products will be hidden in the Luminous UI by default.
+                                image_url:
+                                  type: string
+                                  nullable: true
+                                  description: URL to the product's main image
+                                category:
+                                  type: object
+                                  nullable: true
+                                  properties:
+                                    id:
+                                      type: integer
+                                    name:
+                                      type: string
+                                  description: Product category information
+                                subcategory:
+                                  type: object
+                                  nullable: true
+                                  properties:
+                                    id:
+                                      type: integer
+                                    name:
+                                      type: string
+                                  description: Product subcategory information
+                                custom_fields:
+                                  type: object
+                                  description: Dynamic custom fields with key-value pairs
+                                  additionalProperties:
+                                    type: string
+                                variant_attributes:
+                                  type: object
+                                  nullable: true
+                                  description: Available variant attributes
+                                sku:
+                                  type: string
+                                  description: Internal SKU
+                                alternate_skus:
+                                  type: array
+                                  description: Alternate SKUs
+                                  items:
+                                    type: object
+                                    properties:
+                                      id:
+                                        type: integer
+                                      sku:
+                                        type: string
+                                upc:
+                                  type: string
+                                  description: UPC/Barcode
+                                tags:
+                                  type: array
+                                  description: Tags associated with the product
+                                  items:
+                                    type: object
+                                    properties:
+                                      id:
+                                        type: integer
+                                        description: Unique identifier for the tag
+                                      name:
+                                        type: string
+                                        description: Name of the tag
+                                      description:
+                                        type: string
+                                        nullable: true
+                                        description: Description of the tag
+                                      icon:
+                                        type: string
+                                        nullable: true
+                                        description: Icon identifier or URL for the tag
+                                      color:
+                                        type: string
+                                        nullable: true
+                                        description: Color code for the tag
+                                    required:
+                                      - id
+                                      - name
+                                supplier:
+                                  type: object
+                                  nullable: true
+                                  description: Supplier information
+                                created_at:
+                                  type: string
+                                  format: date-time
+                                  description: Timestamp when the product was created
+                                updated_at:
+                                  type: string
+                                  format: date-time
+                                  description: Timestamp when the product was last updated
+                            tags:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                  name:
+                                    type: string
+                                  description:
+                                    type: string
+                                  icon:
+                                    type: string
+                                  color:
+                                    type: string
+                                  discount_structure:
+                                    type: object
+                                  markup_structure:
+                                    type: object
+                              description: Tags associated with the sales order item
+                        description: Line items in the order
+                      tags:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            description:
+                              type: string
+                            icon:
+                              type: string
+                            color:
+                              type: string
+                            discount_structure:
+                              type: object
+                            markup_structure:
+                              type: object
+                        description: Tags associated with the order
+                      shipments:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the shipment
+                            sales_order_id:
+                              type: integer
+                              description: ID of the associated sales order
+                            ship_date:
+                              type: string
+                              format: date
+                              description: Date when the shipment was or will be sent
+                            tracking_number:
+                              type: string
+                              description: Tracking number for the shipment
+                            is_return:
+                              type: boolean
+                              description: Whether this is a return shipment
+                            carrier_code:
+                              type: string
+                              description: 'Code identifying the carrier (e.g., ups, fedex)'
+                            service_code:
+                              type: string
+                              description: Code identifying the shipping service
+                            package_code:
+                              type: string
+                              description: Code identifying the package type
+                            shipment_cost:
+                              type: number
+                              format: float
+                              description: Cost of shipping
+                            insurance_cost:
+                              type: number
+                              format: float
+                              description: Cost of insurance
+                            warehouse_id:
+                              type: integer
+                              description: ID of the warehouse shipping from
+                            status:
+                              type: integer
+                              description: Status of the shipment
+                            ship_to:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                                  description: Recipient name
+                                company:
+                                  type: string
+                                  description: Company name
+                                street1:
+                                  type: string
+                                  description: Primary street address
+                                street2:
+                                  type: string
+                                  description: Secondary street address
+                                street3:
+                                  type: string
+                                  description: Additional street address
+                                city:
+                                  type: string
+                                  description: City
+                                state:
+                                  type: string
+                                  description: State/province
+                                postalCode:
+                                  type: string
+                                  description: Postal/ZIP code
+                                country:
+                                  type: string
+                                  description: Country
+                                phone:
+                                  type: string
+                                  description: Contact phone number
+                                residential:
+                                  type: boolean
+                                  description: Whether this is a residential address
+                            weight:
+                              type: object
+                              required:
+                                - value
+                                - units
+                              properties:
+                                value:
+                                  type: number
+                                  format: float
+                                  description: Weight value
+                                units:
+                                  type: string
+                                  enum:
+                                    - ounces
+                                    - pounds
+                                    - grams
+                                    - kilograms
+                                  description: Unit of weight measurement
+                            dimensions:
+                              type: object
+                              required:
+                                - units
+                                - length
+                                - width
+                                - height
+                              properties:
+                                units:
+                                  type: string
+                                  enum:
+                                    - inches
+                                    - centimeters
+                                  description: Unit of dimensional measurement
+                                length:
+                                  type: number
+                                  format: float
+                                  description: Length of the package
+                                width:
+                                  type: number
+                                  format: float
+                                  description: Width of the package
+                                height:
+                                  type: number
+                                  format: float
+                                  description: Height of the package
+                            items:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                    description: Unique identifier for the shipment item
+                                  shipment_id:
+                                    type: integer
+                                    description: ID of the parent shipment
+                                  product_id:
+                                    type: integer
+                                    description: ID of the product being shipped
+                                  order_item_id:
+                                    type: integer
+                                    description: ID of the associated sales order line item being shipped
+                                  quantity:
+                                    type: number
+                                    description: Quantity being shipped
+                                  weight:
+                                    type: object
+                                    required:
+                                      - value
+                                      - units
+                                    properties:
+                                      value:
+                                        type: number
+                                        format: float
+                                        description: Weight value
+                                      units:
+                                        type: string
+                                        enum:
+                                          - ounces
+                                          - pounds
+                                          - grams
+                                          - kilograms
+                                        description: Unit of weight measurement
+                                  unit_price:
+                                    type: number
+                                    format: float
+                                    description: Price per unit
+                                  created_at:
+                                    type: string
+                                    format: date-time
+                                    description: Timestamp when the item was created
+                                  updated_at:
+                                    type: string
+                                    format: date-time
+                                    description: Timestamp when the item was last updated
+                              description: Items included in this shipment
+                            created_at:
+                              type: string
+                              format: date-time
+                              description: Timestamp when the shipment was created
+                            updated_at:
+                              type: string
+                              format: date-time
+                              description: Timestamp when the shipment was last updated
+                        description: Shipments associated with order
+                      custom_fields:
+                        type: object
+                        description: Dynamic custom fields with key-value pairs
+                        additionalProperties:
+                          type: string
+              examples:
+                created_order:
+                  summary: Successfully created sales order
+                  value:
+                    data:
+                      id: 12345
+                      created_at: '2024-01-15T10:30:00Z'
+                      updated_at: '2024-01-15T10:30:00Z'
+                      status: Active
+                      order_id: '12345'
+                      order_number: ORD-2024-001
+                      order_date: '2024-01-15'
+                      order_status: pending
+                      customer_email: customer@example.com
+                      customer_username: johndoe123
+                      customer_po_number: PO-2024-5678
+                      bill_to:
+                        name: John Doe
+                        company: Acme Corporation
+                        street1: 123 Main Street
+                        street2: Suite 100
+                        city: Anytown
+                        state: CA
+                        postal_code: '90210'
+                        country: US
+                        phone: 555-1234
+                      ship_to:
+                        name: Jane Smith
+                        company: Delivery Corp
+                        street1: 456 Oak Avenue
+                        city: Somewhere
+                        state: NY
+                        postal_code: '10001'
+                        country: US
+                        phone: 555-5678
+                      total: 128.23
+                      total_paid: 0
+                      total_tax: 15.75
+                      total_shipping: 12.5
+                      product_total: 99.98
+                      requested_shipping_service: FedEx Ground
+                      customer_notes: Please handle with care - fragile items
+                      internal_notes: Rush order - expedite processing
+                      ship_date: '2024-01-20'
+                      hold_until_date: '2024-01-18'
+                      ship_by_date: '2024-01-25'
+                      externally_fulfilled: false
+                      is_posted: false
+                      source: external_api
+                      total_order_quantity: 3
+                      items:
+                        - id: 67890
+                          line_number: 1
+                          sku: WIDGET-001
+                          name: Premium Widget
+                          quantity: 2
+                          unit_price: 49.99
+                          upc: '123456789012'
+                          product_id: 123
+                          tags: []
+                          custom_fields: {}
+                        - id: 67891
+                          line_number: 2
+                          sku: WIDGET-002
+                          name: Standard Widget
+                          quantity: 1
+                          unit_price: 25
+                          upc: '123456789013'
+                          product_id: 124
+                          tags: []
+                          custom_fields: {}
+                      tags:
+                        - id: 1
+                          name: urgent
+                        - id: 2
+                          name: vip-customer
+                        - id: 3
+                          name: rush-order
+                      custom_fields:
+                        Customer PO: PO-98765
+                        Priority Level: High
+                        Package Count: 3
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                missing_required_fields:
+                  summary: Missing required fields
+                  value:
+                    message: The given data was invalid.
+                    errors:
+                      channel_id:
+                        - Channel ID is required.
+                      order_number:
+                        - Order number is required.
+                      order_date:
+                        - Order date is required.
+                      order_status:
+                        - Order status is required.
+                      bill_to:
+                        - Billing address is required.
+                      ship_to:
+                        - Shipping address is required.
+                      items:
+                        - At least one item is required.
+                duplicate_order_number:
+                  summary: Duplicate order number
+                  value:
+                    message: The given data was invalid.
+                    errors:
+                      order_number:
+                        - Order number is already in use.
+                invalid_order_status:
+                  summary: Invalid order status
+                  value:
+                    message: The given data was invalid.
+                    errors:
+                      order_status:
+                        - 'Order status must be one of the following valid values: pending, shipped, fulfilled, cancelled, awaiting_shipment, partially_shipped, on_hold, backorder, partially_refunded, committed, processing, completed'
+                product_not_found:
+                  summary: Product not found
+                  value:
+                    message: The given data was invalid.
+                    errors:
+                      items.0.product:
+                        - 'Product not found for product_id: 99999'
+                invalid_custom_fields:
+                  summary: Invalid custom field values
+                  value:
+                    message: The given data was invalid.
+                    errors:
+                      custom_fields.Priority Level:
+                        - 'Priority Level must be one of: Low, Medium, High'
+                      items.0.custom_fields.Item Weight:
+                        - Item Weight must be a number
   '/sales-orders/{id}':
     get:
       operationId: getSalesOrder
