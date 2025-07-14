@@ -9,20 +9,12 @@ properties:
   tracking_number:
     type: string
   received_by:
-    type: integer
+    type: string
   received_at:
     type: string
     format: date-time
   shipped_via:
     type: string
-  total_quantity:
-    type: number
-  total_tax:
-    type: number
-  total_cost:
-    type: number
-  shipping_cost:
-    type: number
   items:
     type: array
     items:
@@ -31,39 +23,29 @@ properties:
         - purchase_order_id
         - purchase_order_item_id
         - quantity
-        - unit_price
+        - received_unit_of_measure_id
+        - location_id
+        - warehouse_id
       properties:
+        purchase_order_shipment_id:
+          type: integer
         purchase_order_id:
           type: integer
         purchase_order_item_id:
           type: integer
         quantity:
           type: number
-        unit:
-          type: string
         unit_price:
-          type: number
-        tax:
-          type: number
-        discount_amount:
-          type: number
-        discount_percent:
-          type: number
-        line_total:
           type: number
         remarks:
           type: string
-        stock_id:
-          type: integer
-        received_quantity:
-          type: number
-        base_unit_of_measure_id:
-          type: integer
         received_unit_of_measure_id:
           type: integer
         location_id:
           type: integer
         lot_id:
+          type: integer
+        warehouse_id:
           type: integer
   extra_costs:
     type: array
@@ -79,6 +61,4 @@ properties:
         quantity:
           type: number
         unit_price:
-          type: number
-        line_total:
           type: number

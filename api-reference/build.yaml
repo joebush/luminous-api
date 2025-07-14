@@ -5394,20 +5394,12 @@ paths:
                 tracking_number:
                   type: string
                 received_by:
-                  type: integer
+                  type: string
                 received_at:
                   type: string
                   format: date-time
                 shipped_via:
                   type: string
-                total_quantity:
-                  type: number
-                total_tax:
-                  type: number
-                total_cost:
-                  type: number
-                shipping_cost:
-                  type: number
                 items:
                   type: array
                   items:
@@ -5416,39 +5408,29 @@ paths:
                       - purchase_order_id
                       - purchase_order_item_id
                       - quantity
-                      - unit_price
+                      - received_unit_of_measure_id
+                      - location_id
+                      - warehouse_id
                     properties:
+                      purchase_order_shipment_id:
+                        type: integer
                       purchase_order_id:
                         type: integer
                       purchase_order_item_id:
                         type: integer
                       quantity:
                         type: number
-                      unit:
-                        type: string
                       unit_price:
-                        type: number
-                      tax:
-                        type: number
-                      discount_amount:
-                        type: number
-                      discount_percent:
-                        type: number
-                      line_total:
                         type: number
                       remarks:
                         type: string
-                      stock_id:
-                        type: integer
-                      received_quantity:
-                        type: number
-                      base_unit_of_measure_id:
-                        type: integer
                       received_unit_of_measure_id:
                         type: integer
                       location_id:
                         type: integer
                       lot_id:
+                        type: integer
+                      warehouse_id:
                         type: integer
                 extra_costs:
                   type: array
@@ -5464,8 +5446,6 @@ paths:
                       quantity:
                         type: number
                       unit_price:
-                        type: number
-                      line_total:
                         type: number
       responses:
         '200':
@@ -6807,15 +6787,13 @@ paths:
         - Support for both product ID and SKU lookup for items
         - Automatic product name and details population
         - Flexible address handling (only name required)
-        - Optional custom fields and tags at both order and item level
+        - Optional custom fields and tags at both order and order item level
         - Automatic total calculation from line items plus tax/shipping
 
         ## Product Identification
         For each line item, you must provide either:
         - `product_id`: The internal product ID
         - `sku`: The product SKU (supports both internal SKU and alternate SKUs)
-
-        Product details (name, UPC, etc.) will be automatically populated from the product catalog.
 
         ## Order Status Values
         Valid order statuses include: `pending`, `shipped`, `fulfilled`, `cancelled`, 
@@ -6828,9 +6806,7 @@ paths:
 
         ## Custom Fields and Tags
         - Custom fields must be predefined in the system before use
-        - Tags are created automatically if they don't exist
         - Both order-level and item-level custom fields/tags are supported
-        - Custom field validation depends on the field type (string, number, date, dropdown)
       security:
         - BearerAuth: []
       requestBody:
