@@ -6928,9 +6928,9 @@ paths:
                       example: '90210'
                     country:
                       type: string
-                      maxLength: 255
+                      maxLength: 2
                       nullable: true
-                      description: Country code or name
+                      description: 2 character country code
                       example: US
                     phone:
                       type: string
@@ -6992,9 +6992,9 @@ paths:
                       example: '10001'
                     country:
                       type: string
-                      maxLength: 255
+                      maxLength: 2
                       nullable: true
-                      description: Country code or name
+                      description: 2 character country code
                       example: US
                     phone:
                       type: string
@@ -7081,6 +7081,10 @@ paths:
                         format: float
                         description: Price per unit (can be negative for discounts/refunds)
                         example: 49.99
+                      uom_id:
+                        type: integer
+                        description: 'ID of the unit of measure for the item, if not provided, the default UOM for the item/account will be used'
+                        example: 1
                       tags:
                         type: array
                         nullable: true
