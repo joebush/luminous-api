@@ -64,6 +64,7 @@ post:
     Create a new shipment record for a specific sales order. Once the shipment is added, 
     the sales order status will automatically be updated to either `shipped` or `partially_shipped`.
     Also, any shipment costs will be added to the sales order total.
+    
     NOTE: At this time, inventory adjustments will not be made automatically.
   security:
     - BearerAuth: []

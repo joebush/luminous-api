@@ -7796,6 +7796,18 @@ paths:
                             tracking_number:
                               type: string
                               description: Tracking number for the shipment
+                            bol_number:
+                              type: string
+                              description: Bill of Lading Number for logistics tracking
+                              example: BOL-123456789
+                            pro_number:
+                              type: string
+                              description: Progressive Rotating Order Number (common in LTL shipping)
+                              example: PRO-987654321
+                            partner_reference_number:
+                              type: string
+                              description: General reference number from/for the shipping partner
+                              example: PARTNER-REF-001
                             is_return:
                               type: boolean
                               description: Whether this is a return shipment
@@ -8624,6 +8636,18 @@ paths:
                             tracking_number:
                               type: string
                               description: Tracking number for the shipment
+                            bol_number:
+                              type: string
+                              description: Bill of Lading Number for logistics tracking
+                              example: BOL-123456789
+                            pro_number:
+                              type: string
+                              description: Progressive Rotating Order Number (common in LTL shipping)
+                              example: PRO-987654321
+                            partner_reference_number:
+                              type: string
+                              description: General reference number from/for the shipping partner
+                              example: PARTNER-REF-001
                             is_return:
                               type: boolean
                               description: Whether this is a return shipment
@@ -8860,6 +8884,18 @@ paths:
                         tracking_number:
                           type: string
                           description: Tracking number for the shipment
+                        bol_number:
+                          type: string
+                          description: Bill of Lading Number for logistics tracking
+                          example: BOL-123456789
+                        pro_number:
+                          type: string
+                          description: Progressive Rotating Order Number (common in LTL shipping)
+                          example: PRO-987654321
+                        partner_reference_number:
+                          type: string
+                          description: General reference number from/for the shipping partner
+                          example: PARTNER-REF-001
                         is_return:
                           type: boolean
                           description: Whether this is a return shipment
@@ -9079,6 +9115,7 @@ paths:
         Create a new shipment record for a specific sales order. Once the shipment is added, 
         the sales order status will automatically be updated to either `shipped` or `partially_shipped`.
         Also, any shipment costs will be added to the sales order total.
+
         NOTE: At this time, inventory adjustments will not be made automatically.
       security:
         - BearerAuth: []
@@ -9110,6 +9147,18 @@ paths:
                 tracking_number:
                   type: string
                   description: Tracking number for the shipment
+                bol_number:
+                  type: string
+                  description: Bill of Lading Number for logistics tracking
+                  example: BOL-123456789
+                pro_number:
+                  type: string
+                  description: Progressive Rotating Order Number (common in LTL shipping)
+                  example: PRO-987654321
+                partner_reference_number:
+                  type: string
+                  description: General reference number from/for the shipping partner
+                  example: PARTNER-REF-001
                 is_return:
                   type: boolean
                   description: Whether this is a return shipment
@@ -9290,6 +9339,18 @@ paths:
                   tracking_number:
                     type: string
                     description: Tracking number for the shipment
+                  bol_number:
+                    type: string
+                    description: Bill of Lading Number for logistics tracking
+                    example: BOL-123456789
+                  pro_number:
+                    type: string
+                    description: Progressive Rotating Order Number (common in LTL shipping)
+                    example: PRO-987654321
+                  partner_reference_number:
+                    type: string
+                    description: General reference number from/for the shipping partner
+                    example: PARTNER-REF-001
                   is_return:
                     type: boolean
                     description: Whether this is a return shipment
