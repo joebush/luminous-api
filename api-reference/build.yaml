@@ -222,6 +222,15 @@ paths:
                           type: number
                           format: float
                           description: Cost per unit
+                        price:
+                          type: number
+                          format: float
+                          nullable: true
+                          description: |
+                            Calculated price for this product specific to the requesting company.
+                            This price takes into account the company's price level, price group assignments,
+                            and any applicable discounts or markups based on product category.
+                            Will be null if pricing cannot be calculated.
                         product_weight:
                           type: number
                           format: float
@@ -824,6 +833,15 @@ paths:
                         type: number
                         format: float
                         description: Cost per unit
+                      price:
+                        type: number
+                        format: float
+                        nullable: true
+                        description: |
+                          Calculated price for this product specific to the requesting company.
+                          This price takes into account the company's price level, price group assignments,
+                          and any applicable discounts or markups based on product category.
+                          Will be null if pricing cannot be calculated.
                       product_weight:
                         type: number
                         format: float
@@ -1456,6 +1474,15 @@ paths:
                         type: number
                         format: float
                         description: Cost per unit
+                      price:
+                        type: number
+                        format: float
+                        nullable: true
+                        description: |
+                          Calculated price for this product specific to the requesting company.
+                          This price takes into account the company's price level, price group assignments,
+                          and any applicable discounts or markups based on product category.
+                          Will be null if pricing cannot be calculated.
                       product_weight:
                         type: number
                         format: float
@@ -1813,6 +1840,15 @@ paths:
                         type: number
                         format: float
                         description: Cost per unit
+                      price:
+                        type: number
+                        format: float
+                        nullable: true
+                        description: |
+                          Calculated price for this product specific to the requesting company.
+                          This price takes into account the company's price level, price group assignments,
+                          and any applicable discounts or markups based on product category.
+                          Will be null if pricing cannot be calculated.
                       product_weight:
                         type: number
                         format: float
@@ -2416,6 +2452,15 @@ paths:
                         type: number
                         format: float
                         description: Cost per unit
+                      price:
+                        type: number
+                        format: float
+                        nullable: true
+                        description: |
+                          Calculated price for this product specific to the requesting company.
+                          This price takes into account the company's price level, price group assignments,
+                          and any applicable discounts or markups based on product category.
+                          Will be null if pricing cannot be calculated.
                       product_weight:
                         type: number
                         format: float
@@ -13656,6 +13701,10 @@ paths:
       description: |
         Get a paginated list of products associated with a specific company.
 
+        Each product includes a calculated `price` field that reflects the company-specific 
+        pricing based on their assigned price levels, price groups, and any applicable 
+        discounts or markups for the product's category.
+
         For detailed information about the filtering system and available operators, 
         refer to the [Filter System Documentation](/filters).
 
@@ -13693,7 +13742,7 @@ paths:
         # Find products by SKU (includes alternate SKUs)
         ?sku[eq]=SKU-001
 
-        # Find products with specific price range
+        # Find products with specific retail price range
         ?retail_price[gte]=50.00&retail_price[lte]=100.00
 
         # Find recently updated products
@@ -13859,6 +13908,15 @@ paths:
                           type: number
                           format: float
                           description: Cost per unit
+                        price:
+                          type: number
+                          format: float
+                          nullable: true
+                          description: |
+                            Calculated price for this product specific to the requesting company.
+                            This price takes into account the company's price level, price group assignments,
+                            and any applicable discounts or markups based on product category.
+                            Will be null if pricing cannot be calculated.
                         product_weight:
                           type: number
                           format: float

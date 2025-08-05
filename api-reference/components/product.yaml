@@ -22,6 +22,15 @@ properties:
     type: number
     format: float
     description: Cost per unit
+  price:
+    type: number
+    format: float
+    nullable: true
+    description: |
+      Calculated price for this product specific to the requesting company.
+      This price takes into account the company's price level, price group assignments,
+      and any applicable discounts or markups based on product category.
+      Will be null if pricing cannot be calculated.
   product_weight:
     type: number
     format: float

@@ -7,6 +7,10 @@ get:
   description: |
     Get a paginated list of products associated with a specific company.
     
+    Each product includes a calculated `price` field that reflects the company-specific 
+    pricing based on their assigned price levels, price groups, and any applicable 
+    discounts or markups for the product's category.
+    
     For detailed information about the filtering system and available operators, 
     refer to the [Filter System Documentation](/filters).
 
@@ -44,7 +48,7 @@ get:
     # Find products by SKU (includes alternate SKUs)
     ?sku[eq]=SKU-001
 
-    # Find products with specific price range
+    # Find products with specific retail price range
     ?retail_price[gte]=50.00&retail_price[lte]=100.00
 
     # Find recently updated products
