@@ -1,0 +1,267 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the product
+  name:
+    type: string
+    description: Product name
+  description:
+    type: string
+    nullable: true
+    description: Product description
+  retail_price:
+    type: number
+    format: float
+    description: Retail price
+  wholesale_price:
+    type: number
+    format: float
+    description: Wholesale price
+  unit_cost:
+    type: number
+    format: float
+    description: Cost per unit
+  price:
+    type: number
+    format: float
+    nullable: true
+    description: |
+      Calculated price for this product specific to the requesting company.
+      This price takes into account the company's price level, price group assignments,
+      and any applicable discounts or markups based on product category.
+      Will be null if pricing cannot be calculated.
+  product_weight:
+    type: number
+    format: float
+    description: Weight of the product
+  product_length:
+    type: number
+    format: float
+    description: Length of the product
+  product_width:
+    type: number
+    format: float
+    description: Width of the product
+  product_height:
+    type: number
+    format: float
+    description: Height of the product
+  qty_low_alert:
+    type: integer
+    description: Low stock alert threshold
+  qty_reorder_threshold:
+    type: integer
+    description: Reorder threshold quantity
+  qty_minimum:
+    type: integer
+    description: Minimum stock quantity
+  sellable:
+    type: boolean
+    description: Whether the product can be sold
+  discontinued:
+    type: boolean
+    description: Whether the product is discontinued. Discontinued products will be hidden in the Luminous UI by default.
+  image_url:
+    type: string
+    nullable: true
+    description: URL to the product's main image
+  category:
+    type: object
+    nullable: true
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    description: Product category information
+  subcategory:
+    type: object
+    nullable: true
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    description: Product subcategory information
+  custom_fields:
+    type: object
+    description: Dynamic custom fields with key-value pairs
+    additionalProperties:
+      type: string
+  attachments:
+    type: array
+    description: Product attachments
+    items:
+      $ref: './attachment.yaml'
+  variants:
+    type: array
+    description: Product variants with company-specific pricing
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        attachments:
+          type: array
+          description: Variant-specific attachments
+          items:
+            $ref: './attachment.yaml'
+        retail_price:
+          type: number
+          format: float
+        wholesale_price:
+          type: number
+          format: float
+        price:
+          type: number
+          format: float
+          nullable: true
+          description: |
+            Calculated price for this variant specific to the requesting company.
+            Uses the same pricing logic as the main product but applied to the variant.
+            Will be null if pricing cannot be calculated.
+        custom_fields:
+          type: array
+          items:
+            type: object
+        variant_attributes:
+          type: object
+          additionalProperties:
+            type: string
+        sku:
+          type: string
+        upc:
+          type: string
+        sellable:
+          type: boolean
+          description: Whether the variant can be sold
+        discontinued:
+          type: boolean
+          description: Whether the variant is discontinued
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+  variant_attributes:
+    type: object
+    nullable: true
+    description: Available variant attributes
+  sku:
+    type: string
+    description: Internal SKU
+  alternate_skus:
+    type: array
+    description: Alternate SKUs
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        sku:
+          type: string
+  upc:
+    type: string
+    description: UPC/Barcode
+  tags:
+    type: array
+    description: Tags associated with the product
+    items:
+      $ref: './tag.yaml'
+  substitutions:
+    type: array
+    description: Product substitutions, these products may be substituted if the main product is out of stock
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Substitution record ID
+        priority:
+          type: integer
+          description: Substitution priority (lower number = higher priority)
+        product:
+          type: object
+          description: The substitute product
+          properties:
+            id:
+              type: integer
+              description: Unique identifier for the product
+            name:
+              type: string
+              description: Product name
+            description:
+              type: string
+              nullable: true
+              description: Product description
+            retail_price:
+              type: number
+              format: float
+              description: Retail price
+            wholesale_price:
+              type: number
+              format: float
+              description: Wholesale price
+            unit_cost:
+              type: number
+              format: float
+              description: Cost per unit
+            product_weight:
+              type: number
+              format: float
+              description: Weight of the product
+            product_length:
+              type: number
+              format: float
+              description: Length of the product
+            product_width:
+              type: number
+              format: float
+              description: Width of the product
+            product_height:
+              type: number
+              format: float
+              description: Height of the product
+            sellable:
+              type: boolean
+              description: Whether the product can be sold
+            discontinued:
+              type: boolean
+              description: Whether the product is discontinued
+            image_url:
+              type: string
+              nullable: true
+              description: URL to the product's main image
+            sku:
+              type: string
+              description: Internal SKU
+            upc:
+              type: string
+              description: UPC/Barcode
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp when the product was created
+            updated_at:
+              type: string
+              format: date-time
+              description: Timestamp when the product was last updated
+  supplier:
+    type: object
+    nullable: true
+    description: Supplier information
+  created_at:
+    type: string
+    format: date-time
+    description: Timestamp when the product was created
+  updated_at:
+    type: string
+    format: date-time
+    description: Timestamp when the product was last updated

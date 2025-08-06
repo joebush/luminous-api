@@ -1,0 +1,86 @@
+get:
+  operationId: getCompanyProductPricing
+  tags:
+    - Products
+  summary: Single Product with Company Pricing
+  description: |
+    Get a single product by ID with company-specific pricing applied.
+    
+    The `price` field will contain the calculated price for the product based on:
+    - Company's assigned price groups and levels
+    - Product category-specific pricing rules
+    - Applicable discounts or markups
+    - Variant pricing (if applicable)
+    
+    This endpoint returns the complete product information including variants, 
+    substitutions, custom fields, and tags, with pricing calculated for both 
+    the main product and any variants.
+    
+    ## Pricing Calculation
+    The pricing system considers multiple factors:
+    - **Price Levels**: Standard, Premium, VIP, Wholesale, etc.
+    - **Price Groups**: Customer segments like "Electronics Retailers", "Bulk Distributors"
+    - **Category Rules**: Different pricing rules can apply to different product categories
+    - **Markups/Discounts**: Percentage increases or decreases based on customer type
+    
+    ## Example Response
+    The response includes all standard product fields plus the calculated `price` field:
+    ```json
+    {
+      "data": {
+        "id": 1,
+        "name": "Test Product 1",
+        "sku": "SKU-001",
+        "retail_price": 99.99,
+        "wholesale_price": 79.99,
+        "price": 91.99,
+        "variants": [
+          {
+            "id": 2,
+            "name": "Test Product 1 - Large",
+            "sku": "SKU-001-L",
+            "price": 101.99,
+            ...
+          }
+        ],
+        ...
+      }
+    }
+    ```
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: companyId
+      required: true
+      schema:
+        type: integer
+      description: The ID of the company to calculate pricing for
+    - in: path
+      name: productId
+      required: true
+      schema:
+        type: integer
+      description: The ID of the product to retrieve
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/product-with-pricing.yaml'
+    '404':
+      description: Company not found or Product not found
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'

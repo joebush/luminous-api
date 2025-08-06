@@ -222,15 +222,6 @@ paths:
                           type: number
                           format: float
                           description: Cost per unit
-                        price:
-                          type: number
-                          format: float
-                          nullable: true
-                          description: |
-                            Calculated price for this product specific to the requesting company.
-                            This price takes into account the company's price level, price group assignments,
-                            and any applicable discounts or markups based on product category.
-                            Will be null if pricing cannot be calculated.
                         product_weight:
                           type: number
                           format: float
@@ -833,15 +824,6 @@ paths:
                         type: number
                         format: float
                         description: Cost per unit
-                      price:
-                        type: number
-                        format: float
-                        nullable: true
-                        description: |
-                          Calculated price for this product specific to the requesting company.
-                          This price takes into account the company's price level, price group assignments,
-                          and any applicable discounts or markups based on product category.
-                          Will be null if pricing cannot be calculated.
                       product_weight:
                         type: number
                         format: float
@@ -1474,15 +1456,6 @@ paths:
                         type: number
                         format: float
                         description: Cost per unit
-                      price:
-                        type: number
-                        format: float
-                        nullable: true
-                        description: |
-                          Calculated price for this product specific to the requesting company.
-                          This price takes into account the company's price level, price group assignments,
-                          and any applicable discounts or markups based on product category.
-                          Will be null if pricing cannot be calculated.
                       product_weight:
                         type: number
                         format: float
@@ -1840,15 +1813,6 @@ paths:
                         type: number
                         format: float
                         description: Cost per unit
-                      price:
-                        type: number
-                        format: float
-                        nullable: true
-                        description: |
-                          Calculated price for this product specific to the requesting company.
-                          This price takes into account the company's price level, price group assignments,
-                          and any applicable discounts or markups based on product category.
-                          Will be null if pricing cannot be calculated.
                       product_weight:
                         type: number
                         format: float
@@ -2452,15 +2416,6 @@ paths:
                         type: number
                         format: float
                         description: Cost per unit
-                      price:
-                        type: number
-                        format: float
-                        nullable: true
-                        description: |
-                          Calculated price for this product specific to the requesting company.
-                          This price takes into account the company's price level, price group assignments,
-                          and any applicable discounts or markups based on product category.
-                          Will be null if pricing cannot be calculated.
                       product_weight:
                         type: number
                         format: float
@@ -13933,6 +13888,15 @@ paths:
                           type: number
                           format: float
                           description: Height of the product
+                        qty_low_alert:
+                          type: integer
+                          description: Low stock alert threshold
+                        qty_reorder_threshold:
+                          type: integer
+                          description: Reorder threshold quantity
+                        qty_minimum:
+                          type: integer
+                          description: Minimum stock quantity
                         sellable:
                           type: boolean
                           description: Whether the product can be sold
@@ -13998,7 +13962,7 @@ paths:
                               - full_url
                         variants:
                           type: array
-                          description: Product variants
+                          description: Product variants with company-specific pricing
                           items:
                             type: object
                             properties:
@@ -14045,6 +14009,14 @@ paths:
                               wholesale_price:
                                 type: number
                                 format: float
+                              price:
+                                type: number
+                                format: float
+                                nullable: true
+                                description: |
+                                  Calculated price for this variant specific to the requesting company.
+                                  Uses the same pricing logic as the main product but applied to the variant.
+                                  Will be null if pricing cannot be calculated.
                               custom_fields:
                                 type: array
                                 items:
@@ -14057,6 +14029,12 @@ paths:
                                 type: string
                               upc:
                                 type: string
+                              sellable:
+                                type: boolean
+                                description: Whether the variant can be sold
+                              discontinued:
+                                type: boolean
+                                description: Whether the variant is discontinued
                               created_at:
                                 type: string
                                 format: date-time
