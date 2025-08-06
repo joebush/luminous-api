@@ -2,7 +2,7 @@ get:
   operationId: getCompanyProductsPricing
   tags:
     - Products
-  summary: Company Products with Pricing
+  summary: Products with company pricing
   description: |
     Get a paginated list of ALL products with company-specific pricing applied.
     Unlike the `/companies/{companyId}/products` endpoint which only returns products 

@@ -2,7 +2,7 @@ get:
   operationId: getCompanyProductPricing
   tags:
     - Products
-  summary: Single Product with Company Pricing
+  summary: Single product with company price
   description: |
     Get a single product by ID with company-specific pricing applied.
     
