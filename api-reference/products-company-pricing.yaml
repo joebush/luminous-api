@@ -2,7 +2,6 @@ get:
   operationId: getAllProductsWithCompanyPricing
   tags:
     - Products
-    - Pricing
   summary: All products with company pricing
   description: |
     Retrieve ALL products in the system with pricing calculated for all active companies 
