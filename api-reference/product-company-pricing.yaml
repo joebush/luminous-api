@@ -1,0 +1,106 @@
+get:
+  operationId: getSingleProductWithCompanyPricing
+  tags:
+    - Products
+    - Pricing
+  summary: Single product with company pricing
+  description: |
+    Retrieve a single product by ID with pricing calculated for all active companies 
+    or filtered by specific company IDs. This provides comprehensive pricing information 
+    for the product across multiple companies in a single request.
+    
+    The product will include a `company_prices` array containing pricing for each company 
+    based on their assigned price levels, price groups, and applicable discounts or markups.
+    
+    This endpoint returns complete product information including variants, substitutions, 
+    custom fields, and tags, with company pricing calculated for both the main product 
+    and any variants.
+    
+    ## Pricing Calculation
+    The pricing system considers multiple factors for each company:
+    - **Price Levels**: Standard, Premium, VIP, Wholesale, etc.
+    - **Price Groups**: Customer segments like "Electronics Retailers", "Bulk Distributors"
+    - **Category Rules**: Different pricing rules can apply to different product categories
+    - **Markups/Discounts**: Percentage increases or decreases based on customer type
+    
+    ## Company Filtering
+    Use the `company_id` parameter to filter pricing to specific companies:
+    - Single company: `?company_id=1`
+    - Multiple companies: `?company_id=1,2,3`
+    
+    ## Example Response
+    The response includes all standard product fields plus the `company_prices` array:
+    ```json
+    {
+      "data": {
+        "id": 1,
+        "name": "Test Product 1",
+        "sku": "SKU-001",
+        "retail_price": 99.99,
+        "wholesale_price": 79.99,
+        "company_prices": [
+          {
+            "company_id": 1,
+            "company_name": "Electronics Retailer Pro",
+            "price": 91.99
+          },
+          {
+            "company_id": 2,
+            "company_name": "Bulk Distribution Corp", 
+            "price": 63.99
+          }
+        ],
+        "variants": [
+          {
+            "id": 2,
+            "name": "Test Product 1 - Large",
+            "sku": "SKU-001-L",
+            "company_prices": [
+              {
+                "company_id": 1,
+                "company_name": "Electronics Retailer Pro",
+                "price": 101.99
+              }
+            ]
+          }
+        ]
+      }
+    }
+    ```
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: productId
+      required: true
+      schema:
+        type: integer
+      description: The ID of the product to retrieve
+    - in: query
+      name: company_id
+      schema:
+        type: string
+      description: |
+        Filter pricing to specific company IDs. Can be a single ID or comma-separated list.
+        If not provided, pricing for all active companies will be included.
+      example: "1,2,3"
+  responses:
+    '200':
+      description: Product with company pricing information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/product-with-pricing.yaml'
+    '404':
+      description: Product not found
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml'

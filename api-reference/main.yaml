@@ -27,6 +27,10 @@ paths:
     $ref: './products-pricing.yaml'
   /products/{productId}/pricing:
     $ref: './product-pricing.yaml'
+  /products/company-pricing:
+    $ref: './products-company-pricing.yaml'
+  /products/{productId}/company-pricing:
+    $ref: './product-company-pricing.yaml'
   /purchase-orders:
     $ref: './purchase-orders.yaml'
   /purchase-orders/{id}:
@@ -79,10 +83,6 @@ paths:
     $ref: './company-product-price-overrides.yaml'
   /companies/{companyId}/products:
     $ref: './company-products.yaml'
-  /companies/{companyId}/pricing/products:
-    $ref: './company-products-pricing.yaml'
-  /companies/{companyId}/pricing/products/{productId}:
-    $ref: './company-product-pricing.yaml'
   /contacts:
     $ref: './contacts.yaml'
   /price-schedules:

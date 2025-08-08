@@ -22,15 +22,14 @@ properties:
     type: number
     format: float
     description: Cost per unit
-  price:
-    type: number
-    format: float
-    nullable: true
+  company_prices:
+    type: array
     description: |
-      Calculated price for this product specific to the requesting company.
-      This price takes into account the company's price level, price group assignments,
-      and any applicable discounts or markups based on product category.
-      Will be null if pricing cannot be calculated.
+      Array of company-specific pricing for this product. Each object contains pricing 
+      calculated based on the company's price level, price group assignments, and any 
+      applicable discounts or markups based on product category.
+    items:
+      $ref: './company-price.yaml'
   product_weight:
     type: number
     format: float
@@ -118,14 +117,13 @@ properties:
         wholesale_price:
           type: number
           format: float
-        price:
-          type: number
-          format: float
-          nullable: true
+        company_prices:
+          type: array
           description: |
-            Calculated price for this variant specific to the requesting company.
-            Uses the same pricing logic as the main product but applied to the variant.
-            Will be null if pricing cannot be calculated.
+            Array of company-specific pricing for this variant. Each object contains pricing 
+            calculated using the same pricing logic as the main product but applied to the variant.
+          items:
+            $ref: './company-price.yaml'
         custom_fields:
           type: array
           items:

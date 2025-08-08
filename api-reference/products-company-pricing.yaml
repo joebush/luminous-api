@@ -1,18 +1,19 @@
 get:
-  operationId: getCompanyProductsPricing
+  operationId: getAllProductsWithCompanyPricing
   tags:
     - Products
-  summary: Products with company pricing
+    - Pricing
+  summary: All products with company pricing
   description: |
-    Get a paginated list of ALL products with company-specific pricing applied.
-    Unlike the `/companies/{companyId}/products` endpoint which only returns products 
-    assigned to the company's B2B template, this endpoint returns ALL products in the 
-    system with pricing calculated based on the company's price levels and groups.
+    Retrieve ALL products in the system with pricing calculated for all active companies 
+    or filtered by specific company IDs. Unlike company-specific endpoints, this returns 
+    comprehensive pricing information for multiple companies in a single request.
     
-    The `price` field will contain the calculated price for each product based on:
-    - Company's assigned price groups and levels
-    - Product category-specific pricing rules
-    - Applicable discounts or markups
+    Each product will include a `company_prices` array containing pricing for each company 
+    based on their assigned price levels, price groups, and applicable discounts or markups.
+    
+    This endpoint supports all the same filtering parameters as the regular products endpoint,
+    allowing you to retrieve company pricing data for specific sets of products.
     
     For detailed information about the filtering system and available operators, 
     refer to the [Filter System Documentation](/filters).
@@ -46,35 +47,39 @@ get:
     - `created_at`: When the product was created
     - `updated_at`: When the product was last updated
     
+    ## Company Filtering
+    Use the `company_id` parameter to filter pricing to specific companies:
+    - Single company: `?company_id=1`
+    - Multiple companies: `?company_id=1,2,3`
+    
     ## Examples
     ```
+    # Get all products with pricing for all companies
+    /products/company-pricing
+    
+    # Get products with pricing for specific companies only
+    /products/company-pricing?company_id=1,2
+    
     # Find products by SKU with company pricing
-    ?sku[eq]=SKU-001
-
+    /products/company-pricing?sku[eq]=SKU-001
+    
     # Find products with specific price range and company pricing
-    ?retail_price[gte]=50.00&retail_price[lte]=100.00
-
-    # Find recently updated products with company pricing
-    ?updated_at[gte]=2024-01-01 00:00:00
-
-    # Search products by name with company pricing
-    ?name[contains]=Test Product
+    /products/company-pricing?retail_price[gte]=50.00&retail_price[lte]=100.00
     
     # Find products by category with company pricing
-    ?category.name[eq]=Electronics&sub_category.name[eq]=Smartphones
-    
-    # Find products by supplier with company pricing
-    ?supplier.name[contains]=Acme
+    /products/company-pricing?category.name[eq]=Electronics
     ```
   security:
     - BearerAuth: []
   parameters:
-    - in: path
-      name: companyId
-      required: true
+    - in: query
+      name: company_id
       schema:
-        type: integer
-      description: The ID of the company to calculate pricing for
+        type: string
+      description: |
+        Filter pricing to specific company IDs. Can be a single ID or comma-separated list.
+        If not provided, pricing for all active companies will be included.
+      example: "1,2,3"
     - in: query
       name: page
       schema:
@@ -184,7 +189,7 @@ get:
       description: Filter by supplier name
   responses:
     '200':
-      description: Successful response
+      description: List of products with company pricing information
       content:
         application/json:
           schema:
@@ -196,15 +201,7 @@ get:
                   $ref: './components/product-with-pricing.yaml'
               meta:
                 $ref: './components/pagination-meta.yaml'
-    '404':
-      description: Company not found
-      content:
-        application/json:
-          schema:
-            $ref: './components/error.yaml'
     '401':
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: './components/error.yaml'
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml'

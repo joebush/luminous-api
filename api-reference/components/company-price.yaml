@@ -1,0 +1,18 @@
+type: object
+description: Company-specific pricing information
+properties:
+  company_id:
+    type: integer
+    description: The unique identifier of the company
+    example: 1
+  company_name:
+    type: string
+    description: The name of the company
+    example: "Electronics Retailer Pro"
+  price:
+    type: number
+    format: float
+    description: |
+      The calculated price for this company based on their price level, price group assignments,
+      and any applicable discounts or markups based on product category.
+    example: 91.99
