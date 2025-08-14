@@ -34,6 +34,9 @@ get:
     - `total_tax`: Tax amount
     - `total_shipping_cost`: Shipping cost
     - `total_paid`: Amount paid
+    - `total_qty_ordered`: Total quantity of line items ordered
+    - `total_qty_received`: Total quantity of line items received
+    - `total_qty_remaining`: Total quantity of line items remaining to be received (ordered - received)
     - `down_payment`: Down payment amount
     
     ### Boolean Filters

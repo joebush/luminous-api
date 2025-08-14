@@ -57,9 +57,18 @@ properties:
   item_count:
     type: integer
     description: Number of unique items in the order
-  order_quantity:
-    type: integer
-    description: Total quantity of items
+  total_qty_ordered:
+    type: number
+    format: float
+    description: Total quantity of line items ordered
+  total_qty_received:
+    type: number
+    format: float
+    description: Total quantity of line items received
+  total_qty_remaining:
+    type: number
+    format: float
+    description: Total quantity of line items remaining to be received (ordered - received)
   order_cost:
     type: number
     format: float

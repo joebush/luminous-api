@@ -16,3 +16,4 @@ properties:
       The calculated price for this company based on their price level, price group assignments,
       and any applicable discounts or markups based on product category.
     example: 91.99
+
