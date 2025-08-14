@@ -138,10 +138,20 @@ get:
       description: Filter by last update date (YYYY-MM-DD HH:mm:ss)
     # Numeric Filters
     - in: query
-      name: order_quantity
+      name: total_qty_ordered
       schema:
         type: number
-      description: Filter by order quantity
+      description: Filter by total quantity of line items ordered
+    - in: query
+      name: total_qty_received
+      schema:
+        type: number
+      description: Filter by total quantity of line items received
+    - in: query
+      name: total_qty_remaining
+      schema:
+        type: number
+      description: Filter by total quantity of line items remaining to be received (ordered - received)
     - in: query
       name: order_cost
       schema:
