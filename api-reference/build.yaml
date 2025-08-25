@@ -5235,7 +5235,7 @@ paths:
       tags:
         - Inventory
       summary: Adjust inventory stock
-      description: Create a new inventory adjustment entry
+      description: Adjust on-hand stock for any given product in a given location. Either the product `sku` or `product_id` is required to identify the product.
       security:
         - BearerAuth: []
       requestBody:
@@ -5257,7 +5257,6 @@ paths:
                     required:
                       - warehouse_id
                       - location_id
-                      - product_id
                       - qty_onhand
                     properties:
                       warehouse_id:
@@ -5268,7 +5267,10 @@ paths:
                         description: ID of the location within the warehouse
                       product_id:
                         type: integer
-                        description: ID of the product
+                        description: 'ID of the product, required if sku is not provided'
+                      sku:
+                        type: string
+                        description: 'SKU of the product, required if product_id is not provided'
                       qty_onhand:
                         type: integer
                         description: Quantity on hand

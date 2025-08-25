@@ -3,7 +3,7 @@ post:
   tags:
     - Inventory
   summary: Adjust inventory stock
-  description: Create a new inventory adjustment entry
+  description: Adjust on-hand stock for any given product in a given location. Either the product `sku` or `product_id` is required to identify the product.
   security:
     - BearerAuth: []
   requestBody:

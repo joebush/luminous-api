@@ -12,7 +12,6 @@ properties:
       required:
         - warehouse_id
         - location_id
-        - product_id
         - qty_onhand
       properties:
         warehouse_id:
@@ -23,7 +22,10 @@ properties:
           description: ID of the location within the warehouse
         product_id:
           type: integer
-          description: ID of the product
+          description: ID of the product, required if sku is not provided
+        sku:
+          type: string
+          description: SKU of the product, required if product_id is not provided
         qty_onhand:
           type: integer
           description: Quantity on hand
