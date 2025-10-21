@@ -35,6 +35,8 @@ paths:
     $ref: './purchase-orders.yaml'
   /purchase-orders/{id}:
     $ref: './purchase-order.yaml'
+  /purchase-orders/items:
+    $ref: './purchase-order-items.yaml'
   /inventory/adjustments:
     $ref: './inventory-adjustments.yaml'
   /inventory/stocks:

@@ -1,0 +1,155 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Line item ID
+  purchase_order_id:
+    type: integer
+    description: ID of the parent purchase order
+  created_at:
+    type: string
+    format: date-time
+    description: Creation timestamp
+  updated_at:
+    type: string
+    format: date-time
+    description: Last update timestamp
+  quantity:
+    type: number
+    format: float
+    description: Quantity ordered
+  unit_price:
+    type: number
+    format: float
+    description: Price per unit
+  unit:
+    type: string
+    nullable: true
+    description: Unit of measure
+  tax:
+    type: number
+    format: float
+    description: Tax amount
+  discount_amount:
+    type: number
+    format: float
+    description: Discount amount
+  line_total:
+    type: number
+    format: float
+    description: Total for this line item
+  received_quantity:
+    type: number
+    format: float
+    description: Quantity received
+  source_sku:
+    type: string
+    nullable: true
+    description: Source SKU from the supplier
+  product:
+    type: object
+    nullable: true
+    description: Associated product information
+    properties:
+      id:
+        type: integer
+        description: Product ID
+      name:
+        type: string
+        description: Product name
+      description:
+        type: string
+        nullable: true
+        description: Product description
+      retail_price:
+        type: number
+        format: float
+        description: Product retail price
+      wholesale_price:
+        type: number
+        format: float
+        description: Product wholesale price
+      unit_cost:
+        type: number
+        format: float
+        description: Product unit cost
+      product_weight:
+        type: number
+        format: float
+        description: Product weight
+      product_length:
+        type: number
+        format: float
+        description: Product length
+      product_width:
+        type: number
+        format: float
+        description: Product width
+      product_height:
+        type: number
+        format: float
+        description: Product height
+      sellable:
+        type: boolean
+        description: Whether the product is sellable
+      discontinued:
+        type: boolean
+        description: Whether the product is discontinued
+      image_url:
+        type: string
+        nullable: true
+        description: Product image URL
+      variant_attributes:
+        type: object
+        nullable: true
+        description: Product variant attributes
+      sku:
+        type: string
+        description: Product internal SKU
+      upc:
+        type: string
+        description: Product UPC/Barcode
+      created_at:
+        type: string
+        format: date-time
+        description: Product creation timestamp
+      updated_at:
+        type: string
+        format: date-time
+        description: Product last update timestamp
+  base_unit_of_measure:
+    type: object
+    nullable: true
+    description: Base unit of measure
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      abbreviation:
+        type: string
+  ordered_unit_of_measure:
+    type: object
+    nullable: true
+    description: Ordered unit of measure
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      abbreviation:
+        type: string
+  lot:
+    type: object
+    nullable: true
+    description: Product lot information
+    properties:
+      id:
+        type: integer
+      lot_number:
+        type: string
+      expiration_date:
+        type: string
+        format: date
+        nullable: true
+
