@@ -1,0 +1,239 @@
+get:
+  operationId: getBoms
+  tags:
+    - BOMs
+  summary: BOMs
+  description: |
+    Get a paginated list of BOMs (Bills of Materials) with optional filtering.
+    
+    For detailed information about the filtering system and available operators, 
+    refer to the [Filter System Documentation](/filters).
+
+    ## Available Filters
+    ### BOM Filters
+    #### String Filters
+    - `name`: BOM name
+    
+    #### DateTime Filters
+    - `created_at`: When the BOM was created
+    - `updated_at`: When the BOM was last updated
+    
+    ### Product Filters
+    Filter BOMs by products contained in their items. All product filters are prefixed with `item.product.`
+    
+    #### String Filters
+    - `item.product.name`: Product name
+    - `item.product.description`: Product description
+    - `item.product.sku`: Product SKU (searches both internal SKU and alternate SKUs)
+    - `item.product.upc`: Product UPC/Barcode
+    - `item.product.tag`: Product tags
+    - `item.product.q`: General search matches name OR upc OR sku
+    - `item.product.category.name`: Filter by category name
+    - `item.product.sub_category.name`: Filter by sub-category name
+    - `item.product.supplier.name`: Filter by supplier name
+    
+    #### Integer Filters
+    - `item.product.id`: Filter by product ID
+    - `item.product.category.id`: Filter by category ID
+    - `item.product.sub_category.id`: Filter by sub-category ID
+    - `item.product.supplier.id`: Filter by supplier ID
+    
+    #### Float Filters
+    - `item.product.retail_price`: Product retail price
+    - `item.product.wholesale_price`: Product wholesale price
+    
+    #### Boolean Filters
+    - `item.product.sellable`: If the product is sellable or not
+    - `item.product.discontinued`: If the product is discontinued
+    
+    #### DateTime Filters
+    - `item.product.created_at`: When the product was created
+    - `item.product.updated_at`: When the product was last updated
+    
+    ## Examples
+    ```
+    # Find BOMs by name
+    ?name[contains]=Assembly
+
+    # Find recently created BOMs
+    ?created_at[gte]=2024-01-01 00:00:00
+
+    # Find BOMs containing a specific product by SKU
+    ?item.product.sku[eq]=SKU-001
+
+    # Find BOMs containing products with specific price range
+    ?item.product.retail_price[gte]=50.00&item.product.retail_price[lte]=100.00
+
+    # Find BOMs containing products from a specific category
+    ?item.product.category.name[eq]=Electronics
+
+    # Find BOMs containing products by supplier
+    ?item.product.supplier.name[contains]=Acme
+
+    # Find BOMs containing products with specific tags
+    ?item.product.tag[eq]=Assembly
+    ```
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: query
+      name: page
+      schema:
+        type: integer
+        default: 1
+      description: Page number for pagination
+    - in: query
+      name: per_page
+      schema:
+        type: integer
+        default: 10
+        maximum: 100
+      description: Number of items per page (max 100)
+    - in: query
+      name: name
+      schema:
+        type: string
+      description: Filter by BOM name
+    - in: query
+      name: created_at
+      schema:
+        type: string
+        format: date-time
+      description: Filter by creation date
+    - in: query
+      name: updated_at
+      schema:
+        type: string
+        format: date-time
+      description: Filter by last update date
+    - in: query
+      name: item.product.id
+      schema:
+        type: integer
+      description: Filter by product ID (returns BOMs containing items with this product)
+    - in: query
+      name: item.product.sku
+      schema:
+        type: string
+      description: Filter by product SKU (searches both internal and alternate SKUs)
+    - in: query
+      name: item.product.name
+      schema:
+        type: string
+      description: Filter by product name
+    - in: query
+      name: item.product.category.id
+      schema:
+        type: integer
+      description: Filter by product category ID
+    - in: query
+      name: item.product.category.name
+      schema:
+        type: string
+      description: Filter by product category name
+    - in: query
+      name: item.product.supplier.id
+      schema:
+        type: integer
+      description: Filter by product supplier ID
+    - in: query
+      name: item.product.supplier.name
+      schema:
+        type: string
+      description: Filter by product supplier name
+    - in: query
+      name: item.product.tag
+      schema:
+        type: string
+      description: Filter by product tags
+    - in: query
+      name: item.product.retail_price
+      schema:
+        type: number
+        format: float
+      description: Filter by product retail price
+    - in: query
+      name: item.product.wholesale_price
+      schema:
+        type: number
+        format: float
+      description: Filter by product wholesale price
+    - in: query
+      name: item.product.sellable
+      schema:
+        type: boolean
+      description: Filter by product sellable status
+    - in: query
+      name: item.product.discontinued
+      schema:
+        type: boolean
+      description: Filter by whether the product is discontinued
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: './components/bom.yaml'
+              meta:
+                $ref: './components/pagination-meta.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+
+post:
+  operationId: createBom
+  tags:
+    - BOMs
+  summary: Create a BOM
+  description: |
+    Create a new BOM (Bill of Materials) with items and optional extra costs.
+    
+    Each item must specify either a `product_id` or `sku`. If a `sku` is provided, 
+    the system will locate the product by SKU (including alternate SKUs). If no product 
+    is found, an error will be thrown.
+    
+    If no `uom_id` is provided for an item, the default unit of measure will be used.
+    
+    For extra costs, only `name`, `quantity`, and `unit_price` are required. The 
+    `line_total` will be calculated automatically on the backend. Do not provide 
+    `line_total` in the request.
+  security:
+    - BearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: './components/bom-create.yaml'
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/bom.yaml'
+    '422':
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: './components/validation-error.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+

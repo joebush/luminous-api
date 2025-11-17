@@ -1,0 +1,154 @@
+get:
+  operationId: getBomById
+  tags:
+    - BOMs
+  summary: Single BOM
+  description: |
+    Get detailed information about a specific BOM by its ID
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: bomId
+      required: true
+      schema:
+        type: integer
+      description: BOM ID
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/bom.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '404':
+      description: BOM not found
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+
+post:
+  operationId: updateBomById
+  tags:
+    - BOMs
+  summary: Update a BOM
+  description: |
+    Update an existing BOM's information. All fields are optional, allowing partial updates.
+    
+    When updating `items` or `extra_costs`, the provided arrays will replace all existing 
+    items or extra costs respectively.
+    
+    Each item must specify either a `product_id` or `sku`. If a `sku` is provided, 
+    the system will locate the product by SKU (including alternate SKUs). If no product 
+    is found, an error will be thrown.
+    
+    If no `uom_id` is provided for an item, the default unit of measure will be used.
+    
+    For extra costs, only `name`, `quantity`, and `unit_price` are required. The 
+    `line_total` will be calculated automatically on the backend. Do not provide 
+    `line_total` in the request.
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: bomId
+      required: true
+      schema:
+        type: integer
+      description: BOM ID
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: './components/bom-update.yaml'
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/bom.yaml'
+    '409':
+      description: Conflict - BOM name already exists
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '422':
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: './components/validation-error.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '404':
+      description: BOM not found
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+
+delete:
+  operationId: deleteBom
+  tags:
+    - BOMs
+  summary: Delete BOM
+  description: Delete a BOM by ID
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: bomId
+      required: true
+      schema:
+        type: integer
+      description: BOM ID
+  responses:
+    '200':
+      description: BOM successfully deleted
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "BOM deleted"
+    '400':
+      description: Error deleting BOM
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '404':
+      description: BOM not found
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+

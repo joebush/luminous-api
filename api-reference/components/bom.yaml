@@ -1,0 +1,30 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the BOM
+  name:
+    type: string
+    description: BOM name
+  items:
+    type: array
+    description: BOM items (components/products)
+    items:
+      $ref: './bom-item.yaml'
+  extra_costs:
+    type: array
+    description: Additional costs associated with the BOM
+    items:
+      $ref: './bom-extra-cost.yaml'
+  created_at:
+    type: string
+    format: date-time
+    description: Timestamp when the BOM was created
+  updated_at:
+    type: string
+    format: date-time
+    description: Timestamp when the BOM was last updated
+required:
+  - id
+  - name
+

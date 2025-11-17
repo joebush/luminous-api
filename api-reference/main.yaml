@@ -95,6 +95,10 @@ paths:
     $ref: './price-levels.yaml'
   /price-levels/{levelId}:
     $ref: './price-level.yaml'
+  /boms:
+    $ref: './boms.yaml'
+  /boms/{bomId}:
+    $ref: './bom.yaml'
 
 tags:
   - name: Locations
@@ -123,3 +127,5 @@ tags:
     description: Manage contact information for individuals
   - name: Pricing
     description: Manage price schedules, levels, and customizations
+  - name: BOMs
+    description: Manage Bills of Materials (BOMs)

@@ -1,0 +1,68 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the BOM item
+  bom_id:
+    type: integer
+    description: ID of the BOM this item belongs to
+  product_id:
+    type: integer
+    description: ID of the product/component
+  product:
+    type: object
+    nullable: true
+    description: Product information (when loaded)
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      sku:
+        type: string
+      description:
+        type: string
+        nullable: true
+  quantity:
+    type: number
+    format: float
+    description: Quantity required for this item
+  base_quantity:
+    type: number
+    format: float
+    description: Base quantity (converted to base unit of measure)
+  note:
+    type: string
+    nullable: true
+    description: Optional note for this item
+  uom_id:
+    type: integer
+    nullable: true
+    description: Unit of measure ID
+  unit_of_measure:
+    type: object
+    nullable: true
+    description: Unit of measure information (when loaded)
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+  order:
+    type: integer
+    nullable: true
+    description: Display order for this item
+  created_at:
+    type: string
+    format: date-time
+    description: Timestamp when the item was created
+  updated_at:
+    type: string
+    format: date-time
+    description: Timestamp when the item was last updated
+required:
+  - id
+  - bom_id
+  - product_id
+  - quantity
+

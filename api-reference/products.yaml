@@ -25,6 +25,7 @@ get:
     - `category.id`: Filter by category ID
     - `sub_category.id`: Filter by sub-category ID
     - `supplier.id`: Filter by supplier ID
+    - `bom.id`: Filter by Bill of Materials ID (returns products attached to the specified BOM)
     
     ### Float Filters
     - `retail_price`: Product retail price
@@ -168,6 +169,11 @@ get:
       schema:
         type: string
       description: Filter by supplier name
+    - in: query
+      name: bom.id
+      schema:
+        type: integer
+      description: Filter by Bill of Materials ID (returns products attached to the specified BOM)
   responses:
     '200':
       description: Successful response

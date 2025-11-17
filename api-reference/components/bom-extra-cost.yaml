@@ -1,0 +1,35 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the extra cost
+  name:
+    type: string
+    description: Name/description of the extra cost
+  quantity:
+    type: number
+    format: float
+    description: Quantity for this cost item
+  unit_price:
+    type: number
+    format: float
+    description: Unit price for this cost item
+  line_total:
+    type: number
+    format: float
+    description: Total cost (quantity × unit_price), calculated automatically on the backend. This field is read-only and should not be provided when creating or updating extra costs.
+  created_at:
+    type: string
+    format: date-time
+    description: Timestamp when the extra cost was created
+  updated_at:
+    type: string
+    format: date-time
+    description: Timestamp when the extra cost was last updated
+required:
+  - id
+  - name
+  - quantity
+  - unit_price
+  - line_total
+

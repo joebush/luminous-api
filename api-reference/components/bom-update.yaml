@@ -1,0 +1,68 @@
+type: object
+properties:
+  name:
+    type: string
+    maxLength: 255
+    description: BOM name (must be unique)
+  items:
+    type: array
+    minItems: 1
+    description: BOM items (components/products). When updating, this will replace all existing items.
+    items:
+      type: object
+      required:
+        - quantity
+      properties:
+        product_id:
+          type: integer
+          description: ID of the product/component (required if sku not provided)
+        sku:
+          type: string
+          description: SKU of the product/component (required if product_id not provided). Can be internal SKU or alternate SKU.
+        quantity:
+          type: number
+          format: float
+          minimum: 0
+          description: Quantity required for this item
+        note:
+          type: string
+          nullable: true
+          description: Optional note for this item
+        uom_id:
+          type: integer
+          nullable: true
+          description: Unit of measure ID. If not provided, the default UOM will be used.
+        order:
+          type: integer
+          nullable: true
+          minimum: 0
+          description: Display order for this item
+      oneOf:
+        - required: [product_id]
+        - required: [sku]
+  extra_costs:
+    type: array
+    nullable: true
+    description: Additional costs associated with the BOM. When updating, this will replace all existing extra costs.
+    items:
+      type: object
+      required:
+        - name
+        - quantity
+        - unit_price
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          description: Name/description of the extra cost
+        quantity:
+          type: number
+          format: float
+          minimum: 0
+          description: Quantity for this cost item
+        unit_price:
+          type: number
+          format: float
+          minimum: 0
+          description: Unit price for this cost item. The line_total will be calculated automatically on the backend as quantity × unit_price. Do not provide line_total in the request.
+

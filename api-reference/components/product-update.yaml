@@ -254,3 +254,12 @@ properties:
           description: Tags to associate with the variant
           items:
             type: string
+  boms:
+    type: array
+    nullable: true
+    description: |
+      Array of BOM IDs to attach to the product. If null or empty array, all BOMs will be detached.
+      When updating, this will replace all existing BOM associations.
+    items:
+      type: integer
+      description: BOM ID

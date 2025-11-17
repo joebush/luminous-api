@@ -225,6 +225,11 @@ properties:
     type: object
     nullable: true
     description: Supplier information
+  boms:
+    type: array
+    description: BOMs (Bills of Materials) associated with this product
+    items:
+      $ref: './bom.yaml'
   created_at:
     type: string
     format: date-time
