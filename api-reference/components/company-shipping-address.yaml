@@ -1,0 +1,92 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the shipping address
+    example: 789
+  created_at:
+    type: string
+    format: date-time
+    description: When the shipping address was created
+    example: "2023-03-15T14:30:00Z"
+  updated_at:
+    type: string
+    format: date-time
+    description: When the shipping address was last updated
+    example: "2023-03-15T14:30:00Z"
+  company_id:
+    type: integer
+    description: ID of the company this shipping address belongs to
+    example: 123456
+  company_name:
+    type: string
+    nullable: true
+    description: Name of the company
+    example: "Acme Corporation"
+  address:
+    type: string
+    description: Street address
+    example: "456 Warehouse Blvd"
+  address_line_2:
+    type: string
+    nullable: true
+    description: Additional address information
+    example: "Building 2"
+  city:
+    type: string
+    description: City
+    example: "Austin"
+  state:
+    type: string
+    description: State/province
+    example: "TX"
+  postal_code:
+    type: string
+    description: Postal/ZIP code
+    example: "78745"
+  country:
+    type: string
+    description: Country
+    example: "USA"
+  full_address:
+    type: string
+    description: Complete formatted address
+    example: "456 Warehouse Blvd, Building 2, Austin, TX 78745, USA"
+  full_name:
+    type: string
+    description: Full name of the contact person
+    example: "John Doe"
+  first_name:
+    type: string
+    nullable: true
+    description: First name of the contact person
+    example: "John"
+  last_name:
+    type: string
+    nullable: true
+    description: Last name of the contact person
+    example: "Doe"
+  phone:
+    type: string
+    nullable: true
+    description: Phone number
+    example: "555-987-6543"
+  email:
+    type: string
+    format: email
+    nullable: true
+    description: Email address
+    example: "shipping@acmecorp.com"
+  is_default:
+    type: boolean
+    description: Whether this is the default shipping address
+    example: true
+required:
+  - id
+  - company_id
+  - address
+  - city
+  - state
+  - postal_code
+  - country
+

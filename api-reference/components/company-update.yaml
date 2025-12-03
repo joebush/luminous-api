@@ -2,83 +2,100 @@ type: object
 properties:
   name:
     type: string
+    maxLength: 255
+    nullable: true
     description: Company name
     example: "Acme Corporation"
-  external_id:
+  client_type:
+    type: object
+    nullable: true
+    description: Client type information. Can provide either id or name. If name is provided and type doesn't exist, it will be created.
+    properties:
+      id:
+        type: integer
+        description: ID of the client type
+        example: 123
+      name:
+        type: string
+        description: Name of the client type
+        example: "Retail"
+  parent_company_id:
+    type: integer
+    nullable: true
+    description: ID of the parent company
+    example: 456
+  address:
     type: string
-    description: External identifier for the company
-    example: "ACME-123"
-  status:
+    maxLength: 255
+    nullable: true
+    description: Street address for the company
+    example: "123 Main St"
+  address_line_2:
     type: string
-    description: Company status
-    enum: [active, inactive]
-    example: "active"
-  email:
+    maxLength: 255
+    nullable: true
+    description: Additional address information
+    example: "Suite 500"
+  city:
     type: string
-    format: email
-    description: Primary email address for the company
-    example: "info@acmecorp.com"
+    maxLength: 255
+    nullable: true
+    description: City
+    example: "Austin"
+  state:
+    type: string
+    maxLength: 255
+    nullable: true
+    description: State/province
+    example: "TX"
+  postal_code:
+    type: string
+    maxLength: 255
+    nullable: true
+    description: Postal/ZIP code
+    example: "78701"
+  country:
+    type: string
+    maxLength: 255
+    nullable: true
+    description: Country
+    example: "USA"
   phone:
     type: string
+    maxLength: 255
+    nullable: true
     description: Primary phone number for the company
     example: "555-123-4567"
-  fax:
+  fein:
     type: string
-    description: Fax number for the company
-    example: "555-123-9876"
-  website:
+    maxLength: 255
+    nullable: true
+    description: Federal Employer Identification Number
+    example: "12-3456789"
+  tax_exempt:
+    type: boolean
+    nullable: true
+    description: Whether the company is exempt from taxes
+    example: false
+  notes:
     type: string
-    description: Company website
-    example: "https://www.acmecorp.com"
-  billing_address:
-    type: object
-    properties:
-      street1:
-        type: string
-        example: "123 Main St"
-      street2:
-        type: string
-        example: "Suite 500"
-      city:
-        type: string
-        example: "Austin"
-      state:
-        type: string
-        example: "TX"
-      postal_code:
-        type: string
-        example: "78701"
-      country:
-        type: string
-        example: "USA"
-  shipping_address:
-    type: object
-    properties:
-      street1:
-        type: string
-        example: "456 Warehouse Blvd"
-      street2:
-        type: string
-        example: "Building 2"
-      city:
-        type: string
-        example: "Austin"
-      state:
-        type: string
-        example: "TX"
-      postal_code:
-        type: string
-        example: "78745"
-      country:
-        type: string
-        example: "USA"
-  price_level_id:
-    type: string
-    description: ID of the price level to assign to this company
-    example: "789"
+    nullable: true
+    description: Additional notes about the company
+    example: "Key account, requires special handling"
   tags:
     type: array
+    nullable: true
     description: List of tags to associate with the company
     items:
       type: string
-    example: ["wholesale", "preferred"] 
+      maxLength: 255
+    example: ["wholesale", "preferred"]
+  custom_fields:
+    type: object
+    nullable: true
+    description: Custom field values for the company
+    additionalProperties:
+      type: string
+    example:
+      Industry: "Manufacturing"
+      Region: "Southwest" 

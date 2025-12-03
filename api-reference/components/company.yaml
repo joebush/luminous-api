@@ -1,9 +1,9 @@
 type: object
 properties:
   id:
-    type: string
+    type: integer
     description: Unique identifier for the company
-    example: "123456"
+    example: 123456
   created_at:
     type: string
     format: date-time
@@ -27,183 +27,169 @@ properties:
     example: "Acme Corporation"
   type:
     type: string
+    nullable: true
     description: Type of business
     example: "Retail"
   phone:
     type: string
+    nullable: true
     description: Primary phone number for the company
     example: "555-123-4567"
   
   # Address information
   address:
     type: string
+    nullable: true
     description: Street address for the company
     example: "123 Main St"
   address_line_2:
     type: string
+    nullable: true
     description: Additional address information
     example: "Suite 500"
   city:
     type: string
+    nullable: true
     description: City
     example: "Austin"
   state:
     type: string
+    nullable: true
     description: State/province
     example: "TX"
   postal_code:
     type: string
+    nullable: true
     description: Postal/ZIP code
     example: "78701"
   country:
     type: string
+    nullable: true
     description: Country
     example: "USA"
   full_address:
     type: string
+    nullable: true
     description: Complete formatted address
     example: "123 Main St, Suite 500, Austin, TX 78701, USA"
   
-  # Shipping information
+  # Shipping information (legacy fields, use shipping_addresses for multiple addresses)
   shipping_first_name:
     type: string
-    description: First name for shipping contact
+    nullable: true
+    description: First name for shipping contact (legacy field)
     example: "John"
   shipping_last_name:
-    type: string 
-    description: Last name for shipping contact
+    type: string
+    nullable: true
+    description: Last name for shipping contact (legacy field)
     example: "Doe"
   shipping_email:
     type: string
     format: email
-    description: Email for shipping contact
+    nullable: true
+    description: Email for shipping contact (legacy field)
     example: "shipping@acmecorp.com"
   shipping_phone:
     type: string
-    description: Phone number for shipping contact
+    nullable: true
+    description: Phone number for shipping contact (legacy field)
     example: "555-987-6543"
   shipping_address:
     type: string
-    description: Shipping street address
+    nullable: true
+    description: Shipping street address (legacy field)
     example: "456 Warehouse Blvd"
   shipping_city:
     type: string
-    description: Shipping city
+    nullable: true
+    description: Shipping city (legacy field)
     example: "Austin"
   shipping_state:
     type: string
-    description: Shipping state/province
+    nullable: true
+    description: Shipping state/province (legacy field)
     example: "TX"
   shipping_postal_code:
     type: string
-    description: Shipping postal/ZIP code
+    nullable: true
+    description: Shipping postal/ZIP code (legacy field)
     example: "78745"
   shipping_country:
     type: string
-    description: Shipping country
+    nullable: true
+    description: Shipping country (legacy field)
     example: "USA"
   shipping_full_address:
     type: string
-    description: Complete formatted shipping address
+    nullable: true
+    description: Complete formatted shipping address (legacy field)
     example: "456 Warehouse Blvd, Austin, TX 78745, USA"
   
   # Financial information
   payment_term:
     type: string
+    nullable: true
     description: Payment terms for the company
     example: "Net 30"
   tax_exempt:
     type: boolean
+    nullable: true
     description: Whether the company is exempt from taxes
     example: false
   tax_rate:
     type: number
     format: float
+    nullable: true
     description: Tax rate applied to the company's orders
     example: 8.25
   due_date_days:
     type: integer
+    nullable: true
     description: Number of days until payment is due
     example: 30
   price_level:
     $ref: './price-level.yaml'
+    nullable: true
     description: Price level associated with this company
   
   # Additional information
   notes:
     type: string
+    nullable: true
     description: Additional notes about the company
     example: "Key account, requires special handling"
   fein:
     type: string
+    nullable: true
     description: Federal Employer Identification Number
     example: "12-3456789"
   
   # Related resources
   tags:
     type: array
+    nullable: true
     description: List of tags associated with the company
     items:
       $ref: './tag.yaml'
   default_shipping:
-    type: object
-    description: Default shipping information
-    properties:
-      id:
-        type: string
-        example: "789"
-      created_at:
-        type: string
-        format: date-time
-        example: "2023-03-15T14:30:00Z"
-      updated_at:
-        type: string
-        format: date-time
-        example: "2023-03-15T14:30:00Z"
-      address:
-        type: string
-        example: "456 Warehouse Blvd"
-      address_line_2:
-        type: string
-        example: "Building 2"
-      city:
-        type: string
-        example: "Austin"
-      state:
-        type: string
-        example: "TX"
-      postal_code:
-        type: string
-        example: "78745"
-      country:
-        type: string
-        example: "USA"
-      full_name:
-        type: string
-        example: "John Doe"
-      first_name:
-        type: string
-        example: "John"
-      last_name:
-        type: string
-        example: "Doe"
-      phone:
-        type: string
-        example: "555-987-6543"
-      email:
-        type: string
-        format: email
-        example: "shipping@acmecorp.com"
-      is_default:
-        type: boolean
-        example: true
+    $ref: './company-shipping-address.yaml'
+    nullable: true
+    description: Default shipping address
+  shipping_addresses:
+    type: array
+    nullable: true
+    description: List of shipping addresses for the company
+    items:
+      $ref: './company-shipping-address.yaml'
   billing_info:
     type: object
+    nullable: true
     description: Billing information
     properties:
       id:
-        type: string
-        example: "456"
+        type: integer
+        example: 456
       created_at:
         type: string
         format: date-time
@@ -214,27 +200,33 @@ properties:
         example: "2023-03-15T14:30:00Z"
       first_name:
         type: string
+        nullable: true
         example: "Jane"
       last_name:
         type: string
+        nullable: true
         example: "Smith"
       email:
         type: string
         format: email
+        nullable: true
         example: "accounting@acmecorp.com"
       receiving_bank_name:
         type: string
+        nullable: true
         example: "First National Bank"
       receiving_bank_address:
         type: string
+        nullable: true
         example: "789 Finance Street, Austin, TX 78701"
   client_type:
     type: object
+    nullable: true
     description: Type of client
     properties:
       id:
-        type: string
-        example: "123"
+        type: integer
+        example: 123
       created_at:
         type: string
         format: date-time
@@ -248,7 +240,18 @@ properties:
         example: "Retail"
       description:
         type: string
+        nullable: true
         example: "Retail business client"
+  parent_company_id:
+    type: integer
+    nullable: true
+    description: ID of the parent company
+    example: 456
+  invoice_export_template_id:
+    type: integer
+    nullable: true
+    description: ID of the invoice export template
+    example: 789
   custom_fields:
     type: object
     description: Custom fields for the company

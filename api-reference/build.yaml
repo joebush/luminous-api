@@ -2673,13 +2673,6 @@ paths:
       description: Update a specific product's information
       security:
         - BearerAuth: []
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-          description: Product ID
       requestBody:
         required: true
         content:
@@ -3441,7 +3434,7 @@ paths:
         - BearerAuth: []
       parameters:
         - in: path
-          name: id
+          name: productId
           required: true
           schema:
             type: integer
@@ -14665,6 +14658,21 @@ paths:
         - `created_at`: When the company was created
         - `updated_at`: When the company was last updated
 
+        ### Custom Field Filters
+        Custom fields can be filtered using their field names. Custom field filters are dynamically 
+        generated based on the custom fields defined for companies in your system.
+
+        Custom field filters use the format `custom_fields.{field_label}` where `{field_label}` is 
+        the exact label of the custom field as defined in your system. The available operators depend 
+        on the custom field type:
+
+        - **String/Dropdown fields**: `eq`, `neq`, `contains`, `notcontains`, `in`, `notin`, `set`, `notset`
+        - **Number fields**: `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `in`, `notin`, `set`, `notset`
+        - **Date fields**: `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `set`, `notset`
+
+        **Note**: Custom field labels may contain spaces or special characters. When using them in URLs, 
+        ensure proper URL encoding (e.g., spaces become `%20` or `+`).
+
         ## Examples
         ```
         # Find companies by name
@@ -14681,6 +14689,33 @@ paths:
 
         # Find companies by status
         ?status[eq]=active
+
+        # Filter by custom field (string) - exact match
+        ?custom_fields.Industry[eq]=Manufacturing
+
+        # Filter by custom field (string) - contains
+        ?custom_fields.Region[contains]=West
+
+        # Filter by custom field (number) - greater than
+        ?custom_fields.Annual Revenue[gt]=1000000
+
+        # Filter by custom field (number) - range
+        ?custom_fields.Employee Count[gte]=50&custom_fields.Employee Count[lte]=200
+
+        # Filter by custom field (date) - after date
+        ?custom_fields.Contract Start Date[gte]=2024-01-01
+
+        # Filter by custom field (dropdown) - multiple values
+        ?custom_fields.Customer Tier[in]=Premium,Enterprise
+
+        # Filter by custom field - has value set
+        ?custom_fields.Industry[set]=true
+
+        # Filter by custom field - no value set
+        ?custom_fields.Notes[notset]=true
+
+        # Combine custom field filter with other filters
+        ?state[eq]=CA&custom_fields.Industry[eq]=Retail&tag[eq]=VIP
         ```
       security:
         - BearerAuth: []
@@ -14776,9 +14811,9 @@ paths:
                       type: object
                       properties:
                         id:
-                          type: string
+                          type: integer
                           description: Unique identifier for the company
-                          example: '123456'
+                          example: 123456
                         created_at:
                           type: string
                           format: date-time
@@ -14802,99 +14837,123 @@ paths:
                           example: Acme Corporation
                         type:
                           type: string
+                          nullable: true
                           description: Type of business
                           example: Retail
                         phone:
                           type: string
+                          nullable: true
                           description: Primary phone number for the company
                           example: 555-123-4567
                         address:
                           type: string
+                          nullable: true
                           description: Street address for the company
                           example: 123 Main St
                         address_line_2:
                           type: string
+                          nullable: true
                           description: Additional address information
                           example: Suite 500
                         city:
                           type: string
+                          nullable: true
                           description: City
                           example: Austin
                         state:
                           type: string
+                          nullable: true
                           description: State/province
                           example: TX
                         postal_code:
                           type: string
+                          nullable: true
                           description: Postal/ZIP code
                           example: '78701'
                         country:
                           type: string
+                          nullable: true
                           description: Country
                           example: USA
                         full_address:
                           type: string
+                          nullable: true
                           description: Complete formatted address
                           example: '123 Main St, Suite 500, Austin, TX 78701, USA'
                         shipping_first_name:
                           type: string
-                          description: First name for shipping contact
+                          nullable: true
+                          description: First name for shipping contact (legacy field)
                           example: John
                         shipping_last_name:
                           type: string
-                          description: Last name for shipping contact
+                          nullable: true
+                          description: Last name for shipping contact (legacy field)
                           example: Doe
                         shipping_email:
                           type: string
                           format: email
-                          description: Email for shipping contact
+                          nullable: true
+                          description: Email for shipping contact (legacy field)
                           example: shipping@acmecorp.com
                         shipping_phone:
                           type: string
-                          description: Phone number for shipping contact
+                          nullable: true
+                          description: Phone number for shipping contact (legacy field)
                           example: 555-987-6543
                         shipping_address:
                           type: string
-                          description: Shipping street address
+                          nullable: true
+                          description: Shipping street address (legacy field)
                           example: 456 Warehouse Blvd
                         shipping_city:
                           type: string
-                          description: Shipping city
+                          nullable: true
+                          description: Shipping city (legacy field)
                           example: Austin
                         shipping_state:
                           type: string
-                          description: Shipping state/province
+                          nullable: true
+                          description: Shipping state/province (legacy field)
                           example: TX
                         shipping_postal_code:
                           type: string
-                          description: Shipping postal/ZIP code
+                          nullable: true
+                          description: Shipping postal/ZIP code (legacy field)
                           example: '78745'
                         shipping_country:
                           type: string
-                          description: Shipping country
+                          nullable: true
+                          description: Shipping country (legacy field)
                           example: USA
                         shipping_full_address:
                           type: string
-                          description: Complete formatted shipping address
+                          nullable: true
+                          description: Complete formatted shipping address (legacy field)
                           example: '456 Warehouse Blvd, Austin, TX 78745, USA'
                         payment_term:
                           type: string
+                          nullable: true
                           description: Payment terms for the company
                           example: Net 30
                         tax_exempt:
                           type: boolean
+                          nullable: true
                           description: Whether the company is exempt from taxes
                           example: false
                         tax_rate:
                           type: number
                           format: float
+                          nullable: true
                           description: Tax rate applied to the company's orders
                           example: 8.25
                         due_date_days:
                           type: integer
+                          nullable: true
                           description: Number of days until payment is due
                           example: 30
                         price_level:
+                          nullable: true
                           description: Price level associated with this company
                           type: object
                           properties:
@@ -14934,14 +14993,17 @@ paths:
                               example: 15.5
                         notes:
                           type: string
+                          nullable: true
                           description: Additional notes about the company
                           example: 'Key account, requires special handling'
                         fein:
                           type: string
+                          nullable: true
                           description: Federal Employer Identification Number
                           example: 12-3456789
                         tags:
                           type: array
+                          nullable: true
                           description: List of tags associated with the company
                           items:
                             type: object
@@ -14968,64 +15030,203 @@ paths:
                               - id
                               - name
                         default_shipping:
+                          nullable: true
+                          description: Default shipping address
                           type: object
-                          description: Default shipping information
                           properties:
                             id:
-                              type: string
-                              example: '789'
+                              type: integer
+                              description: Unique identifier for the shipping address
+                              example: 789
                             created_at:
                               type: string
                               format: date-time
+                              description: When the shipping address was created
                               example: '2023-03-15T14:30:00Z'
                             updated_at:
                               type: string
                               format: date-time
+                              description: When the shipping address was last updated
                               example: '2023-03-15T14:30:00Z'
+                            company_id:
+                              type: integer
+                              description: ID of the company this shipping address belongs to
+                              example: 123456
+                            company_name:
+                              type: string
+                              nullable: true
+                              description: Name of the company
+                              example: Acme Corporation
                             address:
                               type: string
+                              description: Street address
                               example: 456 Warehouse Blvd
                             address_line_2:
                               type: string
+                              nullable: true
+                              description: Additional address information
                               example: Building 2
                             city:
                               type: string
+                              description: City
                               example: Austin
                             state:
                               type: string
+                              description: State/province
                               example: TX
                             postal_code:
                               type: string
+                              description: Postal/ZIP code
                               example: '78745'
                             country:
                               type: string
+                              description: Country
                               example: USA
+                            full_address:
+                              type: string
+                              description: Complete formatted address
+                              example: '456 Warehouse Blvd, Building 2, Austin, TX 78745, USA'
                             full_name:
                               type: string
+                              description: Full name of the contact person
                               example: John Doe
                             first_name:
                               type: string
+                              nullable: true
+                              description: First name of the contact person
                               example: John
                             last_name:
                               type: string
+                              nullable: true
+                              description: Last name of the contact person
                               example: Doe
                             phone:
                               type: string
+                              nullable: true
+                              description: Phone number
                               example: 555-987-6543
                             email:
                               type: string
                               format: email
+                              nullable: true
+                              description: Email address
                               example: shipping@acmecorp.com
                             is_default:
                               type: boolean
+                              description: Whether this is the default shipping address
                               example: true
+                          required:
+                            - id
+                            - company_id
+                            - address
+                            - city
+                            - state
+                            - postal_code
+                            - country
+                        shipping_addresses:
+                          type: array
+                          nullable: true
+                          description: List of shipping addresses for the company
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: Unique identifier for the shipping address
+                                example: 789
+                              created_at:
+                                type: string
+                                format: date-time
+                                description: When the shipping address was created
+                                example: '2023-03-15T14:30:00Z'
+                              updated_at:
+                                type: string
+                                format: date-time
+                                description: When the shipping address was last updated
+                                example: '2023-03-15T14:30:00Z'
+                              company_id:
+                                type: integer
+                                description: ID of the company this shipping address belongs to
+                                example: 123456
+                              company_name:
+                                type: string
+                                nullable: true
+                                description: Name of the company
+                                example: Acme Corporation
+                              address:
+                                type: string
+                                description: Street address
+                                example: 456 Warehouse Blvd
+                              address_line_2:
+                                type: string
+                                nullable: true
+                                description: Additional address information
+                                example: Building 2
+                              city:
+                                type: string
+                                description: City
+                                example: Austin
+                              state:
+                                type: string
+                                description: State/province
+                                example: TX
+                              postal_code:
+                                type: string
+                                description: Postal/ZIP code
+                                example: '78745'
+                              country:
+                                type: string
+                                description: Country
+                                example: USA
+                              full_address:
+                                type: string
+                                description: Complete formatted address
+                                example: '456 Warehouse Blvd, Building 2, Austin, TX 78745, USA'
+                              full_name:
+                                type: string
+                                description: Full name of the contact person
+                                example: John Doe
+                              first_name:
+                                type: string
+                                nullable: true
+                                description: First name of the contact person
+                                example: John
+                              last_name:
+                                type: string
+                                nullable: true
+                                description: Last name of the contact person
+                                example: Doe
+                              phone:
+                                type: string
+                                nullable: true
+                                description: Phone number
+                                example: 555-987-6543
+                              email:
+                                type: string
+                                format: email
+                                nullable: true
+                                description: Email address
+                                example: shipping@acmecorp.com
+                              is_default:
+                                type: boolean
+                                description: Whether this is the default shipping address
+                                example: true
+                            required:
+                              - id
+                              - company_id
+                              - address
+                              - city
+                              - state
+                              - postal_code
+                              - country
                         billing_info:
                           type: object
+                          nullable: true
                           description: Billing information
                           properties:
                             id:
-                              type: string
-                              example: '456'
+                              type: integer
+                              example: 456
                             created_at:
                               type: string
                               format: date-time
@@ -15036,27 +15237,33 @@ paths:
                               example: '2023-03-15T14:30:00Z'
                             first_name:
                               type: string
+                              nullable: true
                               example: Jane
                             last_name:
                               type: string
+                              nullable: true
                               example: Smith
                             email:
                               type: string
                               format: email
+                              nullable: true
                               example: accounting@acmecorp.com
                             receiving_bank_name:
                               type: string
+                              nullable: true
                               example: First National Bank
                             receiving_bank_address:
                               type: string
+                              nullable: true
                               example: '789 Finance Street, Austin, TX 78701'
                         client_type:
                           type: object
+                          nullable: true
                           description: Type of client
                           properties:
                             id:
-                              type: string
-                              example: '123'
+                              type: integer
+                              example: 123
                             created_at:
                               type: string
                               format: date-time
@@ -15070,7 +15277,18 @@ paths:
                               example: Retail
                             description:
                               type: string
+                              nullable: true
                               example: Retail business client
+                        parent_company_id:
+                          type: integer
+                          nullable: true
+                          description: ID of the parent company
+                          example: 456
+                        invoice_export_template_id:
+                          type: integer
+                          nullable: true
+                          description: ID of the invoice export template
+                          example: 789
                         custom_fields:
                           type: object
                           description: Custom fields for the company
@@ -15141,6 +15359,745 @@ paths:
                   status_code:
                     type: integer
                     example: 403
+    post:
+      operationId: createCompany
+      tags:
+        - Companies
+      summary: Create a company
+      description: 'Create a new company with optional tags, custom fields, and shipping addresses'
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+                  description: Company name
+                  example: Acme Corporation
+                client_type:
+                  type: object
+                  nullable: true
+                  description: 'Client type information. Can provide either id or name. If name is provided and type doesn''t exist, it will be created.'
+                  properties:
+                    id:
+                      type: integer
+                      description: ID of the client type
+                      example: 123
+                    name:
+                      type: string
+                      description: Name of the client type
+                      example: Retail
+                parent_company_id:
+                  type: integer
+                  nullable: true
+                  description: ID of the parent company
+                  example: 456
+                address:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Street address for the company
+                  example: 123 Main St
+                address_line_2:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Additional address information
+                  example: Suite 500
+                city:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: City
+                  example: Austin
+                state:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: State/province
+                  example: TX
+                postal_code:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Postal/ZIP code
+                  example: '78701'
+                country:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Country
+                  example: USA
+                phone:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Primary phone number for the company
+                  example: 555-123-4567
+                fein:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Federal Employer Identification Number
+                  example: 12-3456789
+                tax_exempt:
+                  type: boolean
+                  nullable: true
+                  description: Whether the company is exempt from taxes
+                  example: false
+                notes:
+                  type: string
+                  nullable: true
+                  description: Additional notes about the company
+                  example: 'Key account, requires special handling'
+                tags:
+                  type: array
+                  nullable: true
+                  description: List of tags to associate with the company
+                  items:
+                    type: string
+                    maxLength: 255
+                  example:
+                    - wholesale
+                    - preferred
+                custom_fields:
+                  type: object
+                  nullable: true
+                  description: Custom field values for the company
+                  additionalProperties:
+                    type: string
+                  example:
+                    Industry: Manufacturing
+                    Region: Southwest
+                shipping_addresses:
+                  type: array
+                  nullable: true
+                  description: Array of shipping addresses to create for the company
+                  items:
+                    type: object
+                    required:
+                      - address_1
+                      - city
+                      - state
+                      - country
+                      - zip
+                    properties:
+                      address_1:
+                        type: string
+                        maxLength: 255
+                        description: Street address
+                        example: 456 Warehouse Blvd
+                      address_2:
+                        type: string
+                        maxLength: 255
+                        nullable: true
+                        description: Additional address information
+                        example: Building 2
+                      city:
+                        type: string
+                        maxLength: 255
+                        description: City
+                        example: Austin
+                      state:
+                        type: string
+                        maxLength: 255
+                        description: State/province
+                        example: TX
+                      country:
+                        type: string
+                        maxLength: 255
+                        description: Country
+                        example: USA
+                      zip:
+                        type: string
+                        maxLength: 255
+                        description: Postal/ZIP code
+                        example: '78745'
+                      first_name:
+                        type: string
+                        maxLength: 255
+                        nullable: true
+                        description: First name of the contact person
+                        example: John
+                      last_name:
+                        type: string
+                        maxLength: 255
+                        nullable: true
+                        description: Last name of the contact person
+                        example: Doe
+                      email:
+                        type: string
+                        format: email
+                        maxLength: 255
+                        nullable: true
+                        description: Email address
+                        example: shipping@acmecorp.com
+                      phone:
+                        type: string
+                        maxLength: 255
+                        nullable: true
+                        description: Phone number
+                        example: 555-987-6543
+                      is_default:
+                        type: boolean
+                        nullable: true
+                        description: Whether this is the default shipping address
+                        example: true
+      responses:
+        '201':
+          description: Company successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Unique identifier for the company
+                        example: 123456
+                      created_at:
+                        type: string
+                        format: date-time
+                        description: When the company was created
+                        example: '2023-03-15T14:30:00Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        description: When the company was last updated
+                        example: '2023-03-15T14:30:00Z'
+                      status:
+                        type: string
+                        description: Status of the company
+                        enum:
+                          - active
+                          - inactive
+                        example: active
+                      name:
+                        type: string
+                        description: Company name
+                        example: Acme Corporation
+                      type:
+                        type: string
+                        nullable: true
+                        description: Type of business
+                        example: Retail
+                      phone:
+                        type: string
+                        nullable: true
+                        description: Primary phone number for the company
+                        example: 555-123-4567
+                      address:
+                        type: string
+                        nullable: true
+                        description: Street address for the company
+                        example: 123 Main St
+                      address_line_2:
+                        type: string
+                        nullable: true
+                        description: Additional address information
+                        example: Suite 500
+                      city:
+                        type: string
+                        nullable: true
+                        description: City
+                        example: Austin
+                      state:
+                        type: string
+                        nullable: true
+                        description: State/province
+                        example: TX
+                      postal_code:
+                        type: string
+                        nullable: true
+                        description: Postal/ZIP code
+                        example: '78701'
+                      country:
+                        type: string
+                        nullable: true
+                        description: Country
+                        example: USA
+                      full_address:
+                        type: string
+                        nullable: true
+                        description: Complete formatted address
+                        example: '123 Main St, Suite 500, Austin, TX 78701, USA'
+                      shipping_first_name:
+                        type: string
+                        nullable: true
+                        description: First name for shipping contact (legacy field)
+                        example: John
+                      shipping_last_name:
+                        type: string
+                        nullable: true
+                        description: Last name for shipping contact (legacy field)
+                        example: Doe
+                      shipping_email:
+                        type: string
+                        format: email
+                        nullable: true
+                        description: Email for shipping contact (legacy field)
+                        example: shipping@acmecorp.com
+                      shipping_phone:
+                        type: string
+                        nullable: true
+                        description: Phone number for shipping contact (legacy field)
+                        example: 555-987-6543
+                      shipping_address:
+                        type: string
+                        nullable: true
+                        description: Shipping street address (legacy field)
+                        example: 456 Warehouse Blvd
+                      shipping_city:
+                        type: string
+                        nullable: true
+                        description: Shipping city (legacy field)
+                        example: Austin
+                      shipping_state:
+                        type: string
+                        nullable: true
+                        description: Shipping state/province (legacy field)
+                        example: TX
+                      shipping_postal_code:
+                        type: string
+                        nullable: true
+                        description: Shipping postal/ZIP code (legacy field)
+                        example: '78745'
+                      shipping_country:
+                        type: string
+                        nullable: true
+                        description: Shipping country (legacy field)
+                        example: USA
+                      shipping_full_address:
+                        type: string
+                        nullable: true
+                        description: Complete formatted shipping address (legacy field)
+                        example: '456 Warehouse Blvd, Austin, TX 78745, USA'
+                      payment_term:
+                        type: string
+                        nullable: true
+                        description: Payment terms for the company
+                        example: Net 30
+                      tax_exempt:
+                        type: boolean
+                        nullable: true
+                        description: Whether the company is exempt from taxes
+                        example: false
+                      tax_rate:
+                        type: number
+                        format: float
+                        nullable: true
+                        description: Tax rate applied to the company's orders
+                        example: 8.25
+                      due_date_days:
+                        type: integer
+                        nullable: true
+                        description: Number of days until payment is due
+                        example: 30
+                      price_level:
+                        nullable: true
+                        description: Price level associated with this company
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                            description: Unique identifier for the price level
+                            example: 123
+                          created_at:
+                            type: string
+                            format: date-time
+                            description: When the price level was created
+                            example: '2023-03-15T14:30:00Z'
+                          updated_at:
+                            type: string
+                            format: date-time
+                            description: When the price level was last updated
+                            example: '2023-03-15T14:30:00Z'
+                          status:
+                            type: string
+                            description: Status of the price level
+                            enum:
+                              - active
+                              - inactive
+                            example: active
+                          name:
+                            type: string
+                            description: Name of the price level
+                            example: Wholesale
+                          type:
+                            type: string
+                            description: Type of the price level
+                            example: percentage
+                          percent_increase:
+                            type: number
+                            format: float
+                            description: Percentage increase (or decrease) for this price level
+                            example: 15.5
+                      notes:
+                        type: string
+                        nullable: true
+                        description: Additional notes about the company
+                        example: 'Key account, requires special handling'
+                      fein:
+                        type: string
+                        nullable: true
+                        description: Federal Employer Identification Number
+                        example: 12-3456789
+                      tags:
+                        type: array
+                        nullable: true
+                        description: List of tags associated with the company
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the tag
+                            name:
+                              type: string
+                              description: Name of the tag
+                            description:
+                              type: string
+                              nullable: true
+                              description: Description of the tag
+                            icon:
+                              type: string
+                              nullable: true
+                              description: Icon identifier or URL for the tag
+                            color:
+                              type: string
+                              nullable: true
+                              description: Color code for the tag
+                          required:
+                            - id
+                            - name
+                      default_shipping:
+                        nullable: true
+                        description: Default shipping address
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique identifier for the shipping address
+                            example: 789
+                          created_at:
+                            type: string
+                            format: date-time
+                            description: When the shipping address was created
+                            example: '2023-03-15T14:30:00Z'
+                          updated_at:
+                            type: string
+                            format: date-time
+                            description: When the shipping address was last updated
+                            example: '2023-03-15T14:30:00Z'
+                          company_id:
+                            type: integer
+                            description: ID of the company this shipping address belongs to
+                            example: 123456
+                          company_name:
+                            type: string
+                            nullable: true
+                            description: Name of the company
+                            example: Acme Corporation
+                          address:
+                            type: string
+                            description: Street address
+                            example: 456 Warehouse Blvd
+                          address_line_2:
+                            type: string
+                            nullable: true
+                            description: Additional address information
+                            example: Building 2
+                          city:
+                            type: string
+                            description: City
+                            example: Austin
+                          state:
+                            type: string
+                            description: State/province
+                            example: TX
+                          postal_code:
+                            type: string
+                            description: Postal/ZIP code
+                            example: '78745'
+                          country:
+                            type: string
+                            description: Country
+                            example: USA
+                          full_address:
+                            type: string
+                            description: Complete formatted address
+                            example: '456 Warehouse Blvd, Building 2, Austin, TX 78745, USA'
+                          full_name:
+                            type: string
+                            description: Full name of the contact person
+                            example: John Doe
+                          first_name:
+                            type: string
+                            nullable: true
+                            description: First name of the contact person
+                            example: John
+                          last_name:
+                            type: string
+                            nullable: true
+                            description: Last name of the contact person
+                            example: Doe
+                          phone:
+                            type: string
+                            nullable: true
+                            description: Phone number
+                            example: 555-987-6543
+                          email:
+                            type: string
+                            format: email
+                            nullable: true
+                            description: Email address
+                            example: shipping@acmecorp.com
+                          is_default:
+                            type: boolean
+                            description: Whether this is the default shipping address
+                            example: true
+                        required:
+                          - id
+                          - company_id
+                          - address
+                          - city
+                          - state
+                          - postal_code
+                          - country
+                      shipping_addresses:
+                        type: array
+                        nullable: true
+                        description: List of shipping addresses for the company
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the shipping address
+                              example: 789
+                            created_at:
+                              type: string
+                              format: date-time
+                              description: When the shipping address was created
+                              example: '2023-03-15T14:30:00Z'
+                            updated_at:
+                              type: string
+                              format: date-time
+                              description: When the shipping address was last updated
+                              example: '2023-03-15T14:30:00Z'
+                            company_id:
+                              type: integer
+                              description: ID of the company this shipping address belongs to
+                              example: 123456
+                            company_name:
+                              type: string
+                              nullable: true
+                              description: Name of the company
+                              example: Acme Corporation
+                            address:
+                              type: string
+                              description: Street address
+                              example: 456 Warehouse Blvd
+                            address_line_2:
+                              type: string
+                              nullable: true
+                              description: Additional address information
+                              example: Building 2
+                            city:
+                              type: string
+                              description: City
+                              example: Austin
+                            state:
+                              type: string
+                              description: State/province
+                              example: TX
+                            postal_code:
+                              type: string
+                              description: Postal/ZIP code
+                              example: '78745'
+                            country:
+                              type: string
+                              description: Country
+                              example: USA
+                            full_address:
+                              type: string
+                              description: Complete formatted address
+                              example: '456 Warehouse Blvd, Building 2, Austin, TX 78745, USA'
+                            full_name:
+                              type: string
+                              description: Full name of the contact person
+                              example: John Doe
+                            first_name:
+                              type: string
+                              nullable: true
+                              description: First name of the contact person
+                              example: John
+                            last_name:
+                              type: string
+                              nullable: true
+                              description: Last name of the contact person
+                              example: Doe
+                            phone:
+                              type: string
+                              nullable: true
+                              description: Phone number
+                              example: 555-987-6543
+                            email:
+                              type: string
+                              format: email
+                              nullable: true
+                              description: Email address
+                              example: shipping@acmecorp.com
+                            is_default:
+                              type: boolean
+                              description: Whether this is the default shipping address
+                              example: true
+                          required:
+                            - id
+                            - company_id
+                            - address
+                            - city
+                            - state
+                            - postal_code
+                            - country
+                      billing_info:
+                        type: object
+                        nullable: true
+                        description: Billing information
+                        properties:
+                          id:
+                            type: integer
+                            example: 456
+                          created_at:
+                            type: string
+                            format: date-time
+                            example: '2023-03-15T14:30:00Z'
+                          updated_at:
+                            type: string
+                            format: date-time
+                            example: '2023-03-15T14:30:00Z'
+                          first_name:
+                            type: string
+                            nullable: true
+                            example: Jane
+                          last_name:
+                            type: string
+                            nullable: true
+                            example: Smith
+                          email:
+                            type: string
+                            format: email
+                            nullable: true
+                            example: accounting@acmecorp.com
+                          receiving_bank_name:
+                            type: string
+                            nullable: true
+                            example: First National Bank
+                          receiving_bank_address:
+                            type: string
+                            nullable: true
+                            example: '789 Finance Street, Austin, TX 78701'
+                      client_type:
+                        type: object
+                        nullable: true
+                        description: Type of client
+                        properties:
+                          id:
+                            type: integer
+                            example: 123
+                          created_at:
+                            type: string
+                            format: date-time
+                            example: '2023-03-15T14:30:00Z'
+                          updated_at:
+                            type: string
+                            format: date-time
+                            example: '2023-03-15T14:30:00Z'
+                          name:
+                            type: string
+                            example: Retail
+                          description:
+                            type: string
+                            nullable: true
+                            example: Retail business client
+                      parent_company_id:
+                        type: integer
+                        nullable: true
+                        description: ID of the parent company
+                        example: 456
+                      invoice_export_template_id:
+                        type: integer
+                        nullable: true
+                        description: ID of the invoice export template
+                        example: 789
+                      custom_fields:
+                        type: object
+                        description: Custom fields for the company
+                        example:
+                          Industry: Manufacturing
+                          Region: Southwest
+                          Annual Revenue: $5M-$10M
+                    required:
+                      - id
+                      - name
+                      - status
+        '401':
+          description: Authentication credentials were missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+                  message:
+                    type: string
+                    example: Authentication credentials are missing or invalid
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: You do not have permission to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Forbidden
+                  message:
+                    type: string
+                    example: You do not have permission to access this resource
+                  status_code:
+                    type: integer
+                    example: 403
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
   '/companies/{companyId}':
     get:
       operationId: getCompany
@@ -15155,7 +16112,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            type: integer
           description: The unique identifier of the company
       responses:
         '200':
@@ -15165,313 +16122,1252 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: string
-                    description: Unique identifier for the company
-                    example: '123456'
-                  created_at:
-                    type: string
-                    format: date-time
-                    description: When the company was created
-                    example: '2023-03-15T14:30:00Z'
-                  updated_at:
-                    type: string
-                    format: date-time
-                    description: When the company was last updated
-                    example: '2023-03-15T14:30:00Z'
-                  status:
-                    type: string
-                    description: Status of the company
-                    enum:
-                      - active
-                      - inactive
-                    example: active
-                  name:
-                    type: string
-                    description: Company name
-                    example: Acme Corporation
-                  type:
-                    type: string
-                    description: Type of business
-                    example: Retail
-                  phone:
-                    type: string
-                    description: Primary phone number for the company
-                    example: 555-123-4567
-                  address:
-                    type: string
-                    description: Street address for the company
-                    example: 123 Main St
-                  address_line_2:
-                    type: string
-                    description: Additional address information
-                    example: Suite 500
-                  city:
-                    type: string
-                    description: City
-                    example: Austin
-                  state:
-                    type: string
-                    description: State/province
-                    example: TX
-                  postal_code:
-                    type: string
-                    description: Postal/ZIP code
-                    example: '78701'
-                  country:
-                    type: string
-                    description: Country
-                    example: USA
-                  full_address:
-                    type: string
-                    description: Complete formatted address
-                    example: '123 Main St, Suite 500, Austin, TX 78701, USA'
-                  shipping_first_name:
-                    type: string
-                    description: First name for shipping contact
-                    example: John
-                  shipping_last_name:
-                    type: string
-                    description: Last name for shipping contact
-                    example: Doe
-                  shipping_email:
-                    type: string
-                    format: email
-                    description: Email for shipping contact
-                    example: shipping@acmecorp.com
-                  shipping_phone:
-                    type: string
-                    description: Phone number for shipping contact
-                    example: 555-987-6543
-                  shipping_address:
-                    type: string
-                    description: Shipping street address
-                    example: 456 Warehouse Blvd
-                  shipping_city:
-                    type: string
-                    description: Shipping city
-                    example: Austin
-                  shipping_state:
-                    type: string
-                    description: Shipping state/province
-                    example: TX
-                  shipping_postal_code:
-                    type: string
-                    description: Shipping postal/ZIP code
-                    example: '78745'
-                  shipping_country:
-                    type: string
-                    description: Shipping country
-                    example: USA
-                  shipping_full_address:
-                    type: string
-                    description: Complete formatted shipping address
-                    example: '456 Warehouse Blvd, Austin, TX 78745, USA'
-                  payment_term:
-                    type: string
-                    description: Payment terms for the company
-                    example: Net 30
-                  tax_exempt:
-                    type: boolean
-                    description: Whether the company is exempt from taxes
-                    example: false
-                  tax_rate:
-                    type: number
-                    format: float
-                    description: Tax rate applied to the company's orders
-                    example: 8.25
-                  due_date_days:
-                    type: integer
-                    description: Number of days until payment is due
-                    example: 30
-                  price_level:
-                    description: Price level associated with this company
+                  data:
                     type: object
                     properties:
                       id:
-                        type: number
-                        description: Unique identifier for the price level
-                        example: 123
+                        type: integer
+                        description: Unique identifier for the company
+                        example: 123456
                       created_at:
                         type: string
                         format: date-time
-                        description: When the price level was created
+                        description: When the company was created
                         example: '2023-03-15T14:30:00Z'
                       updated_at:
                         type: string
                         format: date-time
-                        description: When the price level was last updated
+                        description: When the company was last updated
                         example: '2023-03-15T14:30:00Z'
                       status:
                         type: string
-                        description: Status of the price level
+                        description: Status of the company
                         enum:
                           - active
                           - inactive
                         example: active
                       name:
                         type: string
-                        description: Name of the price level
-                        example: Wholesale
+                        description: Company name
+                        example: Acme Corporation
                       type:
                         type: string
-                        description: Type of the price level
-                        example: percentage
-                      percent_increase:
-                        type: number
-                        format: float
-                        description: Percentage increase (or decrease) for this price level
-                        example: 15.5
-                  notes:
-                    type: string
-                    description: Additional notes about the company
-                    example: 'Key account, requires special handling'
-                  fein:
-                    type: string
-                    description: Federal Employer Identification Number
-                    example: 12-3456789
-                  tags:
-                    type: array
-                    description: List of tags associated with the company
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                          description: Unique identifier for the tag
-                        name:
-                          type: string
-                          description: Name of the tag
-                        description:
-                          type: string
-                          nullable: true
-                          description: Description of the tag
-                        icon:
-                          type: string
-                          nullable: true
-                          description: Icon identifier or URL for the tag
-                        color:
-                          type: string
-                          nullable: true
-                          description: Color code for the tag
-                      required:
-                        - id
-                        - name
-                  default_shipping:
-                    type: object
-                    description: Default shipping information
-                    properties:
-                      id:
+                        nullable: true
+                        description: Type of business
+                        example: Retail
+                      phone:
                         type: string
-                        example: '789'
-                      created_at:
-                        type: string
-                        format: date-time
-                        example: '2023-03-15T14:30:00Z'
-                      updated_at:
-                        type: string
-                        format: date-time
-                        example: '2023-03-15T14:30:00Z'
+                        nullable: true
+                        description: Primary phone number for the company
+                        example: 555-123-4567
                       address:
                         type: string
-                        example: 456 Warehouse Blvd
+                        nullable: true
+                        description: Street address for the company
+                        example: 123 Main St
                       address_line_2:
                         type: string
-                        example: Building 2
+                        nullable: true
+                        description: Additional address information
+                        example: Suite 500
                       city:
                         type: string
+                        nullable: true
+                        description: City
                         example: Austin
                       state:
                         type: string
+                        nullable: true
+                        description: State/province
                         example: TX
                       postal_code:
                         type: string
-                        example: '78745'
+                        nullable: true
+                        description: Postal/ZIP code
+                        example: '78701'
                       country:
                         type: string
+                        nullable: true
+                        description: Country
                         example: USA
-                      full_name:
+                      full_address:
                         type: string
-                        example: John Doe
-                      first_name:
+                        nullable: true
+                        description: Complete formatted address
+                        example: '123 Main St, Suite 500, Austin, TX 78701, USA'
+                      shipping_first_name:
                         type: string
+                        nullable: true
+                        description: First name for shipping contact (legacy field)
                         example: John
-                      last_name:
+                      shipping_last_name:
                         type: string
+                        nullable: true
+                        description: Last name for shipping contact (legacy field)
                         example: Doe
-                      phone:
-                        type: string
-                        example: 555-987-6543
-                      email:
+                      shipping_email:
                         type: string
                         format: email
+                        nullable: true
+                        description: Email for shipping contact (legacy field)
                         example: shipping@acmecorp.com
-                      is_default:
+                      shipping_phone:
+                        type: string
+                        nullable: true
+                        description: Phone number for shipping contact (legacy field)
+                        example: 555-987-6543
+                      shipping_address:
+                        type: string
+                        nullable: true
+                        description: Shipping street address (legacy field)
+                        example: 456 Warehouse Blvd
+                      shipping_city:
+                        type: string
+                        nullable: true
+                        description: Shipping city (legacy field)
+                        example: Austin
+                      shipping_state:
+                        type: string
+                        nullable: true
+                        description: Shipping state/province (legacy field)
+                        example: TX
+                      shipping_postal_code:
+                        type: string
+                        nullable: true
+                        description: Shipping postal/ZIP code (legacy field)
+                        example: '78745'
+                      shipping_country:
+                        type: string
+                        nullable: true
+                        description: Shipping country (legacy field)
+                        example: USA
+                      shipping_full_address:
+                        type: string
+                        nullable: true
+                        description: Complete formatted shipping address (legacy field)
+                        example: '456 Warehouse Blvd, Austin, TX 78745, USA'
+                      payment_term:
+                        type: string
+                        nullable: true
+                        description: Payment terms for the company
+                        example: Net 30
+                      tax_exempt:
                         type: boolean
-                        example: true
-                  billing_info:
+                        nullable: true
+                        description: Whether the company is exempt from taxes
+                        example: false
+                      tax_rate:
+                        type: number
+                        format: float
+                        nullable: true
+                        description: Tax rate applied to the company's orders
+                        example: 8.25
+                      due_date_days:
+                        type: integer
+                        nullable: true
+                        description: Number of days until payment is due
+                        example: 30
+                      price_level:
+                        nullable: true
+                        description: Price level associated with this company
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                            description: Unique identifier for the price level
+                            example: 123
+                          created_at:
+                            type: string
+                            format: date-time
+                            description: When the price level was created
+                            example: '2023-03-15T14:30:00Z'
+                          updated_at:
+                            type: string
+                            format: date-time
+                            description: When the price level was last updated
+                            example: '2023-03-15T14:30:00Z'
+                          status:
+                            type: string
+                            description: Status of the price level
+                            enum:
+                              - active
+                              - inactive
+                            example: active
+                          name:
+                            type: string
+                            description: Name of the price level
+                            example: Wholesale
+                          type:
+                            type: string
+                            description: Type of the price level
+                            example: percentage
+                          percent_increase:
+                            type: number
+                            format: float
+                            description: Percentage increase (or decrease) for this price level
+                            example: 15.5
+                      notes:
+                        type: string
+                        nullable: true
+                        description: Additional notes about the company
+                        example: 'Key account, requires special handling'
+                      fein:
+                        type: string
+                        nullable: true
+                        description: Federal Employer Identification Number
+                        example: 12-3456789
+                      tags:
+                        type: array
+                        nullable: true
+                        description: List of tags associated with the company
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the tag
+                            name:
+                              type: string
+                              description: Name of the tag
+                            description:
+                              type: string
+                              nullable: true
+                              description: Description of the tag
+                            icon:
+                              type: string
+                              nullable: true
+                              description: Icon identifier or URL for the tag
+                            color:
+                              type: string
+                              nullable: true
+                              description: Color code for the tag
+                          required:
+                            - id
+                            - name
+                      default_shipping:
+                        nullable: true
+                        description: Default shipping address
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique identifier for the shipping address
+                            example: 789
+                          created_at:
+                            type: string
+                            format: date-time
+                            description: When the shipping address was created
+                            example: '2023-03-15T14:30:00Z'
+                          updated_at:
+                            type: string
+                            format: date-time
+                            description: When the shipping address was last updated
+                            example: '2023-03-15T14:30:00Z'
+                          company_id:
+                            type: integer
+                            description: ID of the company this shipping address belongs to
+                            example: 123456
+                          company_name:
+                            type: string
+                            nullable: true
+                            description: Name of the company
+                            example: Acme Corporation
+                          address:
+                            type: string
+                            description: Street address
+                            example: 456 Warehouse Blvd
+                          address_line_2:
+                            type: string
+                            nullable: true
+                            description: Additional address information
+                            example: Building 2
+                          city:
+                            type: string
+                            description: City
+                            example: Austin
+                          state:
+                            type: string
+                            description: State/province
+                            example: TX
+                          postal_code:
+                            type: string
+                            description: Postal/ZIP code
+                            example: '78745'
+                          country:
+                            type: string
+                            description: Country
+                            example: USA
+                          full_address:
+                            type: string
+                            description: Complete formatted address
+                            example: '456 Warehouse Blvd, Building 2, Austin, TX 78745, USA'
+                          full_name:
+                            type: string
+                            description: Full name of the contact person
+                            example: John Doe
+                          first_name:
+                            type: string
+                            nullable: true
+                            description: First name of the contact person
+                            example: John
+                          last_name:
+                            type: string
+                            nullable: true
+                            description: Last name of the contact person
+                            example: Doe
+                          phone:
+                            type: string
+                            nullable: true
+                            description: Phone number
+                            example: 555-987-6543
+                          email:
+                            type: string
+                            format: email
+                            nullable: true
+                            description: Email address
+                            example: shipping@acmecorp.com
+                          is_default:
+                            type: boolean
+                            description: Whether this is the default shipping address
+                            example: true
+                        required:
+                          - id
+                          - company_id
+                          - address
+                          - city
+                          - state
+                          - postal_code
+                          - country
+                      shipping_addresses:
+                        type: array
+                        nullable: true
+                        description: List of shipping addresses for the company
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the shipping address
+                              example: 789
+                            created_at:
+                              type: string
+                              format: date-time
+                              description: When the shipping address was created
+                              example: '2023-03-15T14:30:00Z'
+                            updated_at:
+                              type: string
+                              format: date-time
+                              description: When the shipping address was last updated
+                              example: '2023-03-15T14:30:00Z'
+                            company_id:
+                              type: integer
+                              description: ID of the company this shipping address belongs to
+                              example: 123456
+                            company_name:
+                              type: string
+                              nullable: true
+                              description: Name of the company
+                              example: Acme Corporation
+                            address:
+                              type: string
+                              description: Street address
+                              example: 456 Warehouse Blvd
+                            address_line_2:
+                              type: string
+                              nullable: true
+                              description: Additional address information
+                              example: Building 2
+                            city:
+                              type: string
+                              description: City
+                              example: Austin
+                            state:
+                              type: string
+                              description: State/province
+                              example: TX
+                            postal_code:
+                              type: string
+                              description: Postal/ZIP code
+                              example: '78745'
+                            country:
+                              type: string
+                              description: Country
+                              example: USA
+                            full_address:
+                              type: string
+                              description: Complete formatted address
+                              example: '456 Warehouse Blvd, Building 2, Austin, TX 78745, USA'
+                            full_name:
+                              type: string
+                              description: Full name of the contact person
+                              example: John Doe
+                            first_name:
+                              type: string
+                              nullable: true
+                              description: First name of the contact person
+                              example: John
+                            last_name:
+                              type: string
+                              nullable: true
+                              description: Last name of the contact person
+                              example: Doe
+                            phone:
+                              type: string
+                              nullable: true
+                              description: Phone number
+                              example: 555-987-6543
+                            email:
+                              type: string
+                              format: email
+                              nullable: true
+                              description: Email address
+                              example: shipping@acmecorp.com
+                            is_default:
+                              type: boolean
+                              description: Whether this is the default shipping address
+                              example: true
+                          required:
+                            - id
+                            - company_id
+                            - address
+                            - city
+                            - state
+                            - postal_code
+                            - country
+                      billing_info:
+                        type: object
+                        nullable: true
+                        description: Billing information
+                        properties:
+                          id:
+                            type: integer
+                            example: 456
+                          created_at:
+                            type: string
+                            format: date-time
+                            example: '2023-03-15T14:30:00Z'
+                          updated_at:
+                            type: string
+                            format: date-time
+                            example: '2023-03-15T14:30:00Z'
+                          first_name:
+                            type: string
+                            nullable: true
+                            example: Jane
+                          last_name:
+                            type: string
+                            nullable: true
+                            example: Smith
+                          email:
+                            type: string
+                            format: email
+                            nullable: true
+                            example: accounting@acmecorp.com
+                          receiving_bank_name:
+                            type: string
+                            nullable: true
+                            example: First National Bank
+                          receiving_bank_address:
+                            type: string
+                            nullable: true
+                            example: '789 Finance Street, Austin, TX 78701'
+                      client_type:
+                        type: object
+                        nullable: true
+                        description: Type of client
+                        properties:
+                          id:
+                            type: integer
+                            example: 123
+                          created_at:
+                            type: string
+                            format: date-time
+                            example: '2023-03-15T14:30:00Z'
+                          updated_at:
+                            type: string
+                            format: date-time
+                            example: '2023-03-15T14:30:00Z'
+                          name:
+                            type: string
+                            example: Retail
+                          description:
+                            type: string
+                            nullable: true
+                            example: Retail business client
+                      parent_company_id:
+                        type: integer
+                        nullable: true
+                        description: ID of the parent company
+                        example: 456
+                      invoice_export_template_id:
+                        type: integer
+                        nullable: true
+                        description: ID of the invoice export template
+                        example: 789
+                      custom_fields:
+                        type: object
+                        description: Custom fields for the company
+                        example:
+                          Industry: Manufacturing
+                          Region: Southwest
+                          Annual Revenue: $5M-$10M
+                    required:
+                      - id
+                      - name
+                      - status
+        '401':
+          description: Authentication credentials were missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+                  message:
+                    type: string
+                    example: Authentication credentials are missing or invalid
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: You do not have permission to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Forbidden
+                  message:
+                    type: string
+                    example: You do not have permission to access this resource
+                  status_code:
+                    type: integer
+                    example: 403
+        '404':
+          description: The requested resource was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Not Found
+                  message:
+                    type: string
+                    example: The requested resource could not be found
+                  status_code:
+                    type: integer
+                    example: 404
+    post:
+      operationId: updateCompany
+      tags:
+        - Companies
+      summary: Update a company
+      description: Update an existing company's information
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: companyId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the company
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Company name
+                  example: Acme Corporation
+                client_type:
+                  type: object
+                  nullable: true
+                  description: 'Client type information. Can provide either id or name. If name is provided and type doesn''t exist, it will be created.'
+                  properties:
+                    id:
+                      type: integer
+                      description: ID of the client type
+                      example: 123
+                    name:
+                      type: string
+                      description: Name of the client type
+                      example: Retail
+                parent_company_id:
+                  type: integer
+                  nullable: true
+                  description: ID of the parent company
+                  example: 456
+                address:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Street address for the company
+                  example: 123 Main St
+                address_line_2:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Additional address information
+                  example: Suite 500
+                city:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: City
+                  example: Austin
+                state:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: State/province
+                  example: TX
+                postal_code:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Postal/ZIP code
+                  example: '78701'
+                country:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Country
+                  example: USA
+                phone:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Primary phone number for the company
+                  example: 555-123-4567
+                fein:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Federal Employer Identification Number
+                  example: 12-3456789
+                tax_exempt:
+                  type: boolean
+                  nullable: true
+                  description: Whether the company is exempt from taxes
+                  example: false
+                notes:
+                  type: string
+                  nullable: true
+                  description: Additional notes about the company
+                  example: 'Key account, requires special handling'
+                tags:
+                  type: array
+                  nullable: true
+                  description: List of tags to associate with the company
+                  items:
+                    type: string
+                    maxLength: 255
+                  example:
+                    - wholesale
+                    - preferred
+                custom_fields:
+                  type: object
+                  nullable: true
+                  description: Custom field values for the company
+                  additionalProperties:
+                    type: string
+                  example:
+                    Industry: Manufacturing
+                    Region: Southwest
+      responses:
+        '200':
+          description: Company successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
                     type: object
-                    description: Billing information
                     properties:
                       id:
-                        type: string
-                        example: '456'
+                        type: integer
+                        description: Unique identifier for the company
+                        example: 123456
                       created_at:
                         type: string
                         format: date-time
+                        description: When the company was created
                         example: '2023-03-15T14:30:00Z'
                       updated_at:
                         type: string
                         format: date-time
+                        description: When the company was last updated
                         example: '2023-03-15T14:30:00Z'
-                      first_name:
+                      status:
                         type: string
-                        example: Jane
-                      last_name:
-                        type: string
-                        example: Smith
-                      email:
-                        type: string
-                        format: email
-                        example: accounting@acmecorp.com
-                      receiving_bank_name:
-                        type: string
-                        example: First National Bank
-                      receiving_bank_address:
-                        type: string
-                        example: '789 Finance Street, Austin, TX 78701'
-                  client_type:
-                    type: object
-                    description: Type of client
-                    properties:
-                      id:
-                        type: string
-                        example: '123'
-                      created_at:
-                        type: string
-                        format: date-time
-                        example: '2023-03-15T14:30:00Z'
-                      updated_at:
-                        type: string
-                        format: date-time
-                        example: '2023-03-15T14:30:00Z'
+                        description: Status of the company
+                        enum:
+                          - active
+                          - inactive
+                        example: active
                       name:
                         type: string
-                        example: Retail
-                      description:
+                        description: Company name
+                        example: Acme Corporation
+                      type:
                         type: string
-                        example: Retail business client
-                  custom_fields:
+                        nullable: true
+                        description: Type of business
+                        example: Retail
+                      phone:
+                        type: string
+                        nullable: true
+                        description: Primary phone number for the company
+                        example: 555-123-4567
+                      address:
+                        type: string
+                        nullable: true
+                        description: Street address for the company
+                        example: 123 Main St
+                      address_line_2:
+                        type: string
+                        nullable: true
+                        description: Additional address information
+                        example: Suite 500
+                      city:
+                        type: string
+                        nullable: true
+                        description: City
+                        example: Austin
+                      state:
+                        type: string
+                        nullable: true
+                        description: State/province
+                        example: TX
+                      postal_code:
+                        type: string
+                        nullable: true
+                        description: Postal/ZIP code
+                        example: '78701'
+                      country:
+                        type: string
+                        nullable: true
+                        description: Country
+                        example: USA
+                      full_address:
+                        type: string
+                        nullable: true
+                        description: Complete formatted address
+                        example: '123 Main St, Suite 500, Austin, TX 78701, USA'
+                      shipping_first_name:
+                        type: string
+                        nullable: true
+                        description: First name for shipping contact (legacy field)
+                        example: John
+                      shipping_last_name:
+                        type: string
+                        nullable: true
+                        description: Last name for shipping contact (legacy field)
+                        example: Doe
+                      shipping_email:
+                        type: string
+                        format: email
+                        nullable: true
+                        description: Email for shipping contact (legacy field)
+                        example: shipping@acmecorp.com
+                      shipping_phone:
+                        type: string
+                        nullable: true
+                        description: Phone number for shipping contact (legacy field)
+                        example: 555-987-6543
+                      shipping_address:
+                        type: string
+                        nullable: true
+                        description: Shipping street address (legacy field)
+                        example: 456 Warehouse Blvd
+                      shipping_city:
+                        type: string
+                        nullable: true
+                        description: Shipping city (legacy field)
+                        example: Austin
+                      shipping_state:
+                        type: string
+                        nullable: true
+                        description: Shipping state/province (legacy field)
+                        example: TX
+                      shipping_postal_code:
+                        type: string
+                        nullable: true
+                        description: Shipping postal/ZIP code (legacy field)
+                        example: '78745'
+                      shipping_country:
+                        type: string
+                        nullable: true
+                        description: Shipping country (legacy field)
+                        example: USA
+                      shipping_full_address:
+                        type: string
+                        nullable: true
+                        description: Complete formatted shipping address (legacy field)
+                        example: '456 Warehouse Blvd, Austin, TX 78745, USA'
+                      payment_term:
+                        type: string
+                        nullable: true
+                        description: Payment terms for the company
+                        example: Net 30
+                      tax_exempt:
+                        type: boolean
+                        nullable: true
+                        description: Whether the company is exempt from taxes
+                        example: false
+                      tax_rate:
+                        type: number
+                        format: float
+                        nullable: true
+                        description: Tax rate applied to the company's orders
+                        example: 8.25
+                      due_date_days:
+                        type: integer
+                        nullable: true
+                        description: Number of days until payment is due
+                        example: 30
+                      price_level:
+                        nullable: true
+                        description: Price level associated with this company
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                            description: Unique identifier for the price level
+                            example: 123
+                          created_at:
+                            type: string
+                            format: date-time
+                            description: When the price level was created
+                            example: '2023-03-15T14:30:00Z'
+                          updated_at:
+                            type: string
+                            format: date-time
+                            description: When the price level was last updated
+                            example: '2023-03-15T14:30:00Z'
+                          status:
+                            type: string
+                            description: Status of the price level
+                            enum:
+                              - active
+                              - inactive
+                            example: active
+                          name:
+                            type: string
+                            description: Name of the price level
+                            example: Wholesale
+                          type:
+                            type: string
+                            description: Type of the price level
+                            example: percentage
+                          percent_increase:
+                            type: number
+                            format: float
+                            description: Percentage increase (or decrease) for this price level
+                            example: 15.5
+                      notes:
+                        type: string
+                        nullable: true
+                        description: Additional notes about the company
+                        example: 'Key account, requires special handling'
+                      fein:
+                        type: string
+                        nullable: true
+                        description: Federal Employer Identification Number
+                        example: 12-3456789
+                      tags:
+                        type: array
+                        nullable: true
+                        description: List of tags associated with the company
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the tag
+                            name:
+                              type: string
+                              description: Name of the tag
+                            description:
+                              type: string
+                              nullable: true
+                              description: Description of the tag
+                            icon:
+                              type: string
+                              nullable: true
+                              description: Icon identifier or URL for the tag
+                            color:
+                              type: string
+                              nullable: true
+                              description: Color code for the tag
+                          required:
+                            - id
+                            - name
+                      default_shipping:
+                        nullable: true
+                        description: Default shipping address
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique identifier for the shipping address
+                            example: 789
+                          created_at:
+                            type: string
+                            format: date-time
+                            description: When the shipping address was created
+                            example: '2023-03-15T14:30:00Z'
+                          updated_at:
+                            type: string
+                            format: date-time
+                            description: When the shipping address was last updated
+                            example: '2023-03-15T14:30:00Z'
+                          company_id:
+                            type: integer
+                            description: ID of the company this shipping address belongs to
+                            example: 123456
+                          company_name:
+                            type: string
+                            nullable: true
+                            description: Name of the company
+                            example: Acme Corporation
+                          address:
+                            type: string
+                            description: Street address
+                            example: 456 Warehouse Blvd
+                          address_line_2:
+                            type: string
+                            nullable: true
+                            description: Additional address information
+                            example: Building 2
+                          city:
+                            type: string
+                            description: City
+                            example: Austin
+                          state:
+                            type: string
+                            description: State/province
+                            example: TX
+                          postal_code:
+                            type: string
+                            description: Postal/ZIP code
+                            example: '78745'
+                          country:
+                            type: string
+                            description: Country
+                            example: USA
+                          full_address:
+                            type: string
+                            description: Complete formatted address
+                            example: '456 Warehouse Blvd, Building 2, Austin, TX 78745, USA'
+                          full_name:
+                            type: string
+                            description: Full name of the contact person
+                            example: John Doe
+                          first_name:
+                            type: string
+                            nullable: true
+                            description: First name of the contact person
+                            example: John
+                          last_name:
+                            type: string
+                            nullable: true
+                            description: Last name of the contact person
+                            example: Doe
+                          phone:
+                            type: string
+                            nullable: true
+                            description: Phone number
+                            example: 555-987-6543
+                          email:
+                            type: string
+                            format: email
+                            nullable: true
+                            description: Email address
+                            example: shipping@acmecorp.com
+                          is_default:
+                            type: boolean
+                            description: Whether this is the default shipping address
+                            example: true
+                        required:
+                          - id
+                          - company_id
+                          - address
+                          - city
+                          - state
+                          - postal_code
+                          - country
+                      shipping_addresses:
+                        type: array
+                        nullable: true
+                        description: List of shipping addresses for the company
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the shipping address
+                              example: 789
+                            created_at:
+                              type: string
+                              format: date-time
+                              description: When the shipping address was created
+                              example: '2023-03-15T14:30:00Z'
+                            updated_at:
+                              type: string
+                              format: date-time
+                              description: When the shipping address was last updated
+                              example: '2023-03-15T14:30:00Z'
+                            company_id:
+                              type: integer
+                              description: ID of the company this shipping address belongs to
+                              example: 123456
+                            company_name:
+                              type: string
+                              nullable: true
+                              description: Name of the company
+                              example: Acme Corporation
+                            address:
+                              type: string
+                              description: Street address
+                              example: 456 Warehouse Blvd
+                            address_line_2:
+                              type: string
+                              nullable: true
+                              description: Additional address information
+                              example: Building 2
+                            city:
+                              type: string
+                              description: City
+                              example: Austin
+                            state:
+                              type: string
+                              description: State/province
+                              example: TX
+                            postal_code:
+                              type: string
+                              description: Postal/ZIP code
+                              example: '78745'
+                            country:
+                              type: string
+                              description: Country
+                              example: USA
+                            full_address:
+                              type: string
+                              description: Complete formatted address
+                              example: '456 Warehouse Blvd, Building 2, Austin, TX 78745, USA'
+                            full_name:
+                              type: string
+                              description: Full name of the contact person
+                              example: John Doe
+                            first_name:
+                              type: string
+                              nullable: true
+                              description: First name of the contact person
+                              example: John
+                            last_name:
+                              type: string
+                              nullable: true
+                              description: Last name of the contact person
+                              example: Doe
+                            phone:
+                              type: string
+                              nullable: true
+                              description: Phone number
+                              example: 555-987-6543
+                            email:
+                              type: string
+                              format: email
+                              nullable: true
+                              description: Email address
+                              example: shipping@acmecorp.com
+                            is_default:
+                              type: boolean
+                              description: Whether this is the default shipping address
+                              example: true
+                          required:
+                            - id
+                            - company_id
+                            - address
+                            - city
+                            - state
+                            - postal_code
+                            - country
+                      billing_info:
+                        type: object
+                        nullable: true
+                        description: Billing information
+                        properties:
+                          id:
+                            type: integer
+                            example: 456
+                          created_at:
+                            type: string
+                            format: date-time
+                            example: '2023-03-15T14:30:00Z'
+                          updated_at:
+                            type: string
+                            format: date-time
+                            example: '2023-03-15T14:30:00Z'
+                          first_name:
+                            type: string
+                            nullable: true
+                            example: Jane
+                          last_name:
+                            type: string
+                            nullable: true
+                            example: Smith
+                          email:
+                            type: string
+                            format: email
+                            nullable: true
+                            example: accounting@acmecorp.com
+                          receiving_bank_name:
+                            type: string
+                            nullable: true
+                            example: First National Bank
+                          receiving_bank_address:
+                            type: string
+                            nullable: true
+                            example: '789 Finance Street, Austin, TX 78701'
+                      client_type:
+                        type: object
+                        nullable: true
+                        description: Type of client
+                        properties:
+                          id:
+                            type: integer
+                            example: 123
+                          created_at:
+                            type: string
+                            format: date-time
+                            example: '2023-03-15T14:30:00Z'
+                          updated_at:
+                            type: string
+                            format: date-time
+                            example: '2023-03-15T14:30:00Z'
+                          name:
+                            type: string
+                            example: Retail
+                          description:
+                            type: string
+                            nullable: true
+                            example: Retail business client
+                      parent_company_id:
+                        type: integer
+                        nullable: true
+                        description: ID of the parent company
+                        example: 456
+                      invoice_export_template_id:
+                        type: integer
+                        nullable: true
+                        description: ID of the invoice export template
+                        example: 789
+                      custom_fields:
+                        type: object
+                        description: Custom fields for the company
+                        example:
+                          Industry: Manufacturing
+                          Region: Southwest
+                          Annual Revenue: $5M-$10M
+                    required:
+                      - id
+                      - name
+                      - status
+        '401':
+          description: Authentication credentials were missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+                  message:
+                    type: string
+                    example: Authentication credentials are missing or invalid
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: You do not have permission to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Forbidden
+                  message:
+                    type: string
+                    example: You do not have permission to access this resource
+                  status_code:
+                    type: integer
+                    example: 403
+        '404':
+          description: The requested resource was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Not Found
+                  message:
+                    type: string
+                    example: The requested resource could not be found
+                  status_code:
+                    type: integer
+                    example: 404
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
                     type: object
-                    description: Custom fields for the company
-                    example:
-                      Industry: Manufacturing
-                      Region: Southwest
-                      Annual Revenue: $5M-$10M
-                required:
-                  - id
-                  - name
-                  - status
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+    delete:
+      operationId: deleteCompany
+      tags:
+        - Companies
+      summary: Delete a company
+      description: Delete a company by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: companyId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the company
+      responses:
+        '204':
+          description: Company successfully deleted
         '401':
           description: Authentication credentials were missing or invalid
           content:

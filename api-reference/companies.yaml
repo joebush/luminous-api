@@ -26,6 +26,21 @@ get:
     - `created_at`: When the company was created
     - `updated_at`: When the company was last updated
     
+    ### Custom Field Filters
+    Custom fields can be filtered using their field names. Custom field filters are dynamically 
+    generated based on the custom fields defined for companies in your system.
+    
+    Custom field filters use the format `custom_fields.{field_label}` where `{field_label}` is 
+    the exact label of the custom field as defined in your system. The available operators depend 
+    on the custom field type:
+    
+    - **String/Dropdown fields**: `eq`, `neq`, `contains`, `notcontains`, `in`, `notin`, `set`, `notset`
+    - **Number fields**: `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `in`, `notin`, `set`, `notset`
+    - **Date fields**: `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `set`, `notset`
+    
+    **Note**: Custom field labels may contain spaces or special characters. When using them in URLs, 
+    ensure proper URL encoding (e.g., spaces become `%20` or `+`).
+    
     ## Examples
     ```
     # Find companies by name
@@ -42,6 +57,33 @@ get:
 
     # Find companies by status
     ?status[eq]=active
+
+    # Filter by custom field (string) - exact match
+    ?custom_fields.Industry[eq]=Manufacturing
+
+    # Filter by custom field (string) - contains
+    ?custom_fields.Region[contains]=West
+
+    # Filter by custom field (number) - greater than
+    ?custom_fields.Annual Revenue[gt]=1000000
+
+    # Filter by custom field (number) - range
+    ?custom_fields.Employee Count[gte]=50&custom_fields.Employee Count[lte]=200
+
+    # Filter by custom field (date) - after date
+    ?custom_fields.Contract Start Date[gte]=2024-01-01
+
+    # Filter by custom field (dropdown) - multiple values
+    ?custom_fields.Customer Tier[in]=Premium,Enterprise
+
+    # Filter by custom field - has value set
+    ?custom_fields.Industry[set]=true
+
+    # Filter by custom field - no value set
+    ?custom_fields.Notes[notset]=true
+
+    # Combine custom field filter with other filters
+    ?state[eq]=CA&custom_fields.Industry[eq]=Retail&tag[eq]=VIP
     ```
   security:
     - BearerAuth: []
@@ -125,6 +167,41 @@ get:
                   $ref: './components/company.yaml'
               meta:
                 $ref: './components/pagination-meta.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml'
+
+post:
+  operationId: createCompany
+  tags:
+    - Companies
+  summary: Create a company
+  description: Create a new company with optional tags, custom fields, and shipping addresses
+  security:
+    - BearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: './components/company-create.yaml'
+  responses:
+    '201':
+      description: Company successfully created
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/company.yaml'
+    '422':
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: './components/validation-error.yaml'
     '401':
       $ref: './components/responses/unauthorized.yaml'
     '403':

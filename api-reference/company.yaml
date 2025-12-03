@@ -11,7 +11,7 @@ get:
       in: path
       required: true
       schema:
-        type: string
+        type: integer
       description: The unique identifier of the company
   responses:
     '200':
@@ -19,7 +19,79 @@ get:
       content:
         application/json:
           schema:
-            $ref: './components/company.yaml'
+            type: object
+            properties:
+              data:
+                $ref: './components/company.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml'
+    '404':
+      $ref: './components/responses/not-found.yaml'
+
+post:
+  operationId: updateCompany
+  tags:
+    - Companies
+  summary: Update a company
+  description: Update an existing company's information
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: companyId
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: The unique identifier of the company
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: './components/company-update.yaml'
+  responses:
+    '200':
+      description: Company successfully updated
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/company.yaml'
+    '422':
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: './components/validation-error.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml'
+    '404':
+      $ref: './components/responses/not-found.yaml'
+
+delete:
+  operationId: deleteCompany
+  tags:
+    - Companies
+  summary: Delete a company
+  description: Delete a company by ID
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: companyId
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: The unique identifier of the company
+  responses:
+    '204':
+      description: Company successfully deleted
     '401':
       $ref: './components/responses/unauthorized.yaml'
     '403':

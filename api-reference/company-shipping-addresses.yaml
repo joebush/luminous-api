@@ -1,0 +1,112 @@
+post:
+  operationId: createCompanyShippingAddress
+  tags:
+    - Companies
+  summary: Create shipping address
+  description: Create a new shipping address for a company
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: companyId
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: The unique identifier of the company
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - address_1
+            - city
+            - state
+            - country
+            - zip
+          properties:
+            address_1:
+              type: string
+              maxLength: 255
+              description: Street address
+              example: "456 Warehouse Blvd"
+            address_2:
+              type: string
+              maxLength: 255
+              nullable: true
+              description: Additional address information
+              example: "Building 2"
+            city:
+              type: string
+              maxLength: 255
+              description: City
+              example: "Austin"
+            state:
+              type: string
+              maxLength: 255
+              description: State/province
+              example: "TX"
+            country:
+              type: string
+              maxLength: 255
+              description: Country
+              example: "USA"
+            zip:
+              type: string
+              maxLength: 255
+              description: Postal/ZIP code
+              example: "78745"
+            first_name:
+              type: string
+              maxLength: 255
+              nullable: true
+              description: First name of the contact person
+              example: "John"
+            last_name:
+              type: string
+              maxLength: 255
+              nullable: true
+              description: Last name of the contact person
+              example: "Doe"
+            email:
+              type: string
+              format: email
+              maxLength: 255
+              nullable: true
+              description: Email address
+              example: "shipping@acmecorp.com"
+            phone:
+              type: string
+              maxLength: 255
+              nullable: true
+              description: Phone number
+              example: "555-987-6543"
+            is_default:
+              type: boolean
+              nullable: true
+              description: Whether this is the default shipping address. If set to true, all other shipping addresses for this company will be set to non-default.
+              example: true
+  responses:
+    '201':
+      description: Shipping address successfully created
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/company-shipping-address.yaml'
+    '422':
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: './components/validation-error.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml'
+    '404':
+      $ref: './components/responses/not-found.yaml'
+
