@@ -5,8 +5,6 @@ required:
   - order_number
   - order_date
   - order_status
-  - bill_to
-  - ship_to
   - items
 properties:
   channel_id:
@@ -60,10 +58,23 @@ properties:
     nullable: true
     description: Customer's purchase order number
     example: "PO-2024-5678"
+  company_id:
+    type: integer
+    nullable: true
+    description: |
+      ID of the company (business account) to associate with this sales order.
+      When provided, the system will automatically populate the `bill_to` and `ship_to` 
+      addresses from the company's information. If `company_id` is provided, the 
+      `bill_to` and `ship_to` fields become optional.
+    example: 123
   bill_to:
     type: object
     required:
       - name
+    description: |
+      Billing address information. Required when `company_id` is not provided.
+      When `company_id` is provided, this field is optional and will be populated 
+      from the company's billing address if not specified.
     properties:
       name:
         type: string
@@ -123,11 +134,14 @@ properties:
         nullable: true
         description: Phone number
         example: "555-1234"
-    description: Billing address information
   ship_to:
     type: object
     required:
       - name
+    description: |
+      Shipping address information. Required when `company_id` is not provided.
+      When `company_id` is provided, this field is optional and will be populated 
+      from the company's default shipping address if not specified.
     properties:
       name:
         type: string
@@ -187,7 +201,6 @@ properties:
         nullable: true
         description: Phone number
         example: "555-5678"
-    description: Shipping address information
   ship_date:
     type: string
     format: date

@@ -305,6 +305,7 @@ post:
     - Support for both product ID and SKU lookup for items
     - Automatic product name and details population
     - Flexible address handling (only name required)
+    - Optional company association - when `company_id` is provided, addresses are auto-populated
     - Optional custom fields and tags at both order and order item level
     - Automatic total calculation from line items plus tax/shipping
     
@@ -362,6 +363,7 @@ post:
               customer_email: "customer@example.com"
               customer_username: "johndoe123"
               customer_po_number: "PO-2024-5678"
+              company_id: 123
               bill_to:
                 name: "John Doe"
                 company: "Acme Corporation"
@@ -480,12 +482,31 @@ post:
               tags:
                 - "bulk-order"
                 - "warehouse-transfer"
+          order_with_company:
+            summary: Order with company association
+            description: An order associated with a company. When company_id is provided, bill_to and ship_to addresses are automatically populated from the company's information.
+            value:
+              channel_id: 1
+              order_number: "ORD-2024-005"
+              order_date: "2024-01-15"
+              order_status: "pending"
+              customer_email: "customer@example.com"
+              company_id: 123
+              # bill_to and ship_to are optional when company_id is provided
+              # They will be auto-populated from the company's addresses
+              items:
+                - product_id: 123
+                  quantity: 2
+                  unit_price: 49.99
+                - sku: "WIDGET-002"
+                  quantity: 1
+                  unit_price: 25.00
           negative_price_order:
             summary: Order with discount/refund items
             description: An order containing items with negative unit prices for discounts or refunds
             value:
               channel_id: 1
-              order_number: "ORD-2024-005"
+              order_number: "ORD-2024-006"
               order_date: "2024-01-15"
               order_status: "pending"
               customer_email: "customer@example.com"
@@ -531,6 +552,16 @@ post:
                   customer_email: "customer@example.com"
                   customer_username: "johndoe123"
                   customer_po_number: "PO-2024-5678"
+                  company_id: 123
+                  company:
+                    id: 123
+                    name: "Acme Corporation"
+                    status: "active"
+                    address: "123 Main Street"
+                    city: "Anytown"
+                    state: "CA"
+                    postal_code: "90210"
+                    country: "US"
                   bill_to:
                     name: "John Doe"
                     company: "Acme Corporation"
@@ -613,8 +644,8 @@ post:
                   order_number: ["Order number is required."]
                   order_date: ["Order date is required."]
                   order_status: ["Order status is required."]
-                  bill_to: ["Billing address is required."]
-                  ship_to: ["Shipping address is required."]
+                  bill_to: ["Billing address is required when company_id is not provided."]
+                  ship_to: ["Shipping address is required when company_id is not provided."]
                   items: ["At least one item is required."]
             duplicate_order_number:
               summary: Duplicate order number

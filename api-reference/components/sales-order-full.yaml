@@ -165,6 +165,15 @@ properties:
   customer_po_number:
     type: string
     description: Customer PO number
+  company_id:
+    type: integer
+    nullable: true
+    description: ID of the company (business account) associated with this sales order. Only present when a company is associated with the order.
+    example: 123
+  company:
+    $ref: './company.yaml'
+    nullable: true
+    description: Full company (business account) details associated with this sales order. Only present when a company is associated with the order.
   items:
     type: array
     items:
