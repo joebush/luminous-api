@@ -30,6 +30,28 @@ get:
     ### Float Filters
     - `retail_price`: Product retail price
     - `wholesale_price`: Product wholesale price
+    - `product_weight`: Product weight
+    - `product_length`: Product length
+    - `product_width`: Product width
+    - `product_height`: Product height
+    - `box_length`: Box length
+    - `box_width`: Box width
+    - `box_height`: Box height
+    - `carton_length`: Carton length
+    - `carton_width`: Carton width
+    - `carton_height`: Carton height
+    - `shipping_length`: Shipping length
+    - `shipping_width`: Shipping width
+    - `shipping_height`: Shipping height
+    - `pallet_length`: Pallet length
+    - `pallet_width`: Pallet width
+    - `pallet_height`: Pallet height
+    
+    ### String Filters (Dimension Weights)
+    - `box_weight`: Box weight
+    - `carton_weight`: Carton weight
+    - `shipping_weight`: Shipping weight
+    - `pallet_weight`: Pallet weight
     
     ### Boolean Filters
     - `sellable`: If the product is sellable or not
@@ -58,6 +80,13 @@ get:
     
     # Find products by supplier
     ?supplier.name[contains]=Acme
+    
+    # Find products by dimension filters
+    ?product_length[gt]=10.0&product_width[lt]=20.0
+    ?box_length[eq]=12.5
+    ?carton_height[gte]=10.0
+    ?shipping_length[lte]=18.0
+    ?pallet_width[gt]=40.0
     ```
   security:
     - BearerAuth: []
@@ -174,6 +203,122 @@ get:
       schema:
         type: integer
       description: Filter by Bill of Materials ID (returns products attached to the specified BOM)
+    - in: query
+      name: product_weight
+      schema:
+        type: number
+        format: float
+      description: Filter by product weight
+    - in: query
+      name: product_length
+      schema:
+        type: number
+        format: float
+      description: Filter by product length
+    - in: query
+      name: product_width
+      schema:
+        type: number
+        format: float
+      description: Filter by product width
+    - in: query
+      name: product_height
+      schema:
+        type: number
+        format: float
+      description: Filter by product height
+    - in: query
+      name: box_weight
+      schema:
+        type: string
+      description: Filter by box weight
+    - in: query
+      name: box_length
+      schema:
+        type: number
+        format: float
+      description: Filter by box length
+    - in: query
+      name: box_width
+      schema:
+        type: number
+        format: float
+      description: Filter by box width
+    - in: query
+      name: box_height
+      schema:
+        type: number
+        format: float
+      description: Filter by box height
+    - in: query
+      name: carton_weight
+      schema:
+        type: string
+      description: Filter by carton weight
+    - in: query
+      name: carton_length
+      schema:
+        type: number
+        format: float
+      description: Filter by carton length
+    - in: query
+      name: carton_width
+      schema:
+        type: number
+        format: float
+      description: Filter by carton width
+    - in: query
+      name: carton_height
+      schema:
+        type: number
+        format: float
+      description: Filter by carton height
+    - in: query
+      name: shipping_weight
+      schema:
+        type: string
+      description: Filter by shipping weight
+    - in: query
+      name: shipping_length
+      schema:
+        type: number
+        format: float
+      description: Filter by shipping length
+    - in: query
+      name: shipping_width
+      schema:
+        type: number
+        format: float
+      description: Filter by shipping width
+    - in: query
+      name: shipping_height
+      schema:
+        type: number
+        format: float
+      description: Filter by shipping height
+    - in: query
+      name: pallet_weight
+      schema:
+        type: string
+      description: Filter by pallet weight
+    - in: query
+      name: pallet_length
+      schema:
+        type: number
+        format: float
+      description: Filter by pallet length
+    - in: query
+      name: pallet_width
+      schema:
+        type: number
+        format: float
+      description: Filter by pallet width
+    - in: query
+      name: pallet_height
+      schema:
+        type: number
+        format: float
+      description: Filter by pallet height
   responses:
     '200':
       description: Successful response

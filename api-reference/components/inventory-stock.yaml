@@ -28,6 +28,18 @@ properties:
     type: number
     format: float
     description: Total quantity incoming across all locations
+  qty_backordered:
+    type: number
+    format: float
+    description: Total quantity backordered across all locations
+  qty_available_via_assembly:
+    type: number
+    format: float
+    description: Total quantity available via assembly across all locations
+  qty_recoverable_via_disassembly:
+    type: number
+    format: float
+    description: Total quantity recoverable via disassembly across all locations
   category_id:
     type: integer
     description: ID of the product category

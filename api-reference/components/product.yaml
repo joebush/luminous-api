@@ -38,6 +38,82 @@ properties:
     type: number
     format: float
     description: Height of the product
+  box_weight:
+    type: string
+    nullable: true
+    description: Weight of the box
+  box_length:
+    type: number
+    format: float
+    nullable: true
+    description: Length of the box
+  box_width:
+    type: number
+    format: float
+    nullable: true
+    description: Width of the box
+  box_height:
+    type: number
+    format: float
+    nullable: true
+    description: Height of the box
+  carton_weight:
+    type: string
+    nullable: true
+    description: Weight of the carton
+  carton_length:
+    type: number
+    format: float
+    nullable: true
+    description: Length of the carton
+  carton_width:
+    type: number
+    format: float
+    nullable: true
+    description: Width of the carton
+  carton_height:
+    type: number
+    format: float
+    nullable: true
+    description: Height of the carton
+  shipping_weight:
+    type: string
+    nullable: true
+    description: Shipping weight
+  shipping_length:
+    type: number
+    format: float
+    nullable: true
+    description: Shipping length
+  shipping_width:
+    type: number
+    format: float
+    nullable: true
+    description: Shipping width
+  shipping_height:
+    type: number
+    format: float
+    nullable: true
+    description: Shipping height
+  pallet_weight:
+    type: string
+    nullable: true
+    description: Weight of the pallet
+  pallet_length:
+    type: number
+    format: float
+    nullable: true
+    description: Length of the pallet
+  pallet_width:
+    type: number
+    format: float
+    nullable: true
+    description: Width of the pallet
+  pallet_height:
+    type: number
+    format: float
+    nullable: true
+    description: Height of the pallet
   sellable:
     type: boolean
     description: Whether the product can be sold
@@ -197,6 +273,82 @@ properties:
               type: number
               format: float
               description: Height of the product
+            box_weight:
+              type: string
+              nullable: true
+              description: Weight of the box
+            box_length:
+              type: number
+              format: float
+              nullable: true
+              description: Length of the box
+            box_width:
+              type: number
+              format: float
+              nullable: true
+              description: Width of the box
+            box_height:
+              type: number
+              format: float
+              nullable: true
+              description: Height of the box
+            carton_weight:
+              type: string
+              nullable: true
+              description: Weight of the carton
+            carton_length:
+              type: number
+              format: float
+              nullable: true
+              description: Length of the carton
+            carton_width:
+              type: number
+              format: float
+              nullable: true
+              description: Width of the carton
+            carton_height:
+              type: number
+              format: float
+              nullable: true
+              description: Height of the carton
+            shipping_weight:
+              type: string
+              nullable: true
+              description: Shipping weight
+            shipping_length:
+              type: number
+              format: float
+              nullable: true
+              description: Shipping length
+            shipping_width:
+              type: number
+              format: float
+              nullable: true
+              description: Shipping width
+            shipping_height:
+              type: number
+              format: float
+              nullable: true
+              description: Shipping height
+            pallet_weight:
+              type: string
+              nullable: true
+              description: Weight of the pallet
+            pallet_length:
+              type: number
+              format: float
+              nullable: true
+              description: Length of the pallet
+            pallet_width:
+              type: number
+              format: float
+              nullable: true
+              description: Width of the pallet
+            pallet_height:
+              type: number
+              format: float
+              nullable: true
+              description: Height of the pallet
             sellable:
               type: boolean
               description: Whether the product can be sold
