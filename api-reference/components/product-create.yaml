@@ -411,6 +411,55 @@ properties:
           description: Tags to associate with the variant
           items:
             type: string
+  type:
+    type: string
+    enum: [PRODUCT, KIT]
+    nullable: true
+    default: PRODUCT
+    description: Product type. PRODUCT for regular products, KIT for kit products that contain other products as components.
+  kit_items:
+    type: array
+    nullable: true
+    description: |
+      Array of kit items (components) for kit products. Required when type = KIT. 
+      Each kit item must specify either product_id or sku, and quantity.
+    items:
+      type: object
+      required:
+        - quantity
+      properties:
+        product_id:
+          type: integer
+          nullable: true
+          description: ID of the product component. Either product_id or sku must be provided.
+        sku:
+          type: string
+          nullable: true
+          description: SKU of the product component. Either product_id or sku must be provided.
+        quantity:
+          type: number
+          format: float
+          minimum: 0
+          description: Quantity of this component in the kit
+        uom_id:
+          type: integer
+          nullable: true
+          description: Unit of measure ID for the quantity. If not provided, defaults to the product's default selling unit.
+        price:
+          type: number
+          format: float
+          minimum: 0
+          nullable: true
+          description: Price for this kit item
+        original_price:
+          type: number
+          format: float
+          minimum: 0
+          nullable: true
+          description: Original price for this kit item
+      oneOf:
+        - required: [product_id]
+        - required: [sku]
   boms:
     type: array
     nullable: true

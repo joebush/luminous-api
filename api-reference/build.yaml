@@ -45,6 +45,10 @@ paths:
         - `sub_category.id`: Filter by sub-category ID
         - `supplier.id`: Filter by supplier ID
         - `bom.id`: Filter by Bill of Materials ID (returns products attached to the specified BOM)
+        - `kit_items.product_id`: Filter by kit item product ID (returns kit products that contain the specified product as a component)
+
+        ### Enum Filters
+        - `type`: Filter by product type (PRODUCT or KIT)
 
         ### Float Filters
         - `retail_price`: Product retail price
@@ -99,6 +103,13 @@ paths:
 
         # Find products by supplier
         ?supplier.name[contains]=Acme
+
+        # Find products by type
+        ?type=PRODUCT
+        ?type=KIT
+
+        # Find kit products that contain a specific product as a component
+        ?kit_items.product_id=123
 
         # Find products by dimension filters
         ?product_length[gt]=10.0&product_width[lt]=20.0
@@ -222,6 +233,19 @@ paths:
           schema:
             type: integer
           description: Filter by Bill of Materials ID (returns products attached to the specified BOM)
+        - in: query
+          name: kit_items.product_id
+          schema:
+            type: integer
+          description: Filter by kit item product ID (returns kit products that contain the specified product as a component)
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum:
+              - PRODUCT
+              - KIT
+          description: 'Filter by product type (PRODUCT for regular products, KIT for kit products)'
         - in: query
           name: product_weight
           schema:
@@ -800,6 +824,82 @@ paths:
                           type: object
                           nullable: true
                           description: Supplier information
+                        type:
+                          type: string
+                          enum:
+                            - PRODUCT
+                            - KIT
+                          description: 'Product type. PRODUCT for regular products, KIT for kit products that contain other products as components.'
+                        kit_items:
+                          type: array
+                          nullable: true
+                          description: Kit items (components) for kit products. Only present when type = KIT.
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: Unique identifier for the kit item
+                              product_id:
+                                type: integer
+                                description: ID of the product component
+                              quantity:
+                                type: number
+                                format: float
+                                description: Quantity of this component in the kit
+                              uom_id:
+                                type: integer
+                                description: Unit of measure ID for the quantity
+                              base_uom_quantity:
+                                type: number
+                                format: float
+                                description: Quantity converted to base unit of measure
+                              price:
+                                type: number
+                                format: float
+                                description: Price for this kit item
+                              original_price:
+                                type: number
+                                format: float
+                                description: Original price for this kit item
+                              total:
+                                type: number
+                                format: float
+                                description: Calculated total (quantity * price)
+                              product:
+                                type: object
+                                nullable: true
+                                description: Product information for this kit item (when loaded)
+                                properties:
+                                  id:
+                                    type: integer
+                                  name:
+                                    type: string
+                                  sku:
+                                    type: string
+                                  description:
+                                    type: string
+                                    nullable: true
+                                  retail_price:
+                                    type: number
+                                    format: float
+                                  wholesale_price:
+                                    type: number
+                                    format: float
+                              unit_of_measure:
+                                type: object
+                                nullable: true
+                                description: Unit of measure information (when loaded)
+                                properties:
+                                  id:
+                                    type: integer
+                                  name:
+                                    type: string
+                                  description:
+                                    type: string
+                                    nullable: true
+                                  base_unit:
+                                    type: boolean
                         boms:
                           type: array
                           description: BOMs (Bills of Materials) associated with this product
@@ -981,7 +1081,12 @@ paths:
       tags:
         - Products
       summary: Create a product
-      description: 'Create a new product with optional variants, custom fields, and tags'
+      description: |
+        Create a new product with optional variants, custom fields, and tags.
+
+        **Kit Products:**
+        When creating a kit product (type = KIT), the `kit_items` field is required and must contain at least one kit item.
+        Each kit item must specify either `product_id` or `sku`, along with a `quantity`.
       security:
         - BearerAuth: []
       requestBody:
@@ -1402,6 +1507,59 @@ paths:
                         description: Tags to associate with the variant
                         items:
                           type: string
+                type:
+                  type: string
+                  enum:
+                    - PRODUCT
+                    - KIT
+                  nullable: true
+                  default: PRODUCT
+                  description: 'Product type. PRODUCT for regular products, KIT for kit products that contain other products as components.'
+                kit_items:
+                  type: array
+                  nullable: true
+                  description: |
+                    Array of kit items (components) for kit products. Required when type = KIT. 
+                    Each kit item must specify either product_id or sku, and quantity.
+                  items:
+                    type: object
+                    required:
+                      - quantity
+                    properties:
+                      product_id:
+                        type: integer
+                        nullable: true
+                        description: ID of the product component. Either product_id or sku must be provided.
+                      sku:
+                        type: string
+                        nullable: true
+                        description: SKU of the product component. Either product_id or sku must be provided.
+                      quantity:
+                        type: number
+                        format: float
+                        minimum: 0
+                        description: Quantity of this component in the kit
+                      uom_id:
+                        type: integer
+                        nullable: true
+                        description: 'Unit of measure ID for the quantity. If not provided, defaults to the product''s default selling unit.'
+                      price:
+                        type: number
+                        format: float
+                        minimum: 0
+                        nullable: true
+                        description: Price for this kit item
+                      original_price:
+                        type: number
+                        format: float
+                        minimum: 0
+                        nullable: true
+                        description: Original price for this kit item
+                    oneOf:
+                      - required:
+                          - product_id
+                      - required:
+                          - sku
                 boms:
                   type: array
                   nullable: true
@@ -1870,6 +2028,82 @@ paths:
                         type: object
                         nullable: true
                         description: Supplier information
+                      type:
+                        type: string
+                        enum:
+                          - PRODUCT
+                          - KIT
+                        description: 'Product type. PRODUCT for regular products, KIT for kit products that contain other products as components.'
+                      kit_items:
+                        type: array
+                        nullable: true
+                        description: Kit items (components) for kit products. Only present when type = KIT.
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the kit item
+                            product_id:
+                              type: integer
+                              description: ID of the product component
+                            quantity:
+                              type: number
+                              format: float
+                              description: Quantity of this component in the kit
+                            uom_id:
+                              type: integer
+                              description: Unit of measure ID for the quantity
+                            base_uom_quantity:
+                              type: number
+                              format: float
+                              description: Quantity converted to base unit of measure
+                            price:
+                              type: number
+                              format: float
+                              description: Price for this kit item
+                            original_price:
+                              type: number
+                              format: float
+                              description: Original price for this kit item
+                            total:
+                              type: number
+                              format: float
+                              description: Calculated total (quantity * price)
+                            product:
+                              type: object
+                              nullable: true
+                              description: Product information for this kit item (when loaded)
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                sku:
+                                  type: string
+                                description:
+                                  type: string
+                                  nullable: true
+                                retail_price:
+                                  type: number
+                                  format: float
+                                wholesale_price:
+                                  type: number
+                                  format: float
+                            unit_of_measure:
+                              type: object
+                              nullable: true
+                              description: Unit of measure information (when loaded)
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                description:
+                                  type: string
+                                  nullable: true
+                                base_unit:
+                                  type: boolean
                       boms:
                         type: array
                         description: BOMs (Bills of Materials) associated with this product
@@ -2971,6 +3205,82 @@ paths:
                         type: object
                         nullable: true
                         description: Supplier information
+                      type:
+                        type: string
+                        enum:
+                          - PRODUCT
+                          - KIT
+                        description: 'Product type. PRODUCT for regular products, KIT for kit products that contain other products as components.'
+                      kit_items:
+                        type: array
+                        nullable: true
+                        description: Kit items (components) for kit products. Only present when type = KIT.
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the kit item
+                            product_id:
+                              type: integer
+                              description: ID of the product component
+                            quantity:
+                              type: number
+                              format: float
+                              description: Quantity of this component in the kit
+                            uom_id:
+                              type: integer
+                              description: Unit of measure ID for the quantity
+                            base_uom_quantity:
+                              type: number
+                              format: float
+                              description: Quantity converted to base unit of measure
+                            price:
+                              type: number
+                              format: float
+                              description: Price for this kit item
+                            original_price:
+                              type: number
+                              format: float
+                              description: Original price for this kit item
+                            total:
+                              type: number
+                              format: float
+                              description: Calculated total (quantity * price)
+                            product:
+                              type: object
+                              nullable: true
+                              description: Product information for this kit item (when loaded)
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                sku:
+                                  type: string
+                                description:
+                                  type: string
+                                  nullable: true
+                                retail_price:
+                                  type: number
+                                  format: float
+                                wholesale_price:
+                                  type: number
+                                  format: float
+                            unit_of_measure:
+                              type: object
+                              nullable: true
+                              description: Unit of measure information (when loaded)
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                description:
+                                  type: string
+                                  nullable: true
+                                base_unit:
+                                  type: boolean
                       boms:
                         type: array
                         description: BOMs (Bills of Materials) associated with this product
@@ -3612,6 +3922,82 @@ paths:
                         type: object
                         nullable: true
                         description: Supplier information
+                      type:
+                        type: string
+                        enum:
+                          - PRODUCT
+                          - KIT
+                        description: 'Product type. PRODUCT for regular products, KIT for kit products that contain other products as components.'
+                      kit_items:
+                        type: array
+                        nullable: true
+                        description: Kit items (components) for kit products. Only present when type = KIT.
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the kit item
+                            product_id:
+                              type: integer
+                              description: ID of the product component
+                            quantity:
+                              type: number
+                              format: float
+                              description: Quantity of this component in the kit
+                            uom_id:
+                              type: integer
+                              description: Unit of measure ID for the quantity
+                            base_uom_quantity:
+                              type: number
+                              format: float
+                              description: Quantity converted to base unit of measure
+                            price:
+                              type: number
+                              format: float
+                              description: Price for this kit item
+                            original_price:
+                              type: number
+                              format: float
+                              description: Original price for this kit item
+                            total:
+                              type: number
+                              format: float
+                              description: Calculated total (quantity * price)
+                            product:
+                              type: object
+                              nullable: true
+                              description: Product information for this kit item (when loaded)
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                sku:
+                                  type: string
+                                description:
+                                  type: string
+                                  nullable: true
+                                retail_price:
+                                  type: number
+                                  format: float
+                                wholesale_price:
+                                  type: number
+                                  format: float
+                            unit_of_measure:
+                              type: object
+                              nullable: true
+                              description: Unit of measure information (when loaded)
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                description:
+                                  type: string
+                                  nullable: true
+                                base_unit:
+                                  type: boolean
                       boms:
                         type: array
                         description: BOMs (Bills of Materials) associated with this product
@@ -4684,6 +5070,82 @@ paths:
                         type: object
                         nullable: true
                         description: Supplier information
+                      type:
+                        type: string
+                        enum:
+                          - PRODUCT
+                          - KIT
+                        description: 'Product type. PRODUCT for regular products, KIT for kit products that contain other products as components.'
+                      kit_items:
+                        type: array
+                        nullable: true
+                        description: Kit items (components) for kit products. Only present when type = KIT.
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique identifier for the kit item
+                            product_id:
+                              type: integer
+                              description: ID of the product component
+                            quantity:
+                              type: number
+                              format: float
+                              description: Quantity of this component in the kit
+                            uom_id:
+                              type: integer
+                              description: Unit of measure ID for the quantity
+                            base_uom_quantity:
+                              type: number
+                              format: float
+                              description: Quantity converted to base unit of measure
+                            price:
+                              type: number
+                              format: float
+                              description: Price for this kit item
+                            original_price:
+                              type: number
+                              format: float
+                              description: Original price for this kit item
+                            total:
+                              type: number
+                              format: float
+                              description: Calculated total (quantity * price)
+                            product:
+                              type: object
+                              nullable: true
+                              description: Product information for this kit item (when loaded)
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                sku:
+                                  type: string
+                                description:
+                                  type: string
+                                  nullable: true
+                                retail_price:
+                                  type: number
+                                  format: float
+                                wholesale_price:
+                                  type: number
+                                  format: float
+                            unit_of_measure:
+                              type: object
+                              nullable: true
+                              description: Unit of measure information (when loaded)
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                description:
+                                  type: string
+                                  nullable: true
+                                base_unit:
+                                  type: boolean
                       boms:
                         type: array
                         description: BOMs (Bills of Materials) associated with this product

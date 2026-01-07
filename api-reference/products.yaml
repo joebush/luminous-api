@@ -26,6 +26,10 @@ get:
     - `sub_category.id`: Filter by sub-category ID
     - `supplier.id`: Filter by supplier ID
     - `bom.id`: Filter by Bill of Materials ID (returns products attached to the specified BOM)
+    - `kit_items.product_id`: Filter by kit item product ID (returns kit products that contain the specified product as a component)
+    
+    ### Enum Filters
+    - `type`: Filter by product type (PRODUCT or KIT)
     
     ### Float Filters
     - `retail_price`: Product retail price
@@ -80,6 +84,13 @@ get:
     
     # Find products by supplier
     ?supplier.name[contains]=Acme
+    
+    # Find products by type
+    ?type=PRODUCT
+    ?type=KIT
+    
+    # Find kit products that contain a specific product as a component
+    ?kit_items.product_id=123
     
     # Find products by dimension filters
     ?product_length[gt]=10.0&product_width[lt]=20.0
@@ -203,6 +214,17 @@ get:
       schema:
         type: integer
       description: Filter by Bill of Materials ID (returns products attached to the specified BOM)
+    - in: query
+      name: kit_items.product_id
+      schema:
+        type: integer
+      description: Filter by kit item product ID (returns kit products that contain the specified product as a component)
+    - in: query
+      name: type
+      schema:
+        type: string
+        enum: [PRODUCT, KIT]
+      description: Filter by product type (PRODUCT for regular products, KIT for kit products)
     - in: query
       name: product_weight
       schema:
@@ -345,7 +367,12 @@ post:
   tags:
     - Products
   summary: Create a product
-  description: Create a new product with optional variants, custom fields, and tags
+  description: |
+    Create a new product with optional variants, custom fields, and tags.
+    
+    **Kit Products:**
+    When creating a kit product (type = KIT), the `kit_items` field is required and must contain at least one kit item.
+    Each kit item must specify either `product_id` or `sku`, along with a `quantity`.
   security:
     - BearerAuth: []
   requestBody:

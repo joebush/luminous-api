@@ -377,6 +377,80 @@ properties:
     type: object
     nullable: true
     description: Supplier information
+  type:
+    type: string
+    enum: [PRODUCT, KIT]
+    description: Product type. PRODUCT for regular products, KIT for kit products that contain other products as components.
+  kit_items:
+    type: array
+    nullable: true
+    description: Kit items (components) for kit products. Only present when type = KIT.
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the kit item
+        product_id:
+          type: integer
+          description: ID of the product component
+        quantity:
+          type: number
+          format: float
+          description: Quantity of this component in the kit
+        uom_id:
+          type: integer
+          description: Unit of measure ID for the quantity
+        base_uom_quantity:
+          type: number
+          format: float
+          description: Quantity converted to base unit of measure
+        price:
+          type: number
+          format: float
+          description: Price for this kit item
+        original_price:
+          type: number
+          format: float
+          description: Original price for this kit item
+        total:
+          type: number
+          format: float
+          description: Calculated total (quantity * price)
+        product:
+          type: object
+          nullable: true
+          description: Product information for this kit item (when loaded)
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            sku:
+              type: string
+            description:
+              type: string
+              nullable: true
+            retail_price:
+              type: number
+              format: float
+            wholesale_price:
+              type: number
+              format: float
+        unit_of_measure:
+          type: object
+          nullable: true
+          description: Unit of measure information (when loaded)
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            description:
+              type: string
+              nullable: true
+            base_unit:
+              type: boolean
   boms:
     type: array
     description: BOMs (Bills of Materials) associated with this product
