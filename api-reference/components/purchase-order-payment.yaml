@@ -1,0 +1,45 @@
+# components/purchase-order-payment.yaml
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier for the payment
+  payment_date:
+    type: string
+    format: date
+    description: Date of the payment
+  payment_type:
+    type: string
+    enum: [cash, credit_card, debit_card, check, bank_transfer]
+    description: Type of payment
+  paid_amount:
+    type: number
+    format: float
+    description: Amount paid
+  remarks:
+    type: string
+    nullable: true
+    description: Payment remarks or notes
+  external_id:
+    type: string
+    nullable: true
+    description: External payment reference ID
+  created_by:
+    type: object
+    description: User who created the payment
+    properties:
+      id:
+        type: integer
+        description: User ID
+      name:
+        type: string
+        nullable: true
+        description: User full name
+  created_at:
+    type: string
+    format: date-time
+    description: Timestamp when the payment was created
+  updated_at:
+    type: string
+    format: date-time
+    description: Timestamp when the payment was last updated

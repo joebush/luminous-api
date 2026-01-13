@@ -29,3 +29,157 @@ get:
         application/json:
           schema:
             $ref: './components/error.yaml'
+
+put:
+  operationId: updatePurchaseOrder
+  tags:
+    - Purchase Orders
+  summary: Update a purchase order
+  description: |
+    Update an existing purchase order. All fields are optional - only provided fields will be updated.
+    
+    ## Key Features
+    - Partial updates supported - only include fields you want to change
+    - Items can be added, updated, or removed
+    - If `items` array is provided, it replaces all existing items
+    - If `payments` array is provided, it replaces all existing payments
+    - Totals are automatically recalculated after updates
+    - Stock count updates - incoming quantities are automatically updated when items change
+    
+    ## Product Identification
+    For each line item, you must provide either:
+    - `product_id`: The internal product ID
+    - `sku`: The product SKU (supports both internal SKU and alternate SKUs)
+    
+    ## Updating Items
+    To update an existing item, include its `id` in the item object.
+    To add a new item, omit the `id` field.
+    To remove an item, omit it from the `items` array.
+    
+    ## Order Status Values
+    Valid order statuses include: `active`, `completed`, `deleted`
+    
+    ## Total Calculation
+    The order cost (`order_cost`) is automatically recalculated as:
+    `sum of (item quantities × unit prices)`
+    
+    The order total (`total_cost`) is automatically recalculated as:
+    `order_cost + total_tax + total_shipping_cost`
+    
+    Note: `order_cost`, `total_cost`, `total_paid`, and `total_due` are calculated automatically 
+    on the backend and cannot be edited directly.
+    
+    ## Payments
+    If `payments` array is provided, it replaces all existing payments for the order.
+    Totals are automatically recalculated after payments are updated.
+    
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+      description: ID of the purchase order to update
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: './components/purchase-order-create.yaml'
+        examples:
+          update_status:
+            summary: Update order status only
+            description: Update just the order status
+            value:
+              order_status: "completed"
+          update_items:
+            summary: Update items
+            description: Replace all items in the order
+            value:
+              items:
+                - id: 789
+                  quantity: 20
+                  unit_price: 49.99
+                - product_id: 456
+                  quantity: 5
+                  unit_price: 29.99
+          update_payments:
+            summary: Update payments
+            description: Replace all payments for the order
+            value:
+              payments:
+                - payment_date: "2024-01-15"
+                  payment_type: "check"
+                  paid_amount: 1000.00
+                  remarks: "Check #5678"
+  responses:
+    '200':
+      description: Purchase order updated successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/purchase-order-full.yaml'
+    '400':
+      description: Bad request - validation error
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '404':
+      description: Purchase order not found
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+
+delete:
+  operationId: deletePurchaseOrder
+  tags:
+    - Purchase Orders
+  summary: Delete a purchase order
+  description: |
+    Delete a purchase order. All associated stock counts and incoming quantities are automatically
+    adjusted when the order is deleted.
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+      description: ID of the purchase order to delete
+  responses:
+    '200':
+      description: Purchase order deleted successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Purchase order deleted successfully"
+    '404':
+      description: Purchase order not found
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'

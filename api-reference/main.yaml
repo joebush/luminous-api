@@ -37,6 +37,10 @@ paths:
     $ref: './purchase-order.yaml'
   /purchase-orders/items:
     $ref: './purchase-order-items.yaml'
+  /purchase-orders/{purchaseOrderId}/payments:
+    $ref: './purchase-order-payment-create.yaml'
+  /purchase-orders/{purchaseOrderId}/payments/{paymentId}:
+    $ref: './purchase-order-payment-update-delete.yaml'
   /inventory/adjustments:
     $ref: './inventory-adjustments.yaml'
   /inventory/stocks:

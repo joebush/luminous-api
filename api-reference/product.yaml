@@ -88,7 +88,7 @@ delete:
     - BearerAuth: []
   parameters:
     - in: path
-      name: productId
+      name: id
       required: true
       schema:
         type: integer

@@ -1,0 +1,162 @@
+# purchase-order-payment-update-delete.yaml
+put:
+  operationId: updatePurchaseOrderPayment
+  tags:
+    - Purchase Orders
+  summary: Update a purchase order payment
+  description: |
+    Update an existing payment for a purchase order. All fields are optional - only provided fields will be updated.
+    The purchase order totals (`total_paid` and `total_due`) are automatically recalculated after the payment is updated.
+    
+    ## Payment Types
+    Valid payment types: `cash`, `credit_card`, `debit_card`, `check`, `bank_transfer`
+    
+    ## Total Recalculation
+    After updating a payment, the system automatically:
+    - Recalculates `total_paid` by summing all payment amounts
+    - Recalculates `total_due` as `total_cost - total_paid`
+    
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: purchaseOrderId
+      required: true
+      schema:
+        type: integer
+      description: ID of the purchase order
+    - in: path
+      name: paymentId
+      required: true
+      schema:
+        type: integer
+      description: ID of the payment to update
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            payment_date:
+              type: string
+              format: date
+              description: Date of the payment (YYYY-MM-DD)
+              example: "2024-01-16"
+            payment_type:
+              type: string
+              enum: [cash, credit_card, debit_card, check, bank_transfer]
+              description: Type of payment
+              example: "check"
+            paid_amount:
+              type: number
+              format: float
+              minimum: 0.01
+              description: Amount paid
+              example: 600.00
+            remarks:
+              type: string
+              maxLength: 1000
+              nullable: true
+              description: Payment remarks or notes
+              example: "Updated check #1234"
+            external_id:
+              type: string
+              maxLength: 255
+              nullable: true
+              description: External payment reference ID
+              example: "PAY-EXT-12345"
+        examples:
+          update_amount:
+            summary: Update payment amount
+            value:
+              paid_amount: 600.00
+          update_all_fields:
+            summary: Update all payment fields
+            value:
+              payment_date: "2024-01-16"
+              payment_type: "bank_transfer"
+              paid_amount: 600.00
+              remarks: "Updated payment"
+              external_id: "PAY-EXT-12345"
+  responses:
+    '200':
+      description: Payment updated successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/purchase-order-full.yaml'
+    '400':
+      description: Bad request - validation error
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '404':
+      description: Purchase order or payment not found
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+
+delete:
+  operationId: deletePurchaseOrderPayment
+  tags:
+    - Purchase Orders
+  summary: Delete a purchase order payment
+  description: |
+    Delete a payment from a purchase order. The purchase order totals (`total_paid` and `total_due`) 
+    are automatically recalculated after the payment is deleted.
+    
+    ## Total Recalculation
+    After deleting a payment, the system automatically:
+    - Recalculates `total_paid` by summing all remaining payment amounts
+    - Recalculates `total_due` as `total_cost - total_paid`
+    
+  security:
+    - BearerAuth: []
+  parameters:
+    - in: path
+      name: purchaseOrderId
+      required: true
+      schema:
+        type: integer
+      description: ID of the purchase order
+    - in: path
+      name: paymentId
+      required: true
+      schema:
+        type: integer
+      description: ID of the payment to delete
+  responses:
+    '200':
+      description: Payment deleted successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Payment deleted successfully"
+    '404':
+      description: Purchase order or payment not found
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'

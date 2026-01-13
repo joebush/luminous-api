@@ -12,7 +12,7 @@ get:
     ## Available Filters
 
     ### String Filters
-    - `order_number`: Purchase order reference number
+    - `order_numbers`: Purchase order numbers (alternate IDs) - searches across all order numbers
     - `public_note`: Public notes content
     - `private_note`: Private notes content
     - `tag`: Order tags
@@ -29,15 +29,14 @@ get:
     
     ### Numeric Filters
     - `order_quantity`: Total number of items ordered
-    - `order_cost`: Base cost before tax and shipping
+    - `order_cost`: Base cost before tax and shipping (calculated from line items)
     - `total_cost`: Total cost including tax and shipping
     - `total_tax`: Tax amount
     - `total_shipping_cost`: Shipping cost
     - `total_paid`: Amount paid
-    - `total_qty_ordered`: Total quantity of line items ordered
-    - `total_qty_received`: Total quantity of line items received
+    - `total_qty_ordered`: Total quantity of line items ordered (sum of `ordered_qty` from all items)
+    - `total_qty_received`: Total quantity of line items received (sum of `received_qty` from all items)
     - `total_qty_remaining`: Total quantity of line items remaining to be received (ordered - received)
-    - `down_payment`: Down payment amount
     
     ### Boolean Filters
     - `starred`: Whether the order is starred
@@ -57,6 +56,12 @@ get:
 
     # Find starred orders from a specific supplier
     ?starred=1&supplier_id=123
+
+    # Find orders by order number
+    ?order_numbers=PO-2024-001
+
+    # Find orders with remaining quantity greater than 0
+    ?total_qty_remaining[gt]=0
 
     # Find recent orders with specific shipping costs
     ?total_shipping_cost=50.00&created_at[gte]=2024-10-25 00:00:00
@@ -79,10 +84,10 @@ get:
       description: Number of items per page (max 100)
     # String Filters
     - in: query
-      name: order_number
+      name: order_numbers
       schema:
         type: string
-      description: Filter by order number
+      description: Filter by purchase order numbers (alternate IDs). Searches across all order numbers associated with the purchase order.
     - in: query
       name: public_note
       schema:
@@ -138,10 +143,15 @@ get:
       description: Filter by last update date (YYYY-MM-DD HH:mm:ss)
     # Numeric Filters
     - in: query
+      name: order_quantity
+      schema:
+        type: number
+      description: Filter by total number of items ordered
+    - in: query
       name: total_qty_ordered
       schema:
         type: number
-      description: Filter by total quantity of line items ordered
+      description: Filter by total quantity of line items ordered (sum of `ordered_qty` from all items)
     - in: query
       name: total_qty_received
       schema:
@@ -177,11 +187,6 @@ get:
       schema:
         type: number
       description: Filter by amount paid
-    - in: query
-      name: down_payment
-      schema:
-        type: number
-      description: Filter by down payment amount
     # Boolean Filters
     - in: query
       name: starred
@@ -225,6 +230,139 @@ get:
                   $ref: './components/purchase-order.yaml'
               meta:
                 $ref: './components/pagination-meta.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
+
+post:
+  operationId: createPurchaseOrder
+  tags:
+    - Purchase Orders
+  summary: Create a new purchase order
+  description: |
+    Create a new purchase order with items, payments, and optional metadata.
+    
+    ## Key Features
+    - Create orders with multiple line items
+    - Support for both product ID and SKU lookup for items
+    - Automatic product name and details population
+    - Optional payments - can include payments when creating the order
+    - Optional shipping address (`ship_to`) information
+    - Optional custom fields and tags at both order and order item level
+    - Automatic total calculation from line items plus tax/shipping
+    - Stock count updates - incoming quantities are automatically updated
+    
+    ## Product Identification
+    For each line item, you must provide either:
+    - `product_id`: The internal product ID
+    - `sku`: The product SKU (supports both internal SKU and alternate SKUs)
+    
+    ## Order Status Values
+    Valid order statuses include: `active`, `completed`, `deleted`
+    Defaults to `active` if not provided.
+    
+    ## Total Calculation
+    The order cost (`order_cost`) is automatically calculated as:
+    `sum of (item quantities × unit prices)`
+    
+    The order total (`total_cost`) is automatically calculated as:
+    `order_cost + total_tax + total_shipping_cost`
+    
+    Note: `order_cost`, `total_cost`, `total_paid`, and `total_due` are calculated automatically 
+    on the backend and cannot be edited directly.
+    
+    ## Payments
+    If `payments` array is provided, it replaces all existing payments for the order.
+    Totals are automatically recalculated after payments are updated.
+    
+  security:
+    - BearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: './components/purchase-order-create.yaml'
+        examples:
+          minimal_order:
+            summary: Minimal required fields
+            description: A basic purchase order with only required fields
+            value:
+              order_date: "2024-01-15"
+              supplier_id: 123
+              items:
+                - product_id: 456
+                  quantity: 10
+                  unit_price: 49.99
+          complete_order:
+            summary: Complete order with all fields
+            description: A comprehensive purchase order demonstrating all available fields
+            value:
+              order_date: "2024-01-15"
+              supplier_id: 123
+              warehouse_id: 1
+              location_id: 1
+              order_status: "active"
+              order_numbers: ["PO-2024-001", "SUPPLIER-PO-123"]
+              invoice_date: "2024-01-16"
+              total_shipping_cost: 50.00
+              total_tax: 80.00
+              public_note: "Please ship via express delivery"
+              private_note: "Rush order - expedite processing"
+              requested_ship_date: "2024-01-20"
+              arrival_due_date: "2024-01-25"
+              ship_to:
+                address_1: "123 Main Street"
+                address_2: "Suite 100"
+                city: "Anytown"
+                state: "CA"
+                zip: "90210"
+                country: "United States"
+                default_ship_to_address: "warehouse"
+              items:
+                - product_id: 456
+                  quantity: 10
+                  unit_price: 49.99
+                  ordered_qty: 10
+                  received_qty: 0
+                  uom_id: 1
+                  source_sku: "SUPPLIER-SKU-123"
+                  tags: ["priority", "fragile"]
+                  custom_fields:
+                    "Lot Number": "LOT-12345"
+                - sku: "WIDGET-001"
+                  quantity: 5
+                  unit_price: 29.99
+                  lot_id: 789
+              payments:
+                - payment_date: "2024-01-15"
+                  payment_type: "check"
+                  paid_amount: 500.00
+                  remarks: "Check #1234"
+                  external_id: "PAY-EXT-12345"
+              custom_fields:
+                "Customer PO": "PO-98765"
+                "Priority Level": "High"
+              tags: ["urgent", "priority", "rush-order"]
+  responses:
+    '201':
+      description: Purchase order created successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/purchase-order-full.yaml'
+    '400':
+      description: Bad request - validation error
+      content:
+        application/json:
+          schema:
+            $ref: './components/error.yaml'
     '401':
       description: Unauthorized
       content:

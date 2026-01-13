@@ -219,6 +219,63 @@ properties:
       updated_at:
         type: string
         format: date-time
+  payments:
+    type: array
+    description: Array of payments for this purchase order
+    items:
+      $ref: './purchase-order-payment.yaml'
+  ship_to:
+    type: object
+    nullable: true
+    description: Shipping address information
+    properties:
+      address_1:
+        type: string
+        nullable: true
+        description: Primary street address
+      address_2:
+        type: string
+        nullable: true
+        description: Secondary address line
+      city:
+        type: string
+        nullable: true
+        description: City name
+      state:
+        type: string
+        nullable: true
+        description: State or province
+      zip:
+        type: string
+        nullable: true
+        description: ZIP or postal code
+      country:
+        type: string
+        nullable: true
+        description: Country name
+      default_ship_to_address:
+        type: string
+        enum: [ship_to_address, warehouse]
+        nullable: true
+        description: Default shipping address preference
+  warehouse:
+    type: object
+    nullable: true
+    description: Warehouse information
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+  location:
+    type: object
+    nullable: true
+    description: Location information
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
   tags:
     type: array
     items:
