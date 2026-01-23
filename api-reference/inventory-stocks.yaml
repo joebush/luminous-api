@@ -9,6 +9,36 @@ get:
     For detailed information about the filtering system and available operators, 
     refer to the [Filter System Documentation](/filters).
 
+    ## ⚠️ Important: Default Sorting and Pagination
+
+    **By default, results are sorted by `updated_at` in descending order.** This field changes frequently as stock levels are updated, which can cause issues when paginating through results:
+    
+    - Items may be skipped or duplicated between pages
+    - The same item may appear on multiple pages
+    - Some items may never appear if they're updated while you're paginating
+    
+    **Recommendation:** When pulling all stocks or paginating through large datasets, use a more stable sort field such as:
+    - `product.id:asc` - Sort by product ID (most stable)
+    - `product.sku:asc` - Sort by product SKU
+    - `product.name:asc` - Sort by product name
+    
+    Example: `?sort=product.id:asc&per_page=100`
+
+    ## Available Sort Fields
+
+    - `product.id` - Sort by product ID
+    - `product.sku` - Sort by product SKU
+    - `product.name` - Sort by product name
+    - `updated_at` - Sort by last stock update date (default: `updated_at:desc`)
+
+    Sort format: `field:direction` where direction is `asc` (ascending) or `desc` (descending).
+    
+    Examples:
+    - `?sort=product.id:asc` - Sort by product ID ascending
+    - `?sort=product.sku:desc` - Sort by product SKU descending
+    - `?sort=product.name:asc` - Sort by product name ascending
+    - `?sort=updated_at:asc` - Sort by update date ascending (overrides default)
+
     ## Available Filters
     ### Inventory Filters
     - `location`: Filter by location ID
@@ -131,6 +161,22 @@ get:
     
     # Search across multiple product fields
     ?product.q[contains]=laptop
+    
+    # Sort examples (recommended for pagination)
+    # Sort by product ID for stable pagination
+    ?sort=product.id:asc&per_page=100
+    
+    # Sort by product SKU
+    ?sort=product.sku:asc
+    
+    # Sort by product name
+    ?sort=product.name:asc
+    
+    # Sort by update date ascending (overrides default DESC)
+    ?sort=updated_at:asc
+    
+    # Combine sorting with filters
+    ?product.category.id[eq]=5&sort=product.name:asc&per_page=50
     ```
   security:
     - BearerAuth: []
@@ -147,6 +193,28 @@ get:
         type: integer
         default: 100
       description: Number of items per page
+    - in: query
+      name: sort
+      schema:
+        type: string
+        default: 'updated_at:desc'
+      description: |
+        Sort results by field and direction. Format: `field:direction`
+        
+        **⚠️ Warning:** Default sorting by `updated_at` changes frequently and can cause pagination issues. 
+        For stable pagination, use `product.id:asc`, `product.sku:asc`, or `product.name:asc`.
+        
+        Available sort fields:
+        - `product.id` - Product ID
+        - `product.sku` - Product SKU
+        - `product.name` - Product name
+        - `updated_at` - Last stock update date (default)
+        
+        Examples:
+        - `product.id:asc` - Sort by product ID ascending
+        - `product.sku:desc` - Sort by product SKU descending
+        - `product.name:asc` - Sort by product name ascending
+        - `updated_at:asc` - Sort by update date ascending
     - in: query
       name: location
       schema:
