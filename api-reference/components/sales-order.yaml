@@ -88,6 +88,11 @@ properties:
     type: string
     format: date
     description: Hold until date
+  earliest_ship_date:
+    type: string
+    format: date
+    nullable: true
+    description: Earliest date the order can be shipped
   user_id:
     type: integer
     description: User ID associated with the order

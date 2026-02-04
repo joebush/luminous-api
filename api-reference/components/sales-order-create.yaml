@@ -219,6 +219,12 @@ properties:
     nullable: true
     description: Required ship by date (YYYY-MM-DD)
     example: "2024-01-25"
+  earliest_ship_date:
+    type: string
+    format: date
+    nullable: true
+    description: Earliest date the order can be shipped (YYYY-MM-DD)
+    example: "2024-01-18"
   total_tax:
     type: number
     format: float

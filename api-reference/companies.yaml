@@ -4,10 +4,23 @@ get:
     - Companies
   summary: Companies
   description: |
-    Get a paginated list of companies with optional filtering.
+    Get a paginated list of companies with optional filtering and sorting.
     
     For detailed information about the filtering system and available operators, 
     refer to the [Filter System Documentation](/filters).
+
+    ## Available Sort Fields
+
+    - `id` - Sort by company ID
+    - `created_at` - Sort by creation date (default: `updated_at:desc`)
+    - `updated_at` - Sort by last update date (default: `updated_at:desc`)
+
+    Sort format: `field:direction` where direction is `asc` (ascending) or `desc` (descending).
+    
+    Examples:
+    - `?sort=id:asc` - Sort by ID ascending
+    - `?sort=created_at:desc` - Sort by creation date descending
+    - `?sort=updated_at:asc` - Sort by update date ascending
 
     ## Available Filters
     ### String Filters
@@ -90,6 +103,23 @@ get:
   parameters:
     - $ref: './components/parameters/page.yaml'
     - $ref: './components/parameters/limit.yaml'
+    - in: query
+      name: sort
+      schema:
+        type: string
+        default: 'updated_at:desc'
+      description: |
+        Sort results by field and direction. Format: `field:direction`
+        
+        Available sort fields:
+        - `id` - Company ID
+        - `created_at` - Creation date
+        - `updated_at` - Last update date (default)
+        
+        Examples:
+        - `id:asc` - Sort by ID ascending
+        - `created_at:desc` - Sort by creation date descending
+        - `updated_at:asc` - Sort by update date ascending
     - in: query
       name: name
       schema:

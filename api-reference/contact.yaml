@@ -1,0 +1,189 @@
+get:
+  operationId: getContactById
+  tags:
+    - Contacts
+  summary: Single contact
+  description: Get detailed information for a specific contact by ID
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: contactId
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: The unique identifier of the contact
+  responses:
+    '200':
+      description: Contact details
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/contact.yaml'
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml'
+    '404':
+      $ref: './components/responses/not-found.yaml'
+
+post:
+  operationId: updateContact
+  tags:
+    - Contacts
+  summary: Update a contact
+  description: |
+    Update an existing contact's information. **All fields are optional**, allowing partial updates.
+    
+    ## Update Behavior
+    
+    - **No fields are required** - you can update just one field or multiple fields
+    - Only fields provided in the request will be updated; all other fields remain unchanged
+    - `company_id` is optional - if not provided, the existing company association will be preserved
+    - If `company_id` is provided, it must be a valid, non-empty integer that exists in the system
+    - Changing the `company_id` will move the contact to the new company
+    
+    ## Examples
+    
+    ```
+    # Update only email
+    POST /contacts/123
+    {
+      "email": "newemail@example.com"
+    }
+    
+    # Update multiple fields
+    POST /contacts/123
+    {
+      "first_name": "Updated",
+      "last_name": "Name",
+      "phone_1": "555-1234"
+    }
+    
+    # Change company association
+    POST /contacts/123
+    {
+      "company_id": 456
+    }
+    
+    # Update without changing company (company_id omitted)
+    POST /contacts/123
+    {
+      "email": "updated@example.com",
+      "is_primary": true
+    }
+    ```
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: contactId
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: The unique identifier of the contact
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: './components/contact-update.yaml'
+        examples:
+          partial_update_email:
+            summary: Update only email
+            description: Update just the email address, leaving all other fields unchanged
+            value:
+              email: "newemail@example.com"
+          partial_update_name:
+            summary: Update name fields
+            description: Update first and last name without changing other fields
+            value:
+              first_name: "Updated"
+              last_name: "Name"
+          change_company:
+            summary: Change company association
+            description: Move contact to a different company
+            value:
+              company_id: 456
+          multiple_fields:
+            summary: Update multiple fields
+            description: Update several fields at once
+            value:
+              first_name: "John"
+              last_name: "Doe"
+              email: "john.doe@example.com"
+              phone_1: "555-1234"
+              is_primary: true
+          empty_request:
+            summary: Empty request body
+            description: Send an empty object - no fields will be updated (request will succeed)
+            value: {}
+  responses:
+    '200':
+      description: Contact successfully updated
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: './components/contact.yaml'
+    '422':
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: './components/validation-error.yaml'
+          examples:
+            invalid_email:
+              summary: Invalid email format
+              value:
+                message: "The given data was invalid."
+                errors:
+                  email: ["The email must be a valid email address."]
+            invalid_company_id:
+              summary: Invalid company ID
+              value:
+                message: "The given data was invalid."
+                errors:
+                  company_id: ["The specified company does not exist."]
+            empty_company_id:
+              summary: Empty company ID
+              value:
+                message: "The given data was invalid."
+                errors:
+                  company_id: ["Company ID cannot be empty if provided."]
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml'
+    '404':
+      $ref: './components/responses/not-found.yaml'
+
+delete:
+  operationId: deleteContact
+  tags:
+    - Contacts
+  summary: Delete a contact
+  description: Delete a contact by ID. This performs a soft delete by setting the contact status to inactive.
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: contactId
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: The unique identifier of the contact
+  responses:
+    '204':
+      description: Contact successfully deleted
+    '401':
+      $ref: './components/responses/unauthorized.yaml'
+    '403':
+      $ref: './components/responses/forbidden.yaml'
+    '404':
+      $ref: './components/responses/not-found.yaml'

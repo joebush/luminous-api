@@ -91,6 +91,8 @@ paths:
     $ref: './company-products.yaml'
   /contacts:
     $ref: './contacts.yaml'
+  /contacts/{contactId}:
+    $ref: './contact.yaml'
   /price-schedules:
     $ref: './price-schedules.yaml'
   /price-schedules/{scheduleId}:

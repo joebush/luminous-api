@@ -387,6 +387,7 @@ post:
               ship_date: "2024-01-20"
               hold_until_date: "2024-01-18"
               ship_by_date: "2024-01-25"
+              earliest_ship_date: "2024-01-18"
               total_tax: 15.75
               total_shipping: 12.50
               requested_shipping_service: "FedEx Ground"
@@ -592,6 +593,7 @@ post:
                   ship_date: "2024-01-20"
                   hold_until_date: "2024-01-18" 
                   ship_by_date: "2024-01-25"
+                  earliest_ship_date: "2024-01-18"
                   externally_fulfilled: false
                   is_posted: false
                   source: "external_api"

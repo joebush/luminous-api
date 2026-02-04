@@ -13513,6 +13513,11 @@ paths:
                           type: string
                           format: date
                           description: Hold until date
+                        earliest_ship_date:
+                          type: string
+                          format: date
+                          nullable: true
+                          description: Earliest date the order can be shipped
                         user_id:
                           type: integer
                           description: User ID associated with the order
@@ -14690,6 +14695,12 @@ paths:
                   nullable: true
                   description: Required ship by date (YYYY-MM-DD)
                   example: '2024-01-25'
+                earliest_ship_date:
+                  type: string
+                  format: date
+                  nullable: true
+                  description: Earliest date the order can be shipped (YYYY-MM-DD)
+                  example: '2024-01-18'
                 total_tax:
                   type: number
                   format: float
@@ -14855,6 +14866,7 @@ paths:
                   ship_date: '2024-01-20'
                   hold_until_date: '2024-01-18'
                   ship_by_date: '2024-01-25'
+                  earliest_ship_date: '2024-01-18'
                   total_tax: 15.75
                   total_shipping: 12.5
                   requested_shipping_service: FedEx Ground
@@ -15090,6 +15102,11 @@ paths:
                         type: string
                         format: date
                         description: Hold until date
+                      earliest_ship_date:
+                        type: string
+                        format: date
+                        nullable: true
+                        description: Earliest date the order can be shipped
                       user_id:
                         type: integer
                         description: User ID associated with the order
@@ -16222,6 +16239,7 @@ paths:
                       ship_date: '2024-01-20'
                       hold_until_date: '2024-01-18'
                       ship_by_date: '2024-01-25'
+                      earliest_ship_date: '2024-01-18'
                       externally_fulfilled: false
                       is_posted: false
                       source: external_api
@@ -16440,6 +16458,11 @@ paths:
                         type: string
                         format: date
                         description: Hold until date
+                      earliest_ship_date:
+                        type: string
+                        format: date
+                        nullable: true
+                        description: Earliest date the order can be shipped
                       user_id:
                         type: integer
                         description: User ID associated with the order
@@ -21019,10 +21042,23 @@ paths:
         - Companies
       summary: Companies
       description: |
-        Get a paginated list of companies with optional filtering.
+        Get a paginated list of companies with optional filtering and sorting.
 
         For detailed information about the filtering system and available operators, 
         refer to the [Filter System Documentation](/filters).
+
+        ## Available Sort Fields
+
+        - `id` - Sort by company ID
+        - `created_at` - Sort by creation date (default: `updated_at:desc`)
+        - `updated_at` - Sort by last update date (default: `updated_at:desc`)
+
+        Sort format: `field:direction` where direction is `asc` (ascending) or `desc` (descending).
+
+        Examples:
+        - `?sort=id:asc` - Sort by ID ascending
+        - `?sort=created_at:desc` - Sort by creation date descending
+        - `?sort=updated_at:asc` - Sort by update date ascending
 
         ## Available Filters
         ### String Filters
@@ -21118,6 +21154,23 @@ paths:
             minimum: 1
             maximum: 100
           description: Number of items per page (max 100)
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: 'updated_at:desc'
+          description: |
+            Sort results by field and direction. Format: `field:direction`
+
+            Available sort fields:
+            - `id` - Company ID
+            - `created_at` - Creation date
+            - `updated_at` - Last update date (default)
+
+            Examples:
+            - `id:asc` - Sort by ID ascending
+            - `created_at:desc` - Sort by creation date descending
+            - `updated_at:asc` - Sort by update date ascending
         - in: query
           name: name
           schema:
@@ -24853,10 +24906,23 @@ paths:
         - Contacts
       summary: Contacts
       description: |
-        Get a paginated list of all contacts with optional filtering.
+        Get a paginated list of all contacts with optional filtering and sorting.
 
         For detailed information about the filtering system and available operators, 
         refer to the [Filter System Documentation](/filters).
+
+        ## Available Sort Fields
+
+        - `id` - Sort by contact ID
+        - `created_at` - Sort by creation date (default: `updated_at:desc`)
+        - `updated_at` - Sort by last update date (default: `updated_at:desc`)
+
+        Sort format: `field:direction` where direction is `asc` (ascending) or `desc` (descending).
+
+        Examples:
+        - `?sort=id:asc` - Sort by ID ascending
+        - `?sort=created_at:desc` - Sort by creation date descending
+        - `?sort=updated_at:asc` - Sort by update date ascending
 
         ## Available Filters
         ### String Filters
@@ -24906,6 +24972,23 @@ paths:
             minimum: 1
             maximum: 100
           description: Number of items per page (max 100)
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: 'updated_at:desc'
+          description: |
+            Sort results by field and direction. Format: `field:direction`
+
+            Available sort fields:
+            - `id` - Contact ID
+            - `created_at` - Creation date
+            - `updated_at` - Last update date (default)
+
+            Examples:
+            - `id:asc` - Sort by ID ascending
+            - `created_at:desc` - Sort by creation date descending
+            - `updated_at:asc` - Sort by update date ascending
         - in: query
           name: first_name
           schema:
@@ -25093,6 +25176,790 @@ paths:
                   status_code:
                     type: integer
                     example: 403
+    post:
+      operationId: createContact
+      tags:
+        - Contacts
+      summary: Create a contact
+      description: |
+        Create a new contact. Only `first_name` and `company_id` are required fields.
+
+        All other fields are optional and can be provided when creating the contact or updated later.
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - first_name
+                - company_id
+              properties:
+                first_name:
+                  type: string
+                  maxLength: 255
+                  description: Contact's first name
+                  example: John
+                last_name:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Contact's last name
+                  example: Smith
+                company_id:
+                  type: integer
+                  description: ID of the company this contact belongs to
+                  example: 123
+                email:
+                  type: string
+                  format: email
+                  maxLength: 255
+                  nullable: true
+                  description: Contact's email address
+                  example: john.smith@acmecorp.com
+                phone_1:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Contact's primary phone number
+                  example: 555-987-6543
+                phone_2:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Contact's secondary phone number
+                  example: 555-555-5555
+                receiving_bank_name:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Bank name for receiving payments
+                receiving_bank_address:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Bank address for receiving payments
+                is_primary:
+                  type: boolean
+                  nullable: true
+                  description: Whether this is the primary contact for the company
+                  example: false
+                receive_quotation_pdf:
+                  type: boolean
+                  nullable: true
+                  description: Whether the contact should receive quotation PDFs
+                  example: false
+                receive_purchase_order_pdf:
+                  type: boolean
+                  nullable: true
+                  description: Whether the contact should receive purchase order PDFs
+                  example: false
+                receive_purchase_order_invoice_pdf:
+                  type: boolean
+                  nullable: true
+                  description: Whether the contact should receive purchase order invoice PDFs
+                  example: false
+                tags:
+                  type: array
+                  nullable: true
+                  description: Tags to associate with the contact
+                  items:
+                    type: string
+                    maxLength: 255
+                  example:
+                    - sales
+                    - primary
+      responses:
+        '201':
+          description: Contact successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: Unique identifier for the contact
+                        example: '789123'
+                      created_at:
+                        type: string
+                        format: date-time
+                        description: When the contact was created
+                        example: '2023-03-15T14:30:00Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        description: When the contact was last updated
+                        example: '2023-03-15T14:30:00Z'
+                      status:
+                        type: string
+                        description: Current status of the contact
+                        example: active
+                      first_name:
+                        type: string
+                        description: Contact's first name
+                        example: John
+                      last_name:
+                        type: string
+                        description: Contact's last name
+                        example: Smith
+                      email:
+                        type: string
+                        format: email
+                        description: Contact's email address
+                        example: john.smith@acmecorp.com
+                      phone:
+                        type: string
+                        description: Contact's primary phone number
+                        example: 555-987-6543
+                      phone_2:
+                        type: string
+                        description: Contact's secondary phone number
+                        example: 555-555-5555
+                      full_name:
+                        type: string
+                        description: Contact's full name
+                        example: John Smith
+                      company_id:
+                        type: string
+                        description: ID of the company this contact belongs to
+                        example: '123456'
+                      company:
+                        type: object
+                        description: Company information for this contact
+                        properties:
+                          id:
+                            type: string
+                            example: '123456'
+                          name:
+                            type: string
+                            example: Acme Corporation
+                      is_primary:
+                        type: boolean
+                        description: Whether this is the primary contact for the company
+                        example: true
+                      receive_quotation_pdf:
+                        type: boolean
+                        description: Whether the contact should receive quotation PDFs
+                        example: false
+                      receive_purchase_order_pdf:
+                        type: boolean
+                        description: Whether the contact should receive purchase order PDFs
+                        example: false
+                      receive_purchase_order_invoice_pdf:
+                        type: boolean
+                        description: Whether the contact should receive purchase order invoice PDFs
+                        example: false
+        '401':
+          description: Authentication credentials were missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+                  message:
+                    type: string
+                    example: Authentication credentials are missing or invalid
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: You do not have permission to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Forbidden
+                  message:
+                    type: string
+                    example: You do not have permission to access this resource
+                  status_code:
+                    type: integer
+                    example: 403
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+  '/contacts/{contactId}':
+    get:
+      operationId: getContactById
+      tags:
+        - Contacts
+      summary: Single contact
+      description: Get detailed information for a specific contact by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the contact
+      responses:
+        '200':
+          description: Contact details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: Unique identifier for the contact
+                        example: '789123'
+                      created_at:
+                        type: string
+                        format: date-time
+                        description: When the contact was created
+                        example: '2023-03-15T14:30:00Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        description: When the contact was last updated
+                        example: '2023-03-15T14:30:00Z'
+                      status:
+                        type: string
+                        description: Current status of the contact
+                        example: active
+                      first_name:
+                        type: string
+                        description: Contact's first name
+                        example: John
+                      last_name:
+                        type: string
+                        description: Contact's last name
+                        example: Smith
+                      email:
+                        type: string
+                        format: email
+                        description: Contact's email address
+                        example: john.smith@acmecorp.com
+                      phone:
+                        type: string
+                        description: Contact's primary phone number
+                        example: 555-987-6543
+                      phone_2:
+                        type: string
+                        description: Contact's secondary phone number
+                        example: 555-555-5555
+                      full_name:
+                        type: string
+                        description: Contact's full name
+                        example: John Smith
+                      company_id:
+                        type: string
+                        description: ID of the company this contact belongs to
+                        example: '123456'
+                      company:
+                        type: object
+                        description: Company information for this contact
+                        properties:
+                          id:
+                            type: string
+                            example: '123456'
+                          name:
+                            type: string
+                            example: Acme Corporation
+                      is_primary:
+                        type: boolean
+                        description: Whether this is the primary contact for the company
+                        example: true
+                      receive_quotation_pdf:
+                        type: boolean
+                        description: Whether the contact should receive quotation PDFs
+                        example: false
+                      receive_purchase_order_pdf:
+                        type: boolean
+                        description: Whether the contact should receive purchase order PDFs
+                        example: false
+                      receive_purchase_order_invoice_pdf:
+                        type: boolean
+                        description: Whether the contact should receive purchase order invoice PDFs
+                        example: false
+        '401':
+          description: Authentication credentials were missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+                  message:
+                    type: string
+                    example: Authentication credentials are missing or invalid
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: You do not have permission to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Forbidden
+                  message:
+                    type: string
+                    example: You do not have permission to access this resource
+                  status_code:
+                    type: integer
+                    example: 403
+        '404':
+          description: The requested resource was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Not Found
+                  message:
+                    type: string
+                    example: The requested resource could not be found
+                  status_code:
+                    type: integer
+                    example: 404
+    post:
+      operationId: updateContact
+      tags:
+        - Contacts
+      summary: Update a contact
+      description: |
+        Update an existing contact's information. **All fields are optional**, allowing partial updates.
+
+        ## Update Behavior
+
+        - **No fields are required** - you can update just one field or multiple fields
+        - Only fields provided in the request will be updated; all other fields remain unchanged
+        - `company_id` is optional - if not provided, the existing company association will be preserved
+        - If `company_id` is provided, it must be a valid, non-empty integer that exists in the system
+        - Changing the `company_id` will move the contact to the new company
+
+        ## Examples
+
+        ```
+        # Update only email
+        POST /contacts/123
+        {
+          "email": "newemail@example.com"
+        }
+
+        # Update multiple fields
+        POST /contacts/123
+        {
+          "first_name": "Updated",
+          "last_name": "Name",
+          "phone_1": "555-1234"
+        }
+
+        # Change company association
+        POST /contacts/123
+        {
+          "company_id": 456
+        }
+
+        # Update without changing company (company_id omitted)
+        POST /contacts/123
+        {
+          "email": "updated@example.com",
+          "is_primary": true
+        }
+        ```
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Contact's first name
+                  example: John
+                last_name:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Contact's last name
+                  example: Smith
+                company_id:
+                  type: integer
+                  nullable: true
+                  description: |
+                    ID of the company this contact belongs to. 
+
+                    **For updates:**
+                    - Optional - if not provided, the existing company association will be preserved
+                    - If provided, must be a valid, non-empty integer that exists in the system
+                    - Cannot be an empty string or null if included in the request
+                    - Changing the `company_id` will move the contact to the new company
+                  example: 123
+                email:
+                  type: string
+                  format: email
+                  maxLength: 255
+                  nullable: true
+                  description: Contact's email address
+                  example: john.smith@acmecorp.com
+                phone_1:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Contact's primary phone number
+                  example: 555-987-6543
+                phone_2:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Contact's secondary phone number
+                  example: 555-555-5555
+                receiving_bank_name:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Bank name for receiving payments
+                receiving_bank_address:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Bank address for receiving payments
+                is_primary:
+                  type: boolean
+                  nullable: true
+                  description: Whether this is the primary contact for the company
+                  example: false
+                receive_quotation_pdf:
+                  type: boolean
+                  nullable: true
+                  description: Whether the contact should receive quotation PDFs
+                  example: false
+                receive_purchase_order_pdf:
+                  type: boolean
+                  nullable: true
+                  description: Whether the contact should receive purchase order PDFs
+                  example: false
+                receive_purchase_order_invoice_pdf:
+                  type: boolean
+                  nullable: true
+                  description: Whether the contact should receive purchase order invoice PDFs
+                  example: false
+                tags:
+                  type: array
+                  nullable: true
+                  description: Tags to associate with the contact
+                  items:
+                    type: string
+                    maxLength: 255
+                  example:
+                    - sales
+                    - primary
+            examples:
+              partial_update_email:
+                summary: Update only email
+                description: 'Update just the email address, leaving all other fields unchanged'
+                value:
+                  email: newemail@example.com
+              partial_update_name:
+                summary: Update name fields
+                description: Update first and last name without changing other fields
+                value:
+                  first_name: Updated
+                  last_name: Name
+              change_company:
+                summary: Change company association
+                description: Move contact to a different company
+                value:
+                  company_id: 456
+              multiple_fields:
+                summary: Update multiple fields
+                description: Update several fields at once
+                value:
+                  first_name: John
+                  last_name: Doe
+                  email: john.doe@example.com
+                  phone_1: 555-1234
+                  is_primary: true
+              empty_request:
+                summary: Empty request body
+                description: Send an empty object - no fields will be updated (request will succeed)
+                value: {}
+      responses:
+        '200':
+          description: Contact successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: Unique identifier for the contact
+                        example: '789123'
+                      created_at:
+                        type: string
+                        format: date-time
+                        description: When the contact was created
+                        example: '2023-03-15T14:30:00Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        description: When the contact was last updated
+                        example: '2023-03-15T14:30:00Z'
+                      status:
+                        type: string
+                        description: Current status of the contact
+                        example: active
+                      first_name:
+                        type: string
+                        description: Contact's first name
+                        example: John
+                      last_name:
+                        type: string
+                        description: Contact's last name
+                        example: Smith
+                      email:
+                        type: string
+                        format: email
+                        description: Contact's email address
+                        example: john.smith@acmecorp.com
+                      phone:
+                        type: string
+                        description: Contact's primary phone number
+                        example: 555-987-6543
+                      phone_2:
+                        type: string
+                        description: Contact's secondary phone number
+                        example: 555-555-5555
+                      full_name:
+                        type: string
+                        description: Contact's full name
+                        example: John Smith
+                      company_id:
+                        type: string
+                        description: ID of the company this contact belongs to
+                        example: '123456'
+                      company:
+                        type: object
+                        description: Company information for this contact
+                        properties:
+                          id:
+                            type: string
+                            example: '123456'
+                          name:
+                            type: string
+                            example: Acme Corporation
+                      is_primary:
+                        type: boolean
+                        description: Whether this is the primary contact for the company
+                        example: true
+                      receive_quotation_pdf:
+                        type: boolean
+                        description: Whether the contact should receive quotation PDFs
+                        example: false
+                      receive_purchase_order_pdf:
+                        type: boolean
+                        description: Whether the contact should receive purchase order PDFs
+                        example: false
+                      receive_purchase_order_invoice_pdf:
+                        type: boolean
+                        description: Whether the contact should receive purchase order invoice PDFs
+                        example: false
+        '401':
+          description: Authentication credentials were missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+                  message:
+                    type: string
+                    example: Authentication credentials are missing or invalid
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: You do not have permission to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Forbidden
+                  message:
+                    type: string
+                    example: You do not have permission to access this resource
+                  status_code:
+                    type: integer
+                    example: 403
+        '404':
+          description: The requested resource was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Not Found
+                  message:
+                    type: string
+                    example: The requested resource could not be found
+                  status_code:
+                    type: integer
+                    example: 404
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+              examples:
+                invalid_email:
+                  summary: Invalid email format
+                  value:
+                    message: The given data was invalid.
+                    errors:
+                      email:
+                        - The email must be a valid email address.
+                invalid_company_id:
+                  summary: Invalid company ID
+                  value:
+                    message: The given data was invalid.
+                    errors:
+                      company_id:
+                        - The specified company does not exist.
+                empty_company_id:
+                  summary: Empty company ID
+                  value:
+                    message: The given data was invalid.
+                    errors:
+                      company_id:
+                        - Company ID cannot be empty if provided.
+    delete:
+      operationId: deleteContact
+      tags:
+        - Contacts
+      summary: Delete a contact
+      description: Delete a contact by ID. This performs a soft delete by setting the contact status to inactive.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the contact
+      responses:
+        '204':
+          description: Contact successfully deleted
+        '401':
+          description: Authentication credentials were missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+                  message:
+                    type: string
+                    example: Authentication credentials are missing or invalid
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: You do not have permission to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Forbidden
+                  message:
+                    type: string
+                    example: You do not have permission to access this resource
+                  status_code:
+                    type: integer
+                    example: 403
+        '404':
+          description: The requested resource was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Not Found
+                  message:
+                    type: string
+                    example: The requested resource could not be found
+                  status_code:
+                    type: integer
+                    example: 404
   /price-schedules:
     get:
       operationId: getPriceSchedules
