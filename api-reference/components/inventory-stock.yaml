@@ -9,7 +9,7 @@ properties:
   name:
     type: string
     description: Name of the product
-  product_type:
+  type:
     type: string
     description: Type of the product
   qty_onhand:
@@ -40,6 +40,23 @@ properties:
     type: number
     format: float
     description: Total quantity recoverable via disassembly across all locations
+  qty_outstanding:
+    type: number
+    format: float
+    description: Total quantity outstanding across all locations
+  current_landed_unit_cost:
+    type: number
+    format: float
+    nullable: true
+    description: |
+      Current landed unit cost from the oldest active cost layer with remaining quantity across all warehouses.
+      The cost is derived from cost layers using FIFO (First-In, First-Out) logic, selecting the oldest cost layer 
+      that has a remaining quantity greater than zero. Returns null if no active cost layer exists.
+  updated_at:
+    type: string
+    format: date-time
+    nullable: true
+    description: Last update timestamp for the stock
   category_id:
     type: integer
     description: ID of the product category

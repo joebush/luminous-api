@@ -51,6 +51,13 @@ get:
     - `qty_backordered`: Filter by quantity backordered
     - `qty_available_via_assembly`: Filter by quantity available via assembly
     - `qty_recoverable_via_disassembly`: Filter by quantity recoverable via disassembly
+    - `qty_outstanding`: Filter by quantity outstanding
+    - `updated_at`: Filter by last stock update date
+    - `discontinued`: Filter by discontinued status (0 = not discontinued, 1 = discontinued, 2+ = all)
+    - `sku`: Filter by SKU (searches product name, internal SKU, UPC, and alternate SKUs)
+    - `product_name`: Filter by product name
+    - `category_id`: Filter by category ID(s), comma-separated
+    - `subcategory_ids`: Filter by subcategory ID(s), comma-separated
     
     ### Product String Filters
     - `product.name`: Product name
@@ -68,6 +75,10 @@ get:
     - `product.category.id`: Filter by category ID
     - `product.sub_category.id`: Filter by sub-category ID
     - `product.supplier.id`: Filter by supplier ID
+    - `product_type_id`: Filter by product type ID
+    
+    ### Product String Filters (Product Type)
+    - `product_type`: Filter by product type
     
     ### Product Float Filters
     - `product.retail_price`: Product retail price
@@ -152,6 +163,18 @@ get:
     
     # Find stock recoverable via disassembly
     ?qty_recoverable_via_disassembly[gt]=5
+    
+    # Find stock with outstanding quantities
+    ?qty_outstanding[gt]=0
+    
+    # Find stock updated after a specific date
+    ?updated_at[gte]=2024-01-01 00:00:00
+    
+    # Find stock by product type
+    ?product_type[eq]=KIT
+    
+    # Find stock by product type ID
+    ?product_type_id[eq]=1
     
     # Find stock for sellable products only
     ?product.sellable=1
@@ -268,6 +291,53 @@ get:
         type: number
         format: float
       description: Filter by quantity recoverable via disassembly
+    - in: query
+      name: qty_outstanding
+      schema:
+        type: number
+        format: float
+      description: Filter by quantity outstanding
+    - in: query
+      name: updated_at
+      schema:
+        type: string
+        format: date-time
+      description: Filter by last stock update date
+    - in: query
+      name: discontinued
+      schema:
+        type: integer
+      description: Filter by discontinued status (0 = not discontinued, 1 = discontinued, 2+ = all)
+    - in: query
+      name: sku
+      schema:
+        type: string
+      description: Filter by SKU (searches product name, internal SKU, UPC, and alternate SKUs)
+    - in: query
+      name: product_name
+      schema:
+        type: string
+      description: Filter by product name
+    - in: query
+      name: category_id
+      schema:
+        type: string
+      description: Filter by category ID(s), comma-separated
+    - in: query
+      name: subcategory_ids
+      schema:
+        type: string
+      description: Filter by subcategory ID(s), comma-separated
+    - in: query
+      name: product_type
+      schema:
+        type: string
+      description: Filter by product type
+    - in: query
+      name: product_type_id
+      schema:
+        type: integer
+      description: Filter by product type ID
     
     # Filter product level filters
     - in: query

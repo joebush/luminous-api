@@ -1,5 +1,9 @@
 type: object
 properties:
+  id:
+    type: integer
+    nullable: true
+    description: Stock location ID (null for virtual locations with no stock)
   warehouse:
     $ref: './location.yaml'
   location:
@@ -20,3 +24,19 @@ properties:
     type: number
     format: float
     description: Quantity incoming at location
+  qty_available_via_assembly:
+    type: number
+    format: float
+    description: Quantity available via assembly at location
+  qty_recoverable_via_disassembly:
+    type: number
+    format: float
+    description: Quantity recoverable via disassembly at location
+  current_landed_unit_cost:
+    type: number
+    format: float
+    nullable: true
+    description: |
+      Current landed unit cost from the oldest active cost layer with remaining quantity for this specific warehouse.
+      The cost is derived from cost layers using FIFO (First-In, First-Out) logic, selecting the oldest cost layer 
+      that has a remaining quantity greater than zero. Returns null if no active cost layer exists.
