@@ -1,0 +1,31 @@
+# Weight value format for product weight fields (product_weight, box_weight, carton_weight, shipping_weight, pallet_weight, dimensional_weight)
+# Input: Single object or array of objects. Each object has unit (lb or oz) and value (non-negative number).
+# Examples: {"unit":"lb","value":1.25} or [{"unit":"lb","value":4},{"unit":"oz","value":6}]
+# Output: Always returns array format. Response also includes {field}_oz and {field}_lb with total weight computed.
+nullable: true
+oneOf:
+  - type: object
+    required: [unit, value]
+    properties:
+      unit:
+        type: string
+        enum: [lb, oz]
+        description: Weight unit (lb for pounds, oz for ounces)
+      value:
+        type: number
+        format: float
+        minimum: 0
+        description: Weight value
+  - type: array
+    items:
+      type: object
+      required: [unit, value]
+      properties:
+        unit:
+          type: string
+          enum: [lb, oz]
+        value:
+          type: number
+          format: float
+          minimum: 0
+    description: Array of weight entries (e.g. 4 lbs + 6 oz as [{"unit":"lb","value":4},{"unit":"oz","value":6}])

@@ -1,0 +1,17 @@
+# Weight field response format. Each weight field returns the array plus _oz and _lb totals.
+# Example: shipping_weight: [{"unit":"lb","value":1.25}], shipping_weight_oz: 20, shipping_weight_lb: 1.25
+type: array
+nullable: true
+items:
+  type: object
+  required: [unit, value]
+  properties:
+    unit:
+      type: string
+      enum: [lb, oz]
+      description: Weight unit
+    value:
+      type: number
+      format: float
+      minimum: 0
+      description: Weight value

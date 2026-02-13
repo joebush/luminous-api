@@ -23,97 +23,149 @@ properties:
     format: float
     description: Cost per unit
   product_weight:
+    $ref: './weight-response.yaml'
+  product_weight_oz:
     type: number
     format: float
-    description: Weight of the product
+    nullable: true
+    description: Total product weight in ounces (computed from product_weight)
+  product_weight_lb:
+    type: number
+    format: float
+    nullable: true
+    description: Total product weight in pounds (computed from product_weight)
+  dimensional_weight:
+    $ref: './weight-response.yaml'
+  dimensional_weight_oz:
+    type: number
+    format: float
+    nullable: true
+    description: Total dimensional weight in ounces (computed from dimensional_weight)
+  dimensional_weight_lb:
+    type: number
+    format: float
+    nullable: true
+    description: Total dimensional weight in pounds (computed from dimensional_weight)
   product_length:
     type: number
     format: float
-    description: Length of the product
+    description: Length of the product (in inches)
   product_width:
     type: number
     format: float
-    description: Width of the product
+    description: Width of the product (in inches)
   product_height:
     type: number
     format: float
-    description: Height of the product
+    description: Height of the product (in inches)
   box_weight:
-    type: string
+    $ref: './weight-response.yaml'
+  box_weight_oz:
+    type: number
+    format: float
     nullable: true
-    description: Weight of the box
+    description: Total box weight in ounces (computed from box_weight)
+  box_weight_lb:
+    type: number
+    format: float
+    nullable: true
+    description: Total box weight in pounds (computed from box_weight)
   box_length:
     type: number
     format: float
     nullable: true
-    description: Length of the box
+    description: Length of the box (in inches)
   box_width:
     type: number
     format: float
     nullable: true
-    description: Width of the box
+    description: Width of the box (in inches)
   box_height:
     type: number
     format: float
     nullable: true
-    description: Height of the box
+    description: Height of the box (in inches)
   carton_weight:
-    type: string
+    $ref: './weight-response.yaml'
+  carton_weight_oz:
+    type: number
+    format: float
     nullable: true
-    description: Weight of the carton
+    description: Total carton weight in ounces (computed from carton_weight)
+  carton_weight_lb:
+    type: number
+    format: float
+    nullable: true
+    description: Total carton weight in pounds (computed from carton_weight)
   carton_length:
     type: number
     format: float
     nullable: true
-    description: Length of the carton
+    description: Length of the carton (in inches)
   carton_width:
     type: number
     format: float
     nullable: true
-    description: Width of the carton
+    description: Width of the carton (in inches)
   carton_height:
     type: number
     format: float
     nullable: true
-    description: Height of the carton
+    description: Height of the carton (in inches)
   shipping_weight:
-    type: string
+    $ref: './weight-response.yaml'
+  shipping_weight_oz:
+    type: number
+    format: float
     nullable: true
-    description: Shipping weight
+    description: Total shipping weight in ounces (computed from shipping_weight)
+  shipping_weight_lb:
+    type: number
+    format: float
+    nullable: true
+    description: Total shipping weight in pounds (computed from shipping_weight)
   shipping_length:
     type: number
     format: float
     nullable: true
-    description: Shipping length
+    description: Shipping length (in inches)
   shipping_width:
     type: number
     format: float
     nullable: true
-    description: Shipping width
+    description: Shipping width (in inches)
   shipping_height:
     type: number
     format: float
     nullable: true
-    description: Shipping height
+    description: Shipping height (in inches)
   pallet_weight:
-    type: string
+    $ref: './weight-response.yaml'
+  pallet_weight_oz:
+    type: number
+    format: float
     nullable: true
-    description: Weight of the pallet
+    description: Total pallet weight in ounces (computed from pallet_weight)
+  pallet_weight_lb:
+    type: number
+    format: float
+    nullable: true
+    description: Total pallet weight in pounds (computed from pallet_weight)
   pallet_length:
     type: number
     format: float
     nullable: true
-    description: Length of the pallet
+    description: Length of the pallet (in inches)
   pallet_width:
     type: number
     format: float
     nullable: true
-    description: Width of the pallet
+    description: Width of the pallet (in inches)
   pallet_height:
     type: number
     format: float
     nullable: true
-    description: Height of the pallet
+    description: Height of the pallet (in inches)
   sellable:
     type: boolean
     description: Whether the product can be sold
@@ -164,6 +216,66 @@ properties:
           type: string
         description:
           type: string
+          nullable: true
+        product_weight:
+          $ref: './weight-response.yaml'
+        product_weight_oz:
+          type: number
+          format: float
+          nullable: true
+        product_weight_lb:
+          type: number
+          format: float
+          nullable: true
+        dimensional_weight:
+          $ref: './weight-response.yaml'
+        dimensional_weight_oz:
+          type: number
+          format: float
+          nullable: true
+        dimensional_weight_lb:
+          type: number
+          format: float
+          nullable: true
+        box_weight:
+          $ref: './weight-response.yaml'
+        box_weight_oz:
+          type: number
+          format: float
+          nullable: true
+        box_weight_lb:
+          type: number
+          format: float
+          nullable: true
+        carton_weight:
+          $ref: './weight-response.yaml'
+        carton_weight_oz:
+          type: number
+          format: float
+          nullable: true
+        carton_weight_lb:
+          type: number
+          format: float
+          nullable: true
+        shipping_weight:
+          $ref: './weight-response.yaml'
+        shipping_weight_oz:
+          type: number
+          format: float
+          nullable: true
+        shipping_weight_lb:
+          type: number
+          format: float
+          nullable: true
+        pallet_weight:
+          $ref: './weight-response.yaml'
+        pallet_weight_oz:
+          type: number
+          format: float
+          nullable: true
+        pallet_weight_lb:
+          type: number
+          format: float
           nullable: true
         attachments:
           type: array
@@ -258,97 +370,137 @@ properties:
               format: float
               description: Cost per unit
             product_weight:
+              $ref: './weight-response.yaml'
+            product_weight_oz:
               type: number
               format: float
-              description: Weight of the product
+              nullable: true
+            product_weight_lb:
+              type: number
+              format: float
+              nullable: true
+            dimensional_weight:
+              $ref: './weight-response.yaml'
+            dimensional_weight_oz:
+              type: number
+              format: float
+              nullable: true
+            dimensional_weight_lb:
+              type: number
+              format: float
+              nullable: true
             product_length:
               type: number
               format: float
-              description: Length of the product
+              description: Length of the product (in inches)
             product_width:
               type: number
               format: float
-              description: Width of the product
+              description: Width of the product (in inches)
             product_height:
               type: number
               format: float
-              description: Height of the product
+              description: Height of the product (in inches)
             box_weight:
-              type: string
+              $ref: './weight-response.yaml'
+            box_weight_oz:
+              type: number
+              format: float
               nullable: true
-              description: Weight of the box
+            box_weight_lb:
+              type: number
+              format: float
+              nullable: true
             box_length:
               type: number
               format: float
               nullable: true
-              description: Length of the box
+              description: Length of the box (in inches)
             box_width:
               type: number
               format: float
               nullable: true
-              description: Width of the box
+              description: Width of the box (in inches)
             box_height:
               type: number
               format: float
               nullable: true
-              description: Height of the box
+              description: Height of the box (in inches)
             carton_weight:
-              type: string
+              $ref: './weight-response.yaml'
+            carton_weight_oz:
+              type: number
+              format: float
               nullable: true
-              description: Weight of the carton
+            carton_weight_lb:
+              type: number
+              format: float
+              nullable: true
             carton_length:
               type: number
               format: float
               nullable: true
-              description: Length of the carton
+              description: Length of the carton (in inches)
             carton_width:
               type: number
               format: float
               nullable: true
-              description: Width of the carton
+              description: Width of the carton (in inches)
             carton_height:
               type: number
               format: float
               nullable: true
-              description: Height of the carton
+              description: Height of the carton (in inches)
             shipping_weight:
-              type: string
+              $ref: './weight-response.yaml'
+            shipping_weight_oz:
+              type: number
+              format: float
               nullable: true
-              description: Shipping weight
+            shipping_weight_lb:
+              type: number
+              format: float
+              nullable: true
             shipping_length:
               type: number
               format: float
               nullable: true
-              description: Shipping length
+              description: Shipping length (in inches)
             shipping_width:
               type: number
               format: float
               nullable: true
-              description: Shipping width
+              description: Shipping width (in inches)
             shipping_height:
               type: number
               format: float
               nullable: true
-              description: Shipping height
+              description: Shipping height (in inches)
             pallet_weight:
-              type: string
+              $ref: './weight-response.yaml'
+            pallet_weight_oz:
+              type: number
+              format: float
               nullable: true
-              description: Weight of the pallet
+            pallet_weight_lb:
+              type: number
+              format: float
+              nullable: true
             pallet_length:
               type: number
               format: float
               nullable: true
-              description: Length of the pallet
+              description: Length of the pallet (in inches)
             pallet_width:
               type: number
               format: float
               nullable: true
-              description: Width of the pallet
+              description: Width of the pallet (in inches)
             pallet_height:
               type: number
               format: float
               nullable: true
-              description: Height of the pallet
+              description: Height of the pallet (in inches)
             sellable:
               type: boolean
               description: Whether the product can be sold

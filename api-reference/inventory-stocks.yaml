@@ -84,21 +84,21 @@ get:
     - `product.retail_price`: Product retail price
     - `product.wholesale_price`: Product wholesale price
     - `product.product_weight`: Product weight
-    - `product.product_length`: Product length
-    - `product.product_width`: Product width
-    - `product.product_height`: Product height
-    - `product.box_length`: Box length
-    - `product.box_width`: Box width
-    - `product.box_height`: Box height
-    - `product.carton_length`: Carton length
-    - `product.carton_width`: Carton width
-    - `product.carton_height`: Carton height
-    - `product.shipping_length`: Shipping length
-    - `product.shipping_width`: Shipping width
-    - `product.shipping_height`: Shipping height
-    - `product.pallet_length`: Pallet length
-    - `product.pallet_width`: Pallet width
-    - `product.pallet_height`: Pallet height
+    - `product.product_length`: Product length (in inches)
+    - `product.product_width`: Product width (in inches)
+    - `product.product_height`: Product height (in inches)
+    - `product.box_length`: Box length (in inches)
+    - `product.box_width`: Box width (in inches)
+    - `product.box_height`: Box height (in inches)
+    - `product.carton_length`: Carton length (in inches)
+    - `product.carton_width`: Carton width (in inches)
+    - `product.carton_height`: Carton height (in inches)
+    - `product.shipping_length`: Shipping length (in inches)
+    - `product.shipping_width`: Shipping width (in inches)
+    - `product.shipping_height`: Shipping height (in inches)
+    - `product.pallet_length`: Pallet length (in inches)
+    - `product.pallet_width`: Pallet width (in inches)
+    - `product.pallet_height`: Pallet height (in inches)
     
     ### Product String Filters (Dimension Weights)
     - `product.box_weight`: Box weight

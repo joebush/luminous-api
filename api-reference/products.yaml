@@ -34,28 +34,31 @@ get:
     ### Float Filters
     - `retail_price`: Product retail price
     - `wholesale_price`: Product wholesale price
-    - `product_weight`: Product weight
-    - `product_length`: Product length
-    - `product_width`: Product width
-    - `product_height`: Product height
-    - `box_length`: Box length
-    - `box_width`: Box width
-    - `box_height`: Box height
-    - `carton_length`: Carton length
-    - `carton_width`: Carton width
-    - `carton_height`: Carton height
-    - `shipping_length`: Shipping length
-    - `shipping_width`: Shipping width
-    - `shipping_height`: Shipping height
-    - `pallet_length`: Pallet length
-    - `pallet_width`: Pallet width
-    - `pallet_height`: Pallet height
+    - `product_weight_oz`: Product weight total in ounces
+    - `product_weight_lb`: Product weight total in pounds
+    - `product_length`: Product length (in inches)
+    - `product_width`: Product width (in inches)
+    - `product_height`: Product height (in inches)
+    - `box_length`: Box length (in inches)
+    - `box_width`: Box width (in inches)
+    - `box_height`: Box height (in inches)
+    - `carton_length`: Carton length (in inches)
+    - `carton_width`: Carton width (in inches)
+    - `carton_height`: Carton height (in inches)
+    - `shipping_length`: Shipping length (in inches)
+    - `shipping_width`: Shipping width (in inches)
+    - `shipping_height`: Shipping height (in inches)
+    - `pallet_length`: Pallet length (in inches)
+    - `pallet_width`: Pallet width (in inches)
+    - `pallet_height`: Pallet height (in inches)
     
-    ### String Filters (Dimension Weights)
-    - `box_weight`: Box weight
-    - `carton_weight`: Carton weight
-    - `shipping_weight`: Shipping weight
-    - `pallet_weight`: Pallet weight
+    ### Float Filters (Weight Totals)
+    Weight fields are stored as JSON with multiple unit support. Filter by total weight using:
+    - `box_weight_oz` / `box_weight_lb`: Box weight total
+    - `carton_weight_oz` / `carton_weight_lb`: Carton weight total
+    - `shipping_weight_oz` / `shipping_weight_lb`: Shipping weight total
+    - `pallet_weight_oz` / `pallet_weight_lb`: Pallet weight total
+    - `dimensional_weight_oz` / `dimensional_weight_lb`: Dimensional weight total
     
     ### Boolean Filters
     - `sellable`: If the product is sellable or not
@@ -98,6 +101,11 @@ get:
     ?carton_height[gte]=10.0
     ?shipping_length[lte]=18.0
     ?pallet_width[gt]=40.0
+
+    # Find products by weight (filter by total oz or lb)
+    ?shipping_weight_oz[gte]=64
+    ?shipping_weight_lb[gt]=5.0
+    ?product_weight_oz[lt]=200
     ```
   security:
     - BearerAuth: []
@@ -226,121 +234,167 @@ get:
         enum: [PRODUCT, KIT]
       description: Filter by product type (PRODUCT for regular products, KIT for kit products)
     - in: query
-      name: product_weight
+      name: product_weight_oz
       schema:
         type: number
         format: float
-      description: Filter by product weight
+      description: Filter by product weight total in ounces
+    - in: query
+      name: product_weight_lb
+      schema:
+        type: number
+        format: float
+      description: Filter by product weight total in pounds
     - in: query
       name: product_length
       schema:
         type: number
         format: float
-      description: Filter by product length
+      description: Filter by product length (in inches)
     - in: query
       name: product_width
       schema:
         type: number
         format: float
-      description: Filter by product width
+      description: Filter by product width (in inches)
     - in: query
       name: product_height
       schema:
         type: number
         format: float
-      description: Filter by product height
+      description: Filter by product height (in inches)
     - in: query
-      name: box_weight
+      name: box_weight_oz
       schema:
-        type: string
-      description: Filter by box weight
+        type: number
+        format: float
+      description: Filter by box weight total in ounces
+    - in: query
+      name: box_weight_lb
+      schema:
+        type: number
+        format: float
+      description: Filter by box weight total in pounds
     - in: query
       name: box_length
       schema:
         type: number
         format: float
-      description: Filter by box length
+      description: Filter by box length (in inches)
     - in: query
       name: box_width
       schema:
         type: number
         format: float
-      description: Filter by box width
+      description: Filter by box width (in inches)
     - in: query
       name: box_height
       schema:
         type: number
         format: float
-      description: Filter by box height
+      description: Filter by box height (in inches)
     - in: query
-      name: carton_weight
+      name: carton_weight_oz
       schema:
-        type: string
-      description: Filter by carton weight
+        type: number
+        format: float
+      description: Filter by carton weight total in ounces
+    - in: query
+      name: carton_weight_lb
+      schema:
+        type: number
+        format: float
+      description: Filter by carton weight total in pounds
     - in: query
       name: carton_length
       schema:
         type: number
         format: float
-      description: Filter by carton length
+      description: Filter by carton length (in inches)
     - in: query
       name: carton_width
       schema:
         type: number
         format: float
-      description: Filter by carton width
+      description: Filter by carton width (in inches)
     - in: query
       name: carton_height
       schema:
         type: number
         format: float
-      description: Filter by carton height
+      description: Filter by carton height (in inches)
     - in: query
-      name: shipping_weight
+      name: shipping_weight_oz
       schema:
-        type: string
-      description: Filter by shipping weight
+        type: number
+        format: float
+      description: Filter by shipping weight total in ounces
+    - in: query
+      name: shipping_weight_lb
+      schema:
+        type: number
+        format: float
+      description: Filter by shipping weight total in pounds
     - in: query
       name: shipping_length
       schema:
         type: number
         format: float
-      description: Filter by shipping length
+      description: Filter by shipping length (in inches)
     - in: query
       name: shipping_width
       schema:
         type: number
         format: float
-      description: Filter by shipping width
+      description: Filter by shipping width (in inches)
     - in: query
       name: shipping_height
       schema:
         type: number
         format: float
-      description: Filter by shipping height
+      description: Filter by shipping height (in inches)
     - in: query
-      name: pallet_weight
+      name: pallet_weight_oz
       schema:
-        type: string
-      description: Filter by pallet weight
+        type: number
+        format: float
+      description: Filter by pallet weight total in ounces
+    - in: query
+      name: pallet_weight_lb
+      schema:
+        type: number
+        format: float
+      description: Filter by pallet weight total in pounds
+    - in: query
+      name: dimensional_weight_oz
+      schema:
+        type: number
+        format: float
+      description: Filter by dimensional weight total in ounces
+    - in: query
+      name: dimensional_weight_lb
+      schema:
+        type: number
+        format: float
+      description: Filter by dimensional weight total in pounds
     - in: query
       name: pallet_length
       schema:
         type: number
         format: float
-      description: Filter by pallet length
+      description: Filter by pallet length (in inches)
     - in: query
       name: pallet_width
       schema:
         type: number
         format: float
-      description: Filter by pallet width
+      description: Filter by pallet width (in inches)
     - in: query
       name: pallet_height
       schema:
         type: number
         format: float
-      description: Filter by pallet height
+      description: Filter by pallet height (in inches)
   responses:
     '200':
       description: Successful response

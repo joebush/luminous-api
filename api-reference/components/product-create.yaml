@@ -87,117 +87,107 @@ properties:
     nullable: true
     description: Cost per unit
   product_weight:
-    type: number
-    format: float
-    minimum: 0
-    nullable: true
-    description: Weight of the product
+    $ref: './weight-value.yaml'
+  dimensional_weight:
+    $ref: './weight-value.yaml'
   product_length:
     type: number
     format: float
     minimum: 0
     nullable: true
-    description: Length of the product
+    description: Length of the product (in inches)
   product_width:
     type: number
     format: float
     minimum: 0
     nullable: true
-    description: Width of the product
+    description: Width of the product (in inches)
   product_height:
     type: number
     format: float
     minimum: 0
     nullable: true
-    description: Height of the product
+    description: Height of the product (in inches)
   box_weight:
-    type: string
-    nullable: true
-    description: Weight of the box
+    $ref: './weight-value.yaml'
   box_length:
     type: number
     format: float
     minimum: 0
     nullable: true
-    description: Length of the box
+    description: Length of the box (in inches)
   box_width:
     type: number
     format: float
     minimum: 0
     nullable: true
-    description: Width of the box
+    description: Width of the box (in inches)
   box_height:
     type: number
     format: float
     minimum: 0
     nullable: true
-    description: Height of the box
+    description: Height of the box (in inches)
   carton_weight:
-    type: string
-    nullable: true
-    description: Weight of the carton
+    $ref: './weight-value.yaml'
   carton_length:
     type: number
     format: float
     minimum: 0
     nullable: true
-    description: Length of the carton
+    description: Length of the carton (in inches)
   carton_width:
     type: number
     format: float
     minimum: 0
     nullable: true
-    description: Width of the carton
+    description: Width of the carton (in inches)
   carton_height:
     type: number
     format: float
     minimum: 0
     nullable: true
-    description: Height of the carton
+    description: Height of the carton (in inches)
   shipping_weight:
-    type: string
-    nullable: true
-    description: Shipping weight
+    $ref: './weight-value.yaml'
   shipping_length:
     type: number
     format: float
     minimum: 0
     nullable: true
-    description: Shipping length
+    description: Shipping length (in inches)
   shipping_width:
     type: number
     format: float
     minimum: 0
     nullable: true
-    description: Shipping width
+    description: Shipping width (in inches)
   shipping_height:
     type: number
     format: float
     minimum: 0
     nullable: true
-    description: Shipping height
+    description: Shipping height (in inches)
   pallet_weight:
-    type: string
-    nullable: true
-    description: Weight of the pallet
+    $ref: './weight-value.yaml'
   pallet_length:
     type: number
     format: float
     minimum: 0
     nullable: true
-    description: Length of the pallet
+    description: Length of the pallet (in inches)
   pallet_width:
     type: number
     format: float
     minimum: 0
     nullable: true
-    description: Width of the pallet
+    description: Width of the pallet (in inches)
   pallet_height:
     type: number
     format: float
     minimum: 0
     nullable: true
-    description: Height of the pallet
+    description: Height of the pallet (in inches)
   upc:
     type: string
     nullable: true
@@ -284,117 +274,107 @@ properties:
           nullable: true
           description: Variant cost per unit
         product_weight:
-          type: number
-          format: float
-          minimum: 0
-          nullable: true
-          description: Weight of the variant
+          $ref: './weight-value.yaml'
+        dimensional_weight:
+          $ref: './weight-value.yaml'
         product_length:
           type: number
           format: float
           minimum: 0
           nullable: true
-          description: Length of the variant
+          description: Length of the variant (in inches)
         product_width:
           type: number
           format: float
           minimum: 0
           nullable: true
-          description: Width of the variant
+          description: Width of the variant (in inches)
         product_height:
           type: number
           format: float
           minimum: 0
           nullable: true
-          description: Height of the variant
+          description: Height of the variant (in inches) (in inches)
         box_weight:
-          type: string
-          nullable: true
-          description: Weight of the box
+          $ref: './weight-value.yaml'
         box_length:
           type: number
           format: float
           minimum: 0
           nullable: true
-          description: Length of the box
+          description: Length of the box (in inches)
         box_width:
           type: number
           format: float
           minimum: 0
           nullable: true
-          description: Width of the box
+          description: Width of the box (in inches)
         box_height:
           type: number
           format: float
           minimum: 0
           nullable: true
-          description: Height of the box
+          description: Height of the box (in inches)
         carton_weight:
-          type: string
-          nullable: true
-          description: Weight of the carton
+          $ref: './weight-value.yaml'
         carton_length:
           type: number
           format: float
           minimum: 0
           nullable: true
-          description: Length of the carton
+          description: Length of the carton (in inches)
         carton_width:
           type: number
           format: float
           minimum: 0
           nullable: true
-          description: Width of the carton
+          description: Width of the carton (in inches)
         carton_height:
           type: number
           format: float
           minimum: 0
           nullable: true
-          description: Height of the carton
+          description: Height of the carton (in inches)
         shipping_weight:
-          type: string
-          nullable: true
-          description: Shipping weight
+          $ref: './weight-value.yaml'
         shipping_length:
           type: number
           format: float
           minimum: 0
           nullable: true
-          description: Shipping length
+          description: Shipping length (in inches)
         shipping_width:
           type: number
           format: float
           minimum: 0
           nullable: true
-          description: Shipping width
+          description: Shipping width (in inches)
         shipping_height:
           type: number
           format: float
           minimum: 0
           nullable: true
-          description: Shipping height
+          description: Shipping height (in inches)
         pallet_weight:
-          type: string
-          nullable: true
-          description: Weight of the pallet
+          $ref: './weight-value.yaml'
         pallet_length:
           type: number
           format: float
           minimum: 0
           nullable: true
-          description: Length of the pallet
+          description: Length of the pallet (in inches)
         pallet_width:
           type: number
           format: float
           minimum: 0
           nullable: true
-          description: Width of the pallet
+          description: Width of the pallet (in inches)
         pallet_height:
           type: number
           format: float
           minimum: 0
           nullable: true
-          description: Height of the pallet
+          description: Height of the pallet (in inches)
         upc:
           type: string
           nullable: true

@@ -29,15 +29,15 @@ properties:
   product_length:
     type: number
     format: float
-    description: Length of the product
+    description: Length of the product (in inches)
   product_width:
     type: number
     format: float
-    description: Width of the product
+    description: Width of the product (in inches)
   product_height:
     type: number
     format: float
-    description: Height of the product
+    description: Height of the product (in inches)
   sellable:
     type: boolean
     description: Whether the product can be sold
