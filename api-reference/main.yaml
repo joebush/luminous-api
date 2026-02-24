@@ -55,6 +55,8 @@ paths:
     $ref: './receiving-report.yaml'
   /sales-orders:
     $ref: './sales-orders.yaml'
+  /sales-orders/export:
+    $ref: './sales-orders-export.yaml'
   /sales-orders/{id}:
     $ref: './sales-order.yaml'
   /sales-orders/{salesOrderId}/shipments:

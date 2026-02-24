@@ -6,8 +6,14 @@ get:
   summary: Sales orders
   description: |
     Get a paginated list of sales orders with optional filtering.
-    
-    For detailed information about the filtering system and available operators, 
+
+    <Note>
+    **Syncing sales order data?** Use [`GET /sales-orders/export`](/api-reference/sales-orders/export-sales-orders)
+    instead. The export endpoint uses cursor-based pagination with a fixed time window, making it
+    significantly more reliable for incremental sync workflows than polling this list endpoint.
+    </Note>
+
+    For detailed information about the filtering system and available operators,
     refer to the [Filter System Documentation](/filters).
 
     ## Available Filters
