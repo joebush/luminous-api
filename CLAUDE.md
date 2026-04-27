@@ -8,8 +8,10 @@
 ## After ANY changes, always run both:
 ```bash
 npm run build       # Bundles YAML files → api-reference/build.yaml
-npm run build-mint  # Generates MDX files → mdx-api-reference/
+npm run build-mint  # Generates MDX files → mdx-api-reference/, then injects the llms.txt directive into every .mdx
 ```
+
+`build-mint` chains `scripts/inject-llms-directive.mjs`, which adds a screen-reader-only blockquote linking to `/llms.txt` to every `.mdx` page so AI agents/crawlers find the index in HTML. Idempotent (sentinel: `{/* llms-directive */}`). The `.llms-directive` CSS class lives in `style.css` (Mintlify auto-loads any `.css` file in the repo).
 
 ## File Structure
 ```
