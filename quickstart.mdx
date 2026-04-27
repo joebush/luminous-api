@@ -8,3 +8,14 @@ description: 'Start building awesome stuff with Luminous in under 5 minutes'
 Before you hook in to the Luminous API, you will need an API key. Contact developers@joinluminous.com to get your API key.
 
 Once you have a valid API key, head over to [API Reference](/api-reference) to start building.
+
+## Using these docs with AI agents
+
+Every page on this site is also available as plain Markdown for use with LLMs and AI coding agents:
+
+- **Per-page Markdown** — append `.md` to any documentation URL. Example: [`/api-reference/sales-orders/list-sales-orders.md`](/api-reference/sales-orders/list-sales-orders.md).
+- **Content negotiation** — request any page with header `Accept: text/markdown` to receive the Markdown version.
+- **[`/llms.txt`](/llms.txt)** — index of every page in the documentation, formatted per the [llmstxt.org](https://llmstxt.org) spec. Point an agent at this file first to discover what's available.
+- **[`/llms-full.txt`](/llms-full.txt)** — the full text of every page concatenated into a single file, suitable for loading into a model's context window in one fetch.
+
+Every HTML page also advertises these via the HTTP `Link` header (`rel="llms-txt"` and `rel="llms-full-txt"`).

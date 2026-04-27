@@ -1,5 +1,6 @@
 {
   "name": "Luminous API Documentation",
+  "description": "REST API for Luminous, a supply chain and inventory management platform. Manage products, sales orders, purchase orders, shipments, inventory stocks, bills, vendor records, and reporting.",
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
